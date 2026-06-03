@@ -91,8 +91,12 @@ const LoginPage: React.FC = () => {
           ? redirect
           : '/';
       navigate(safeRedirect);
-    } catch (error) {
+    } catch (error: any) {
       tokenManager.clearTokens();
+      // Request 401 no message
+      if (error?.details?.status === 401) {
+        message.error(error.message);
+      }
     } finally {
       setLogging(false);
     }
