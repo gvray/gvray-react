@@ -1,44 +1,29 @@
 import AntIcon from '@/components/AntIcon';
 import { useAppStore, useAuthStore } from '@/stores';
 import type { SiderTheme } from '@/stores/useAppStore';
-import { LeftOutlined, RightOutlined } from '@ant-design/icons';
-import { ConfigProvider, Layout, Menu, MenuProps, Skeleton } from 'antd';
+import type { MenuProps } from 'antd';
+import { ConfigProvider, Layout, Menu, Skeleton } from 'antd';
 import React, { useEffect, useMemo, useState } from 'react';
 import { history, styled, useLocation } from 'umi';
 import Logo from '../Logo';
+import CollapseTrigger from './CollapseTrigger';
 
 const { Sider } = Layout;
 
 const SiderWrapper = styled.div`
   position: relative;
   height: 100vh;
-
-  .collapse-trigger-wrap {
-    position: absolute;
-    top: 108px;
-    right: 0;
-    z-index: 101;
-    transform: translateX(50%);
-  }
-
-  .collapse-trigger {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 24px;
-    height: 24px;
-    font-size: 11px;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
-    overflow: visible;
-
-    &:hover {
-      transform: scale(1.15);
-    }
-  }
 `;
+
+const siderStyle: React.CSSProperties = {
+  overflow: 'auto',
+  height: '100vh',
+  position: 'sticky',
+  insetInlineStart: 0,
+  top: 0,
+  scrollbarWidth: 'thin',
+  scrollbarGutter: 'stable',
+};
 
 interface SideNavProps {
   collapsed: boolean;
@@ -47,6 +32,20 @@ interface SideNavProps {
   collapsedWidth?: number;
   showLogo?: boolean;
 }
+
+/**
+ * 菜单转换
+ */
+const transformMenuItems = (menuData: any[]): MenuProps['items'] => {
+  return (menuData || []).map((item: any) => ({
+    key: item.meta?.path || item.key,
+    icon: item.meta?.icon ? <AntIcon icon={item.meta.icon} /> : undefined,
+    label: item.name || item.label,
+    children: item.children?.length
+      ? transformMenuItems(item.children)
+      : undefined,
+  }));
+};
 
 const SideNav: React.FC<SideNavProps> = ({
   collapsed,
@@ -58,67 +57,67 @@ const SideNav: React.FC<SideNavProps> = ({
   const menus = useAuthStore((s) => s.menus);
   const siteName = useAppStore((s) => s.serverConfig.system.name);
   const toggleCollapsed = useAppStore((s) => s.toggleCollapsed);
-  const loading = !menus;
 
   const location = useLocation();
+
+  const isDark = theme === 'dark';
+  const loading = menus === undefined;
+
   const [openKeys, setOpenKeys] = useState<string[]>([]);
+  const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
 
-  const handleMenuClick: MenuProps['onClick'] = (e) => {
-    history.push(e.key);
-  };
-
-  const transformMenuItems = (menuData: any[]): MenuProps['items'] => {
-    return menuData?.map((item: any) => {
-      const menuItem: any = {
-        key: item.meta?.path || item.key,
-        icon: item.meta?.icon ? <AntIcon icon={item.meta.icon} /> : null,
-        label: item.name || item.label,
-      };
-
-      // 递归处理子菜单
-      if (item.children && item.children.length > 0) {
-        menuItem.children = transformMenuItems(item.children);
-      }
-
-      return menuItem;
-    });
-  };
-
+  /**
+   * menus -> menu items
+   */
   const items = useMemo(() => {
     return transformMenuItems(menus || []);
   }, [menus]);
 
-  // Compute openKeys from current pathname, e.g. /system/user -> ['/system']
+  /**
+   * 路由变化同步菜单状态（展开 + 高亮）
+   */
   useEffect(() => {
-    const segments = location.pathname.split('/').filter(Boolean);
+    const pathname = location.pathname;
+
+    setSelectedKeys([pathname]);
+
+    const segments = pathname.split('/').filter(Boolean);
+
     const keys: string[] = [];
     let path = '';
-    // Build all ancestor paths except the leaf
+
     for (let i = 0; i < segments.length - 1; i++) {
-      path += '/' + segments[i];
+      path += `/${segments[i]}`;
       keys.push(path);
     }
-    setOpenKeys((prev) => {
-      const merged = new Set([...prev, ...keys]);
-      return Array.from(merged);
-    });
+
+    setOpenKeys(keys);
   }, [location.pathname]);
 
-  const siderTheme = theme;
+  /**
+   * 点击菜单跳转
+   */
+  const handleMenuClick: MenuProps['onClick'] = (e) => {
+    setSelectedKeys([e.key]);
+    history.push(e.key);
+  };
 
-  // 暗色 sidebar 的 token 覆盖，防止全局 darkAlgorithm 冲掉经典深蓝配色
-  const darkSiderTokens =
-    siderTheme === 'dark'
-      ? {
-          components: {
-            Menu: {
-              darkItemBg: '#001529',
-              darkSubMenuItemBg: '#000c17',
-              darkItemSelectedBg: '#1677ff',
-            },
-          },
-        }
-      : {};
+  /**
+   * 暗色主题 token
+   */
+  const darkSiderTokens = useMemo(() => {
+    if (!isDark) return undefined;
+
+    return {
+      components: {
+        Menu: {
+          darkItemBg: '#001529',
+          darkSubMenuItemBg: '#000c17',
+          darkItemSelectedBg: '#1677ff',
+        },
+      },
+    };
+  }, [isDark]);
 
   const siderContent = (
     <Sider
@@ -127,22 +126,23 @@ const SideNav: React.FC<SideNavProps> = ({
       collapsed={collapsed}
       width={width}
       collapsedWidth={collapsedWidth}
-      theme={siderTheme}
-      style={{ height: '100%' }}
+      theme={theme}
+      style={siderStyle}
     >
       {showLogo && (
-        <Logo theme={siderTheme} title={siteName} collapsed={collapsed} />
+        <Logo theme={theme} title={siteName} collapsed={collapsed} />
       )}
-      <Skeleton loading={loading} active round style={{ padding: '15px' }}>
+
+      <Skeleton loading={loading} active round style={{ padding: 15 }}>
         <Menu
-          inlineIndent={10}
-          openKeys={openKeys}
-          onOpenChange={(keys) => setOpenKeys(keys as string[])}
-          theme={siderTheme}
           mode="inline"
-          onClick={handleMenuClick}
-          selectedKeys={[location.pathname]}
+          theme={theme}
+          inlineIndent={10}
           items={items}
+          openKeys={openKeys}
+          selectedKeys={selectedKeys}
+          onOpenChange={(keys) => setOpenKeys(keys as string[])}
+          onClick={handleMenuClick}
         />
       </Skeleton>
     </Sider>
@@ -150,34 +150,17 @@ const SideNav: React.FC<SideNavProps> = ({
 
   return (
     <SiderWrapper>
-      {siderTheme === 'dark' ? (
+      {isDark ? (
         <ConfigProvider theme={darkSiderTokens}>{siderContent}</ConfigProvider>
       ) : (
         siderContent
       )}
-      <div className="collapse-trigger-wrap">
-        <div
-          className="collapse-trigger"
-          onClick={toggleCollapsed}
-          style={
-            siderTheme === 'dark'
-              ? {
-                  color: 'rgba(255,255,255,0.45)',
-                  background: '#002140',
-                  border: '1px solid rgba(255,255,255,0.08)',
-                  boxShadow: '0 1px 4px rgba(0,0,0,0.2)',
-                }
-              : {
-                  color: 'rgba(0,0,0,0.2)',
-                  background: '#f0f0f0',
-                  border: '1px solid rgba(0,0,0,0.06)',
-                  boxShadow: '0 1px 4px rgba(0,0,0,0.05)',
-                }
-          }
-        >
-          {collapsed ? <RightOutlined /> : <LeftOutlined />}
-        </div>
-      </div>
+
+      <CollapseTrigger
+        collapsed={collapsed}
+        dark={isDark}
+        onToggle={toggleCollapsed}
+      />
     </SiderWrapper>
   );
 };
