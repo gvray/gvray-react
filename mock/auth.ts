@@ -8,7 +8,7 @@ export default {
 
     // Dev 环境只支持 admin 登录，返回 super 权限
     if (
-      password === 'admin123' &&
+      password === '123456' &&
       ['admin', 'admin@example.com'].includes(account)
     ) {
       res.send({

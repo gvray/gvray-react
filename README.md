@@ -12,7 +12,7 @@
 
 ## 🔥 项目展示
 
-登陆路径：/login 登陆账号：admin@example/admin/13800138000 登陆密码：admin123
+登陆路径：/login 登陆账号：admin@example/admin/13800138000 登陆密码：123456
 
 核心页面一览：
 
