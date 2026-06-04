@@ -43,7 +43,7 @@ const routes = [
         component: 'User',
         meta: {
           title: '用户管理',
-          permissions: ['system:user:view'],
+          permissions: ['system:user'],
         },
       },
       {
@@ -51,7 +51,7 @@ const routes = [
         component: 'Role',
         meta: {
           title: '角色管理',
-          permissions: ['system:role:view'],
+          permissions: ['system:role'],
         },
       },
       {
@@ -59,7 +59,7 @@ const routes = [
         component: 'Permission',
         meta: {
           title: '权限管理',
-          permissions: ['system:permission:view'],
+          permissions: ['system:permission'],
         },
       },
       {
@@ -67,7 +67,7 @@ const routes = [
         component: 'Department',
         meta: {
           title: '部门管理',
-          permissions: ['system:department:view'],
+          permissions: ['system:department'],
         },
       },
       {
@@ -75,7 +75,7 @@ const routes = [
         component: 'Position',
         meta: {
           title: '职位管理',
-          permissions: ['system:position:view'],
+          permissions: ['system:position'],
         },
       },
       {
@@ -83,7 +83,7 @@ const routes = [
         component: 'Dictionary',
         meta: {
           title: '字典管理',
-          permissions: ['system:dictionary:view'],
+          permissions: ['system:dictionary'],
         },
       },
       {
@@ -91,7 +91,7 @@ const routes = [
         component: 'Dictionary/Items',
         meta: {
           title: '字典项管理',
-          permissions: ['system:dictionary:view'],
+          permissions: ['system:dictionary'],
         },
       },
       {
@@ -99,14 +99,14 @@ const routes = [
         component: 'Config',
         meta: {
           title: '系统配置',
-          permissions: ['system:config:view'],
+          permissions: ['system:config'],
         },
       },
       {
         path: '/system/log',
         meta: {
           title: '日志管理',
-          permissions: ['system:log:view'],
+          permissions: ['system:log'],
         },
         routes: [
           {
@@ -114,7 +114,7 @@ const routes = [
             component: 'Log/Login',
             meta: {
               title: '登录日志',
-              permissions: ['system:log:view'],
+              permissions: ['system:log-login'],
             },
           },
           {
@@ -122,7 +122,7 @@ const routes = [
             component: 'Log/Operation',
             meta: {
               title: '操作日志',
-              permissions: ['system:log:view'],
+              permissions: ['system:log-operation'],
             },
           },
         ],
