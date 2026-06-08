@@ -513,7 +513,7 @@ export default function AuthPermissionPage() {
                 onClick={handleSubmit}
                 loading={submitting}
                 disabled={!hasChanges()}
-                requirePermissions={['role:permission:update']}
+                requirePermissions={['system:permission:update']}
               >
                 保存
               </AuthButton>

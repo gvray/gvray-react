@@ -56,6 +56,7 @@ interface PageContainerProps {
 const PageContainer: React.FC<PropsWithChildren<PageContainerProps>> = ({
   children,
   title,
+  ...rest
 }) => {
   const [isVisible, setIsVisible] = useState(false);
 
@@ -75,7 +76,7 @@ const PageContainer: React.FC<PropsWithChildren<PageContainerProps>> = ({
   }, []);
 
   return (
-    <PageContainerWrapper>
+    <PageContainerWrapper {...rest}>
       {title && (
         <Helmet>
           <title>{title}</title>

@@ -260,7 +260,7 @@ export default function AuthUserPage() {
                 onClick={handleSubmit}
                 loading={submitting}
                 disabled={!hasChanges()}
-                requirePermissions={['role:user:update']}
+                requirePermissions={['system:role:update']}
               >
                 保存分配
               </AuthButton>

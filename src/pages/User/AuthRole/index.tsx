@@ -222,7 +222,7 @@ export default function AuthRolePage() {
                 onClick={handleSubmit}
                 loading={submitting}
                 disabled={!hasChanges()}
-                requirePermissions={['system:user:manage']}
+                requirePermissions={['system:user:update']}
               >
                 保存分配
               </AuthButton>

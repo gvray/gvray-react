@@ -8,6 +8,7 @@ import {
 } from '@gvray/request';
 import { Modal, message as msg, notification } from 'antd';
 import { history } from 'umi';
+import { statusMap } from './constants/httpStatus';
 import { BizErrorDetails, throwBizError, wrapToBizError } from './utils/errors';
 
 // 防止多次弹出 401 对话框
@@ -51,7 +52,12 @@ const handleBizErrorMessage = (details: BizErrorDetails) => {
       msg.error(message);
       break;
     case ErrorShowType.NOTIFICATION:
-      notification.open({ description: message, message: code });
+      notification.warning({
+        description: message,
+        message: statusMap[code || -1] ?? `请求失败（${code}）`,
+        duration: 4,
+        placement: 'topRight',
+      });
       break;
     case ErrorShowType.REDIRECT:
       // TODO: redirect

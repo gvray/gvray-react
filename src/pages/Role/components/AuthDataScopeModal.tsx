@@ -296,7 +296,7 @@ export default function AuthDataScopeModal({
           type="primary"
           loading={submitting}
           onClick={handleSubmit}
-          requirePermissions={['system:role:manage']}
+          requirePermissions={['system:role:update']}
         >
           保存分配
         </AuthButton>,
