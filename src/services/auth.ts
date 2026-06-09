@@ -29,3 +29,19 @@ export function queryMenus() {
     method: 'GET',
   });
 }
+
+/** 刷新访问令牌 */
+export function refreshToken(data: API.RefreshTokenDto) {
+  return request<
+    API.Response<{
+      access_token: string;
+      refresh_token: string;
+      access_token_expires_in: number;
+      refresh_token_expires_in: number;
+    }>
+  >('/auth/refresh', {
+    method: 'POST',
+    data,
+    skipAuth: true,
+  });
+}

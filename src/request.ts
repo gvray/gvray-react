@@ -1,5 +1,6 @@
 import { createClient } from '@gvray/request';
 import { httpConfig } from './httpConfig';
+import { refreshToken } from './services/auth';
 import { tokenManager } from './utils';
 
 // 创建并初始化请求客户端
@@ -12,6 +13,21 @@ const client = createClient({
   preset: {
     bearerAuth: {
       getToken: () => Promise.resolve(tokenManager.getAccessToken()),
+    },
+    requestAuthRefresh: {
+      getToken: () => Promise.resolve(tokenManager.getAccessToken()), // null = expired
+      refreshToken: async () => {
+        const token = tokenManager.getRefreshToken();
+        if (!token) {
+          return null; // 无 refresh token，无法刷新，需重新登录
+        }
+        const res = await refreshToken({ refreshToken: token });
+        const { access_token, refresh_token } = res.data;
+        tokenManager.setRefreshToken(refresh_token);
+        return access_token;
+      },
+      setToken: (token) => tokenManager.setAccessToken(token),
+      exclude: ['/auth/login', '/auth/refresh'],
     },
     logging: true,
   },
