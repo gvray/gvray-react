@@ -514,7 +514,7 @@ export default function AuthPermissionPage() {
                 onClick={handleSubmit}
                 loading={submitting}
                 disabled={!hasChanges()}
-                requirePermissions={[PERM.ROLE_UPDATE_PERMISSIONS]}
+                perms={[PERM.ROLE_UPDATE_PERMISSIONS]}
               >
                 保存
               </AuthButton>

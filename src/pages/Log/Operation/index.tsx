@@ -157,7 +157,7 @@ const OperationLogPage: React.FC = () => {
           <AuthButton
             type="link"
             onClick={() => handleViewDetail(record)}
-            perms={[PERM.LOG_VIEW]}
+            perms={[PERM.LOG_OPERATION_VIEW]}
           >
             详情
           </AuthButton>
@@ -229,7 +229,7 @@ const OperationLogPage: React.FC = () => {
               danger
               disabled={!selectedRowKeys.length}
               onClick={handleBatchDelete}
-              perms={[PERM.LOG_DELETE]}
+              perms={[PERM.LOG_OPERATION_DELETE]}
             >
               删除
             </AuthButton>

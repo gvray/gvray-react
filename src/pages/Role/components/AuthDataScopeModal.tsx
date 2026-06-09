@@ -297,7 +297,7 @@ export default function AuthDataScopeModal({
           type="primary"
           loading={submitting}
           onClick={handleSubmit}
-          requirePermissions={[PERM.ROLE_UPDATE_DATA_SCOPE]}
+          perms={[PERM.ROLE_UPDATE_DATA_SCOPE]}
         >
           保存分配
         </AuthButton>,

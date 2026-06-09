@@ -223,7 +223,7 @@ export default function AuthRolePage() {
                 onClick={handleSubmit}
                 loading={submitting}
                 disabled={!hasChanges()}
-                requirePermissions={[PERM.USER_UPDATE_ROLES]}
+                perms={[PERM.USER_UPDATE_ROLES]}
               >
                 保存分配
               </AuthButton>

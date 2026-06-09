@@ -3,10 +3,8 @@ import { Button, ButtonProps, Tooltip } from 'antd';
 import React from 'react';
 
 export interface AuthButtonProps extends ButtonProps {
-  /** 兼容长写：建议使用更简短的 perms */
-  requirePermissions?: string[];
   /** 简写：推荐使用 */
-  perms?: string[];
+  perms: string[];
   anyOf?: boolean; // 任一权限即可
   mode?: 'hidden' | 'disabled'; // 无权限时处理方式
   denyMessage?: React.ReactNode; // 无权限提示
@@ -14,7 +12,6 @@ export interface AuthButtonProps extends ButtonProps {
 
 const AuthButton: React.FC<AuthButtonProps> = ({
   children,
-  requirePermissions = [],
   perms,
   anyOf = false,
   mode = 'hidden',
@@ -24,14 +21,14 @@ const AuthButton: React.FC<AuthButtonProps> = ({
   const { permissions } = useAuth();
 
   const hasPermission = React.useMemo(() => {
-    const required = perms ?? requirePermissions ?? [];
+    const required = perms ?? [];
     if (!required || required.length === 0) return true;
     if (!permissions || permissions.length === 0) return false;
     if (permissions.includes('*:*:*')) return true;
     return anyOf
       ? required.some((p) => permissions.includes(p))
       : required.every((p) => permissions.includes(p));
-  }, [permissions, requirePermissions, perms, anyOf]);
+  }, [permissions, perms, anyOf]);
 
   if (hasPermission) {
     return <Button {...buttonProps}>{children}</Button>;

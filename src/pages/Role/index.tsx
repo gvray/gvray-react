@@ -199,7 +199,7 @@ const RolePage = () => {
               type="link"
               icon={<EditOutlined />}
               onClick={() => handleUpdate(record)}
-              requirePermissions={[PERM.ROLE_UPDATE]}
+              perms={[PERM.ROLE_UPDATE]}
             >
               修改
             </AuthButton>
@@ -209,7 +209,7 @@ const RolePage = () => {
               type="link"
               icon={<DeleteOutlined />}
               onClick={() => handleDelete(record)}
-              requirePermissions={[PERM.ROLE_DELETE]}
+              perms={[PERM.ROLE_DELETE]}
             >
               删除
             </AuthButton>
@@ -237,7 +237,7 @@ const RolePage = () => {
             <AuthButton
               type="primary"
               onClick={handleAdd}
-              requirePermissions={[PERM.ROLE_CREATE]}
+              perms={[PERM.ROLE_CREATE]}
             >
               新增角色
             </AuthButton>

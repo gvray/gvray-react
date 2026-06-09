@@ -154,7 +154,7 @@ const ResourcePage = () => {
               type="link"
               icon={<EditOutlined />}
               onClick={() => handleUpdate(record)}
-              requirePermissions={[PERM.PERMISSION_UPDATE]}
+              perms={[PERM.PERMISSION_UPDATE]}
             >
               修改
             </AuthButton>
@@ -163,7 +163,7 @@ const ResourcePage = () => {
               type="link"
               icon={<DeleteOutlined />}
               onClick={() => handleDelete(record)}
-              requirePermissions={[PERM.PERMISSION_DELETE]}
+              perms={[PERM.PERMISSION_DELETE]}
             >
               删除
             </AuthButton>
@@ -190,7 +190,7 @@ const ResourcePage = () => {
             type="primary"
             icon={<PlusOutlined />}
             onClick={handleAdd}
-            requirePermissions={[PERM.PERMISSION_CREATE]}
+            perms={[PERM.PERMISSION_CREATE]}
           >
             新增权限
           </AuthButton>

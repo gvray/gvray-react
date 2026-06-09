@@ -137,7 +137,7 @@ const LoginLog: React.FC = () => {
               onClick={handleDelete}
               loading={deleting}
               disabled={selectedRows.length === 0}
-              perms={[PERM.LOG_DELETE]}
+              perms={[PERM.LOG_LOGIN_DELETE]}
             >
               删除
             </AuthButton>
