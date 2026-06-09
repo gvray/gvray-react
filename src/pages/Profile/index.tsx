@@ -117,7 +117,7 @@ export default function ProfilePage() {
           <SafetyCertificateOutlined /> 我的权限
         </span>
       ),
-      children: <TabPermissions profile={profile} />,
+      children: <TabPermissions />,
     },
     {
       key: 'preferences',
@@ -153,7 +153,6 @@ export default function ProfilePage() {
   return (
     <PageContainer className={styles.profilePage}>
       <FlexLayout className="profile-flex">
-        {/* ════════════ Left Panel (single card) ════════════ */}
         <PanelCard className={styles.leftPanel}>
           {/* ── Avatar Hero ── */}
           <div className={styles.avatarHero}>
@@ -327,8 +326,6 @@ export default function ProfilePage() {
             </div>
           </div>
         </PanelCard>
-
-        {/* ════════════ Right Panel ════════════ */}
         <PanelCard className={styles.rightPanel}>
           <Tabs defaultActiveKey="profile" items={tabItems} />
         </PanelCard>

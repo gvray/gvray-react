@@ -6,6 +6,7 @@ import {
   TablePro,
 } from '@/components';
 import { TableProRef } from '@/components/TablePro';
+import { PERM } from '@/constants';
 import { useFeedback } from '@/hooks';
 import useDict from '@/hooks/useDict';
 import type { DictOption } from '@/types/dict';
@@ -121,7 +122,7 @@ const PositionPage = () => {
               type="link"
               icon={<EditOutlined />}
               onClick={() => handleUpdate(record)}
-              perms={['system:position:update']}
+              perms={[PERM.POSITION_UPDATE]}
             >
               修改
             </AuthButton>
@@ -130,7 +131,7 @@ const PositionPage = () => {
               type="link"
               icon={<DeleteOutlined />}
               onClick={() => handleDelete(record)}
-              perms={['system:position:delete']}
+              perms={[PERM.POSITION_DELETE]}
             >
               删除
             </AuthButton>
@@ -150,7 +151,7 @@ const PositionPage = () => {
               type="primary"
               icon={<PlusOutlined />}
               onClick={handleAdd}
-              perms={['system:position:create']}
+              perms={[PERM.POSITION_CREATE]}
             >
               新增岗位
             </AuthButton>

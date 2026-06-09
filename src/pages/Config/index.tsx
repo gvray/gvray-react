@@ -6,6 +6,7 @@ import {
   TablePro,
 } from '@/components';
 import { TableProRef } from '@/components/TablePro';
+import { PERM } from '@/constants';
 import { useFeedback } from '@/hooks';
 import useDict from '@/hooks/useDict';
 import type { DictOption } from '@/types/dict';
@@ -191,7 +192,7 @@ const ConfigPage = () => {
             type="link"
             icon={<EyeOutlined />}
             onClick={() => handleView(record)}
-            perms={['system:config:view']}
+            perms={[PERM.CONFIG_VIEW]}
           >
             查看
           </AuthButton>
@@ -199,7 +200,7 @@ const ConfigPage = () => {
             type="link"
             icon={<EditOutlined />}
             onClick={() => handleUpdate(record)}
-            perms={['system:config:update']}
+            perms={[PERM.CONFIG_UPDATE]}
           >
             修改
           </AuthButton>
@@ -208,7 +209,7 @@ const ConfigPage = () => {
             type="link"
             icon={<DeleteOutlined />}
             onClick={() => handleDelete(record)}
-            perms={['system:config:delete']}
+            perms={[PERM.CONFIG_DELETE]}
           >
             删除
           </AuthButton>
@@ -225,7 +226,7 @@ const ConfigPage = () => {
           <AuthButton
             type="primary"
             onClick={handleAdd}
-            perms={['system:config:create']}
+            perms={[PERM.CONFIG_CREATE]}
           >
             新增配置
           </AuthButton>

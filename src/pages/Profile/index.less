@@ -1,510 +1,504 @@
-// ─── Profile Page v6 ────────────────────────────────────
-// Single-card left panel, PageContainer wrapper
 .profilePage {
-  background: transparent;
-  padding: 0;
-}
-// ─── Left Panel ─────────────────────────────────────────
-
-.leftPanel {
-  width: 320px;
-  flex-shrink: 0;
-  position: sticky;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
-
-  :global(.ant-card-body) {
-    padding: 0;
-  }
-}
-
-// ── Avatar Hero ──
-
-.avatarHero {
-  position: relative;
-  text-align: center;
-  padding: 0 0 24px;
-}
-
-.heroBg {
-  height: 100px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  position: relative;
-  overflow: hidden;
-
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: -40px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 200%;
-    height: 80px;
-    background: var(--ant-color-bg-container, #fff);
-    border-radius: 50%;
-  }
-}
-
-.avatarWrap {
-  position: relative;
-  display: inline-block;
-  z-index: 2;
-  margin-top: -48px;
-}
-
-.avatarRing {
-  border: 4px solid #fff;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
-}
-
-.avatarUploadBtn {
-  position: absolute;
-  bottom: 4px;
-  right: 4px;
-  z-index: 3;
-}
-
-.onlineDot {
-  position: absolute;
-  top: 6px;
-  right: 6px;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  border: 3px solid #fff;
-  z-index: 3;
-}
-
-.nameRow {
-  margin-top: 12px;
-  padding: 0 24px;
-  position: relative;
-  z-index: 1;
-}
-
-.userName {
-  font-size: 20px;
-  font-weight: 700;
-  margin: 0 0 2px !important;
-  letter-spacing: 0.3px;
-}
-
-.userBio {
-  font-size: 13px;
-  color: rgba(0, 0, 0, 0.45);
-  margin: 0 0 14px !important;
-  line-height: 1.5;
-}
-
-.roleTags {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 6px;
-  padding: 0 8px;
-
-  :global(.ant-tag) {
-    max-width: 120px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-}
-
-// ── Stats Row ──
-
-.statsRow {
-  display: flex;
-  padding: 16px 24px;
-  gap: 0;
-}
-
-.statItem {
-  flex: 1;
-  text-align: center;
-  position: relative;
-
-  &:not(:last-child)::after {
-    content: '';
-    position: absolute;
-    right: 0;
-    top: 4px;
-    bottom: 4px;
-    width: 1px;
-    background: rgba(0, 0, 0, 0.06);
-  }
-}
-
-.statValue {
-  font-size: 20px;
-  font-weight: 700;
-  line-height: 1.2;
-  color: rgba(0, 0, 0, 0.85);
-}
-
-.statLabel {
-  font-size: 12px;
-  color: rgba(0, 0, 0, 0.45);
-  margin-top: 2px;
-}
-
-// ── Divider ──
-
-.sectionDivider {
-  margin: 0 24px;
-  border-top: 1px solid rgba(0, 0, 0, 0.04);
-}
-
-// ── Info Section ──
-
-.infoSection {
-  padding: 20px 24px;
-}
-
-.infoSectionTitle {
-  font-size: 12px;
-  font-weight: 600;
-  margin-bottom: 14px;
-  color: rgba(0, 0, 0, 0.45);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.infoRow {
-  display: flex;
-  align-items: center;
-  padding: 10px 0;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
-  font-size: 13px;
-
-  &:last-child {
-    border-bottom: none;
-    padding-bottom: 0;
-  }
-
-  &:first-of-type {
-    padding-top: 0;
-  }
-}
-
-.infoIcon {
-  color: rgba(0, 0, 0, 0.3);
-  font-size: 14px;
-  width: 20px;
-  text-align: center;
-  margin-right: 10px;
-  flex-shrink: 0;
-}
-
-.infoLabel {
-  color: rgba(0, 0, 0, 0.45);
-  width: 60px;
-  flex-shrink: 0;
-}
-
-.infoValue {
-  flex: 1;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  text-align: right;
-  font-weight: 500;
-}
-
-// ── Completeness ──
-
-.completenessSection {
-  padding: 20px 24px;
-}
-
-.completenessHeader {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 12px;
-  font-size: 12px;
-  font-weight: 600;
-  color: rgba(0, 0, 0, 0.45);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.completenessItems {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-top: 14px;
-}
-
-.completenessItem {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 13px;
-
-  .itemIcon {
-    font-size: 15px;
-    width: 20px;
-    text-align: center;
-  }
-
-  .itemLabel {
-    flex: 1;
-  }
-}
-
-// ─── Right Panel ────────────────────────────────────────
-
-.rightPanel {
-  flex: 1;
-  min-width: 0;
-  border-radius: 16px;
-  overflow: hidden;
-
-  :global(.ant-card-body) {
-    padding: 0;
-  }
-
-  :global(.ant-tabs) {
-    overflow: visible;
-  }
-
-  :global(.ant-tabs-nav) {
-    padding: 0 28px;
-    margin-bottom: 0;
-
-    &::before {
-      border-bottom-color: rgba(0, 0, 0, 0.04);
-    }
-  }
-
-  :global(.ant-tabs-tab) {
-    padding: 14px 4px;
-    font-size: 14px;
-    font-weight: 500;
-  }
-
-  :global(.ant-tabs-content-holder) {
-    padding: 24px 28px;
-  }
-}
-
-// ─── Module Cards (used in tabs) ────────────────────────
-
-.moduleCard {
-  border-radius: 12px;
-  border: 1px solid rgba(0, 0, 0, 0.04);
-  box-shadow: none;
-  margin-bottom: 16px;
-  overflow: hidden;
-
-  &:last-child {
-    margin-bottom: 0;
-  }
-
-  :global(.ant-card-head) {
-    border-bottom-color: rgba(0, 0, 0, 0.04);
-    min-height: 44px;
-    padding: 0 20px;
-    font-size: 14px;
-  }
-
-  :global(.ant-card-body) {
-    padding: 20px;
-  }
-}
-
-// ─── Profile Info Tab ───────────────────────────────────
-
-.readonlyField {
-  color: rgba(0, 0, 0, 0.45);
-
-  :global(.anticon) {
-    margin-left: 6px;
-    font-size: 11px;
-    color: rgba(0, 0, 0, 0.2);
-  }
-}
-
-.verifiedIcon {
-  color: #52c41a;
-  margin-left: 6px;
-  font-size: 13px;
-}
-
-.unverifiedIcon {
-  color: #faad14;
-  margin-left: 6px;
-  font-size: 13px;
-}
-
-.contactRow {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.contactAction {
-  margin-left: auto;
-  flex-shrink: 0;
-}
-
-// ─── Security Tab ───────────────────────────────────────
-
-.securityGrid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  overflow: auto;
-}
-
-.strengthWeak {
-  color: #ff4d4f;
-}
-
-.strengthMedium {
-  color: #faad14;
-}
-
-.strengthStrong {
-  color: #52c41a;
-}
-
-.sessionItem {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.sessionIcon {
-  font-size: 22px;
-  color: rgba(0, 0, 0, 0.25);
-}
-
-.sessionInfo {
-  flex: 1;
-  min-width: 0;
-}
-
-.sessionDevice {
-  font-weight: 500;
-  font-size: 13px;
-}
-
-.sessionMeta {
-  font-size: 12px;
-  color: rgba(0, 0, 0, 0.45);
-}
-
-// ─── Permissions Tab ────────────────────────────────────
-
-.permissionSource {
-  font-size: 12px;
-  color: rgba(0, 0, 0, 0.45);
-}
-
-.menuTreeWrap {
-  :global(.ant-tree) {
-    background: transparent;
-  }
-}
-
-// ─── Login Log Tab ──────────────────────────────────────
-
-.logFilters {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 16px;
-  flex-wrap: wrap;
-  align-items: center;
-}
-
-// ─── Notifications Tab ──────────────────────────────────
-
-.notifItem {
-  cursor: pointer;
-  transition: background 0.15s;
-  border-radius: 8px;
-  padding: 4px 0;
-
-  &:hover {
-    background: rgba(0, 0, 0, 0.02);
-  }
-}
-
-.notifUnread {
-  font-weight: 600;
-}
-
-.notifTime {
-  font-size: 12px;
-  color: rgba(0, 0, 0, 0.35);
-  margin-top: 4px;
-}
-
-// ─── Preferences Tab ────────────────────────────────────
-
-.prefCard {
-  border-radius: 12px;
-  border: 1px solid rgba(0, 0, 0, 0.04);
-  box-shadow: none;
-  height: 100%;
-
-  :global(.ant-card-head) {
-    border-bottom-color: rgba(0, 0, 0, 0.04);
-    min-height: 44px;
-    padding: 0 20px;
-  }
-
-  :global(.ant-card-body) {
-    padding: 12px 20px;
-  }
-}
-
-// ─── Responsive ─────────────────────────────────────────
-
-@media (max-width: 1200px) {
   .leftPanel {
-    width: 100%;
-    position: static;
-  }
+    width: 320px;
+    flex-shrink: 0;
+    position: sticky;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 
-  .rightPanel {
-    width: 100%;
-  }
-
-  .securityGrid {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 768px) {
-  .rightPanel {
-    :global(.ant-tabs-nav) {
-      padding: 0 16px;
-    }
-
-    :global(.ant-tabs-content-holder) {
-      padding: 16px;
+    :global(.ant-card-body) {
+      padding: 0;
     }
   }
 
-  .statsRow {
-    padding: 12px 16px;
+  // ── Avatar Hero ──
+
+  .avatarHero {
+    position: relative;
+    text-align: center;
+    padding: 0 0 24px;
   }
 
-  .infoSection,
-  .completenessSection {
-    padding: 16px;
+  .heroBg {
+    height: 100px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    position: relative;
+    overflow: hidden;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -40px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 200%;
+      height: 80px;
+      background: var(--ant-color-bg-container, #fff);
+      border-radius: 50%;
+    }
   }
 
-  .sectionDivider {
-    margin: 0 16px;
+  .avatarWrap {
+    position: relative;
+    display: inline-block;
+    z-index: 2;
+    margin-top: -48px;
+  }
+
+  .avatarRing {
+    border: 4px solid #fff;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+  }
+
+  .avatarUploadBtn {
+    position: absolute;
+    bottom: 4px;
+    right: 4px;
+    z-index: 3;
+  }
+
+  .onlineDot {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 3px solid #fff;
+    z-index: 3;
   }
 
   .nameRow {
-    padding: 0 16px;
+    margin-top: 12px;
+    padding: 0 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .userName {
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0 0 2px !important;
+    letter-spacing: 0.3px;
+  }
+
+  .userBio {
+    font-size: 13px;
+    color: rgba(0, 0, 0, 0.45);
+    margin: 0 0 14px !important;
+    line-height: 1.5;
+  }
+
+  .roleTags {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 0 8px;
+
+    :global(.ant-tag) {
+      max-width: 120px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  // ── Stats Row ──
+
+  .statsRow {
+    display: flex;
+    padding: 16px 24px;
+    gap: 0;
+  }
+
+  .statItem {
+    flex: 1;
+    text-align: center;
+    position: relative;
+
+    &:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 4px;
+      bottom: 4px;
+      width: 1px;
+      background: rgba(0, 0, 0, 0.06);
+    }
+  }
+
+  .statValue {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.2;
+    color: rgba(0, 0, 0, 0.85);
+  }
+
+  .statLabel {
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.45);
+    margin-top: 2px;
+  }
+
+  // ── Divider ──
+
+  .sectionDivider {
+    margin: 0 24px;
+    border-top: 1px solid rgba(0, 0, 0, 0.04);
+  }
+
+  // ── Info Section ──
+
+  .infoSection {
+    padding: 20px 24px;
+  }
+
+  .infoSectionTitle {
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 14px;
+    color: rgba(0, 0, 0, 0.45);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .infoRow {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+    font-size: 13px;
+
+    &:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    &:first-of-type {
+      padding-top: 0;
+    }
+  }
+
+  .infoIcon {
+    color: rgba(0, 0, 0, 0.3);
+    font-size: 14px;
+    width: 20px;
+    text-align: center;
+    margin-right: 10px;
+    flex-shrink: 0;
+  }
+
+  .infoLabel {
+    color: rgba(0, 0, 0, 0.45);
+    width: 60px;
+    flex-shrink: 0;
+  }
+
+  .infoValue {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: right;
+    font-weight: 500;
+  }
+
+  // ── Completeness ──
+
+  .completenessSection {
+    padding: 20px 24px;
+  }
+
+  .completenessHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(0, 0, 0, 0.45);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .completenessItems {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 14px;
+  }
+
+  .completenessItem {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+
+    .itemIcon {
+      font-size: 15px;
+      width: 20px;
+      text-align: center;
+    }
+
+    .itemLabel {
+      flex: 1;
+    }
+  }
+
+  // ─── Right Panel ────────────────────────────────────────
+
+  .rightPanel {
+    flex: 1;
+    min-width: 0;
+    border-radius: 16px;
+    overflow: hidden;
+
+    :global(.ant-card-body) {
+      padding: 0;
+    }
+
+    :global(.ant-tabs) {
+      overflow: visible;
+    }
+
+    :global(.ant-tabs-nav) {
+      padding: 0 28px;
+      margin-bottom: 0;
+
+      &::before {
+        border-bottom-color: rgba(0, 0, 0, 0.04);
+      }
+    }
+
+    :global(.ant-tabs-tab) {
+      padding: 14px 4px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    :global(.ant-tabs-content-holder) {
+      padding: 24px 28px;
+    }
+  }
+
+  // ─── Module Cards (used in tabs) ────────────────────────
+
+  .moduleCard {
+    border-radius: 12px;
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    box-shadow: none;
+    margin-bottom: 16px;
+    overflow: hidden;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    :global(.ant-card-head) {
+      border-bottom-color: rgba(0, 0, 0, 0.04);
+      min-height: 44px;
+      padding: 0 20px;
+      font-size: 14px;
+    }
+
+    :global(.ant-card-body) {
+      padding: 20px;
+    }
+  }
+
+  // ─── Profile Info Tab ───────────────────────────────────
+
+  .readonlyField {
+    color: rgba(0, 0, 0, 0.45);
+
+    :global(.anticon) {
+      margin-left: 6px;
+      font-size: 11px;
+      color: rgba(0, 0, 0, 0.2);
+    }
+  }
+
+  .verifiedIcon {
+    color: #52c41a;
+    margin-left: 6px;
+    font-size: 13px;
+  }
+
+  .unverifiedIcon {
+    color: #faad14;
+    margin-left: 6px;
+    font-size: 13px;
+  }
+
+  .contactRow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .contactAction {
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+
+  // ─── Security Tab ───────────────────────────────────────
+
+  .securityGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    overflow: auto;
+  }
+
+  .strengthWeak {
+    color: #ff4d4f;
+  }
+
+  .strengthMedium {
+    color: #faad14;
+  }
+
+  .strengthStrong {
+    color: #52c41a;
+  }
+
+  .sessionItem {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .sessionIcon {
+    font-size: 22px;
+    color: rgba(0, 0, 0, 0.25);
+  }
+
+  .sessionInfo {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .sessionDevice {
+    font-weight: 500;
+    font-size: 13px;
+  }
+
+  .sessionMeta {
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.45);
+  }
+
+  // ─── Permissions Tab ────────────────────────────────────
+
+  .permissionSource {
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.45);
+  }
+
+  .menuTreeWrap {
+    :global(.ant-tree) {
+      background: transparent;
+    }
+  }
+
+  // ─── Login Log Tab ──────────────────────────────────────
+
+  .logFilters {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  // ─── Notifications Tab ──────────────────────────────────
+
+  .notifItem {
+    cursor: pointer;
+    transition: background 0.15s;
+    border-radius: 8px;
+    padding: 4px 0;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.02);
+    }
+  }
+
+  .notifUnread {
+    font-weight: 600;
+  }
+
+  .notifTime {
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.35);
+    margin-top: 4px;
+  }
+
+  // ─── Preferences Tab ────────────────────────────────────
+
+  .prefCard {
+    border-radius: 12px;
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    box-shadow: none;
+    height: 100%;
+
+    :global(.ant-card-head) {
+      border-bottom-color: rgba(0, 0, 0, 0.04);
+      min-height: 44px;
+      padding: 0 20px;
+    }
+
+    :global(.ant-card-body) {
+      padding: 12px 20px;
+    }
+  }
+
+  // ─── Responsive ─────────────────────────────────────────
+
+  @media (max-width: 1200px) {
+    .leftPanel {
+      width: 100%;
+      position: static;
+    }
+
+    .rightPanel {
+      width: 100%;
+    }
+
+    .securityGrid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .rightPanel {
+      :global(.ant-tabs-nav) {
+        padding: 0 16px;
+      }
+
+      :global(.ant-tabs-content-holder) {
+        padding: 16px;
+      }
+    }
+
+    .statsRow {
+      padding: 12px 16px;
+    }
+
+    .infoSection,
+    .completenessSection {
+      padding: 16px;
+    }
+
+    .sectionDivider {
+      margin: 0 16px;
+    }
+
+    .nameRow {
+      padding: 0 16px;
+    }
   }
 }

@@ -1,6 +1,6 @@
 /**
  * 此文件由 scripts/gen-api-types.ts 自动生成
- * 生成时间: 2026-03-13T16:03:06.263Z
+ * 生成时间: 2026-06-09T13:49:09.897Z
  * 数据来源: http://localhost:8001/api-json
  * 请勿手动修改此文件
  */
@@ -358,6 +358,36 @@ declare namespace API {
     permissionIds?: string[];
   }
 
+  interface RolePermissionResponseDto {
+    /**
+     * 权限唯一标识符（UUID）
+     * @example a3d7d76e-5a4e-4f0a-93c3-d0b2b27d471e
+     */
+    permissionId: string;
+    /** 权限名称 */
+    name: string;
+    /** 权限代码 */
+    code: string;
+    /** 操作类型 */
+    action: string;
+  }
+
+  interface RoleUserResponseDto {
+    /**
+     * 用户唯一标识符（UUID）
+     * @example a3d7d76e-5a4e-4f0a-93c3-d0b2b27d471e
+     */
+    userId: string;
+    /** 用户名 */
+    username: string;
+    /** 用户昵称 */
+    nickname: string;
+    /** 用户邮箱 */
+    email: string;
+    /** 用户状态：0-禁用，1-启用 */
+    status: number;
+  }
+
   interface UpdateRoleDto {
     /** 角色名称 */
     name?: string;
@@ -391,36 +421,6 @@ declare namespace API {
     userIds: string[];
   }
 
-  interface RolePermissionResponseDto {
-    /**
-     * 权限唯一标识符（UUID）
-     * @example a3d7d76e-5a4e-4f0a-93c3-d0b2b27d471e
-     */
-    permissionId: string;
-    /** 权限名称 */
-    name: string;
-    /** 权限代码 */
-    code: string;
-    /** 操作类型 */
-    action: string;
-  }
-
-  interface RoleUserResponseDto {
-    /**
-     * 用户唯一标识符（UUID）
-     * @example a3d7d76e-5a4e-4f0a-93c3-d0b2b27d471e
-     */
-    userId: string;
-    /** 用户名 */
-    username: string;
-    /** 用户昵称 */
-    nickname: string;
-    /** 用户邮箱 */
-    email: string;
-    /** 用户状态：0-禁用，1-启用 */
-    status: number;
-  }
-
   interface AssignDataScopeDto {
     /**
      * 数据权限类型：1-仅本人, 2-本部门, 3-本部门及以下, 4-自定义, 5-全部
@@ -429,6 +429,22 @@ declare namespace API {
     dataScope: number;
     /** 部门ID列表（当dataScope为4-自定义时必填） */
     departmentIds?: string[];
+  }
+
+  interface RoleDepartmentDto {
+    /** 部门ID */
+    departmentId: string;
+    /** 部门名称 */
+    departmentName: string;
+  }
+
+  interface RoleDataScopeResponseDto {
+    /** 角色ID */
+    roleId: string;
+    /** 数据权限范围 */
+    dataScope: number;
+    /** 关联部门列表 */
+    departments: RoleDepartmentDto[];
   }
 
   interface BatchDeleteRolesDto {
@@ -458,15 +474,23 @@ declare namespace API {
     type: 'DIRECTORY' | 'MENU' | 'BUTTON' | 'API';
     /** 父级菜单的权限ID（仅非菜单时需要） */
     parentPermissionId?: string;
-    /** 操作类型（菜单默认为access） */
+    /** 操作类型（菜单默认为list或view） */
     action?:
-      | 'access'
+      | 'list'
       | 'view'
       | 'create'
       | 'update'
       | 'delete'
+      | 'clean'
+      | 'clear'
+      | 'import'
       | 'export'
-      | 'import';
+      | 'scan'
+      | 'update-users'
+      | 'update-roles'
+      | 'update-permissions'
+      | 'update-data-scope'
+      | 'reset-password';
     /** 权限描述 */
     description?: string;
     /** 备注信息 */
@@ -537,6 +561,25 @@ declare namespace API {
     children?: PermissionTreeNodeDto[];
   }
 
+  interface SimplePermissionTreeNodeDto {
+    /** 权限ID */
+    key: string;
+    /** 权限名称 */
+    title: string;
+    /** 权限代码 */
+    code: string;
+    /** 权限类型 */
+    type: string;
+    /** 父权限ID */
+    parentId?: Record<string, unknown>;
+    /** 操作动作 */
+    action?: string;
+    /** 排序值 */
+    sort?: number;
+    /** 子节点 */
+    children?: SimplePermissionTreeNodeDto[];
+  }
+
   interface UpdatePermissionDto {
     /** 权限名称 */
     name?: string;
@@ -546,15 +589,23 @@ declare namespace API {
     type?: 'DIRECTORY' | 'MENU' | 'BUTTON' | 'API';
     /** 父级菜单的权限ID（仅非菜单时需要） */
     parentPermissionId?: string;
-    /** 操作类型（菜单默认为access） */
+    /** 操作类型（菜单默认为list或view） */
     action?:
-      | 'access'
+      | 'list'
       | 'view'
       | 'create'
       | 'update'
       | 'delete'
+      | 'clean'
+      | 'clear'
+      | 'import'
       | 'export'
-      | 'import';
+      | 'scan'
+      | 'update-users'
+      | 'update-roles'
+      | 'update-permissions'
+      | 'update-data-scope'
+      | 'reset-password';
     /** 权限描述 */
     description?: string;
     /** 备注信息 */
@@ -1241,7 +1292,7 @@ declare namespace API {
     updatedAt: string;
     /** 是否为超级管理员 */
     isSuperAdmin?: boolean;
-    /** 权限代码聚合（超管返回 ["*:*:*"]） */
+    /** 权限代码聚合（超管动态返回全部权限代码） */
     permissionCodes?: string[];
     /** 用户角色列表（包含权限信息） */
     roles?: CurrentUserRoleResponseDto[];
@@ -1251,6 +1302,43 @@ declare namespace API {
     preferences?: Record<string, unknown>;
     /** 所属岗位 */
     positions?: CurrentUserPositionResponseDto[];
+  }
+
+  interface UserRoleSimpleDto {
+    /** 角色ID */
+    roleId: string;
+    /** 角色名称 */
+    name: string;
+    /** 角色标识 */
+    roleKey: string;
+    /** 角色描述 */
+    description?: Record<string, unknown>;
+  }
+
+  interface UserPermissionSimpleDto {
+    /** 权限ID */
+    permissionId: string;
+    /** 权限名称 */
+    name: string;
+    /** 权限代码 */
+    code: string;
+    /** 权限类型 */
+    type: string;
+    /** 操作动作 */
+    action: string;
+    /** 权限描述 */
+    description?: Record<string, unknown>;
+    /** 父权限ID */
+    parentPermissionId?: Record<string, unknown>;
+  }
+
+  interface UserPermissionsResponseDto {
+    /** 用户角色列表 */
+    roles: UserRoleSimpleDto[];
+    /** 用户权限列表（去重） */
+    permissions: UserPermissionSimpleDto[];
+    /** 是否为超级管理员 */
+    isSuperAdmin: boolean;
   }
 
   interface UpdateProfileDto {

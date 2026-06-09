@@ -7,3 +7,11 @@ export function queryProfile(options?: RuntimeControlFields) {
     ...options,
   });
 }
+
+/** 获取当前用户权限信息 */
+export function queryProfilePermissions() {
+  return request<API.Response<API.UserPermissionsResponseDto>>(
+    '/profile/permissions',
+    { method: 'GET' },
+  );
+}

@@ -6,6 +6,7 @@ import {
 } from '@/components';
 import StatusTag from '@/components/StatusTag';
 import { TableProRef } from '@/components/TablePro';
+import { PERM } from '@/constants';
 import useDict from '@/hooks/useDict';
 import type { DictOption } from '@/types/dict';
 import { callRef, logger } from '@/utils';
@@ -134,7 +135,7 @@ const UserPage = () => {
               type="link"
               icon={<EditOutlined />}
               onClick={() => handleUpdate(record)}
-              perms={['system:user:update']}
+              perms={[PERM.USER_UPDATE]}
             >
               修改
             </AuthButton>
@@ -143,7 +144,7 @@ const UserPage = () => {
               type="link"
               icon={<DeleteOutlined />}
               onClick={() => handleDelete(record)}
-              perms={['system:user:delete']}
+              perms={[PERM.USER_DELETE]}
             >
               删除
             </AuthButton>
@@ -151,7 +152,7 @@ const UserPage = () => {
               type="link"
               icon={<UserOutlined />}
               onClick={() => handleAuthRole(record.userId)}
-              perms={['system:user:update']}
+              perms={[PERM.USER_UPDATE_ROLES]}
             >
               分配角色
             </AuthButton>
@@ -170,7 +171,7 @@ const UserPage = () => {
             <AuthButton
               type="primary"
               onClick={handleAdd}
-              perms={['system:user:create']}
+              perms={[PERM.USER_CREATE]}
             >
               新增用户
             </AuthButton>

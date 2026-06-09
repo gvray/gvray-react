@@ -6,6 +6,7 @@ import {
 } from '@/components';
 import StatusTag from '@/components/StatusTag';
 import { TableProRef } from '@/components/TablePro';
+import { PERM } from '@/constants';
 import { useAuth, useFeedback } from '@/hooks';
 import useDict from '@/hooks/useDict';
 import type { DictOption } from '@/types/dict';
@@ -129,21 +130,21 @@ const RolePage = () => {
         icon: <KeyOutlined />,
         label: '分配权限',
         onClick: () => handleAuthPermission(record),
-        permission: 'system:role:update',
+        permission: PERM.ROLE_UPDATE_PERMISSIONS,
       },
       {
         key: 'dataPermission',
         icon: <DatabaseOutlined />,
         label: '数据权限',
         onClick: () => handleAuthDataPermission(record),
-        permission: 'system:role:update',
+        permission: PERM.ROLE_UPDATE_DATA_SCOPE,
       },
       {
         key: 'user',
         icon: <UserOutlined />,
         label: '分配用户',
         onClick: () => handleAuthUser(record),
-        permission: 'system:role:update',
+        permission: PERM.ROLE_UPDATE_USERS,
       },
     ];
 
@@ -198,7 +199,7 @@ const RolePage = () => {
               type="link"
               icon={<EditOutlined />}
               onClick={() => handleUpdate(record)}
-              requirePermissions={['system:role:update']}
+              requirePermissions={[PERM.ROLE_UPDATE]}
             >
               修改
             </AuthButton>
@@ -208,7 +209,7 @@ const RolePage = () => {
               type="link"
               icon={<DeleteOutlined />}
               onClick={() => handleDelete(record)}
-              requirePermissions={['system:role:delete']}
+              requirePermissions={[PERM.ROLE_DELETE]}
             >
               删除
             </AuthButton>
@@ -228,7 +229,7 @@ const RolePage = () => {
   ];
 
   return (
-    <PageContainer>
+    <PageContainer title="角色管理">
       <TablePro
         rowKey={'roleId'}
         toolbarRender={() => (
@@ -236,7 +237,7 @@ const RolePage = () => {
             <AuthButton
               type="primary"
               onClick={handleAdd}
-              requirePermissions={['system:role:create']}
+              requirePermissions={[PERM.ROLE_CREATE]}
             >
               新增角色
             </AuthButton>

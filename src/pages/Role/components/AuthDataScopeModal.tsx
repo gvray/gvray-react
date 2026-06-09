@@ -1,4 +1,5 @@
 import { AuthButton } from '@/components';
+import { PERM } from '@/constants';
 import { useFeedback } from '@/hooks';
 import { queryDepartmentTree } from '@/services/department';
 import {
@@ -296,7 +297,7 @@ export default function AuthDataScopeModal({
           type="primary"
           loading={submitting}
           onClick={handleSubmit}
-          requirePermissions={['system:role:update']}
+          requirePermissions={[PERM.ROLE_UPDATE_DATA_SCOPE]}
         >
           保存分配
         </AuthButton>,

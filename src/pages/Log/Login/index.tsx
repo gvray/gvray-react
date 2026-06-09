@@ -6,6 +6,7 @@ import {
   TablePro,
 } from '@/components';
 import { TableProRef } from '@/components/TablePro';
+import { PERM } from '@/constants';
 import { useFeedback } from '@/hooks';
 import useDict from '@/hooks/useDict';
 import type { DictOption } from '@/types/dict';
@@ -136,7 +137,7 @@ const LoginLog: React.FC = () => {
               onClick={handleDelete}
               loading={deleting}
               disabled={selectedRows.length === 0}
-              perms={['system:log:delete']}
+              perms={[PERM.LOG_DELETE]}
             >
               删除
             </AuthButton>
@@ -145,7 +146,7 @@ const LoginLog: React.FC = () => {
               icon={<DeleteOutlined />}
               onClick={handleClear}
               loading={clearing}
-              perms={['system:log:delete']}
+              perms={[PERM.LOG_LOGIN_CLEAR]}
             >
               清空
             </AuthButton>

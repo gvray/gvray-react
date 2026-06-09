@@ -6,6 +6,7 @@ import {
   TablePro,
 } from '@/components';
 import { TableProRef } from '@/components/TablePro';
+import { PERM } from '@/constants';
 import { useFeedback } from '@/hooks';
 import useDict from '@/hooks/useDict';
 import type { DictOption } from '@/types/dict';
@@ -98,7 +99,7 @@ const OperationLogPage: React.FC = () => {
     });
   };
 
-  const handleClean = () => {
+  const handleClear = () => {
     Modal.confirm({
       title: '清空日志确认',
       content: '确认清空所有操作日志吗？该操作不可恢复。',
@@ -156,7 +157,7 @@ const OperationLogPage: React.FC = () => {
           <AuthButton
             type="link"
             onClick={() => handleViewDetail(record)}
-            perms={['system:log:view']}
+            perms={[PERM.LOG_VIEW]}
           >
             详情
           </AuthButton>
@@ -228,14 +229,14 @@ const OperationLogPage: React.FC = () => {
               danger
               disabled={!selectedRowKeys.length}
               onClick={handleBatchDelete}
-              perms={['system:log:delete']}
+              perms={[PERM.LOG_DELETE]}
             >
               删除
             </AuthButton>
             <AuthButton
               danger
-              onClick={handleClean}
-              perms={['system:log:clean']}
+              onClick={handleClear}
+              perms={[PERM.LOG_OPERATION_CLEAR]}
             >
               清空
             </AuthButton>

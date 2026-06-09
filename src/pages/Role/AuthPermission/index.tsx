@@ -5,6 +5,7 @@ import {
   PagePlaceholder,
   StatusTag,
 } from '@/components';
+import { PERM } from '@/constants';
 import { useFeedback } from '@/hooks';
 import useDict from '@/hooks/useDict';
 import type { DictOption } from '@/types/dict';
@@ -513,7 +514,7 @@ export default function AuthPermissionPage() {
                 onClick={handleSubmit}
                 loading={submitting}
                 disabled={!hasChanges()}
-                requirePermissions={['system:permission:update']}
+                requirePermissions={[PERM.ROLE_UPDATE_PERMISSIONS]}
               >
                 保存
               </AuthButton>

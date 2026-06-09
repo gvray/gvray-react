@@ -7,6 +7,7 @@ import {
   TablePro,
 } from '@/components';
 import { TableProRef } from '@/components/TablePro';
+import { PERM } from '@/constants';
 import { useFeedback } from '@/hooks';
 import useDict from '@/hooks/useDict';
 import type { DictOption } from '@/types/dict';
@@ -153,7 +154,7 @@ const ResourcePage = () => {
               type="link"
               icon={<EditOutlined />}
               onClick={() => handleUpdate(record)}
-              requirePermissions={['permission:update']}
+              requirePermissions={[PERM.PERMISSION_UPDATE]}
             >
               修改
             </AuthButton>
@@ -162,7 +163,7 @@ const ResourcePage = () => {
               type="link"
               icon={<DeleteOutlined />}
               onClick={() => handleDelete(record)}
-              requirePermissions={['permission:delete']}
+              requirePermissions={[PERM.PERMISSION_DELETE]}
             >
               删除
             </AuthButton>
@@ -189,7 +190,7 @@ const ResourcePage = () => {
             type="primary"
             icon={<PlusOutlined />}
             onClick={handleAdd}
-            requirePermissions={['permission:create']}
+            requirePermissions={[PERM.PERMISSION_CREATE]}
           >
             新增权限
           </AuthButton>

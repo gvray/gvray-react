@@ -6,6 +6,7 @@ import {
   TablePro,
 } from '@/components';
 import { TableProRef } from '@/components/TablePro';
+import { PERM } from '@/constants';
 import { useFeedback } from '@/hooks';
 import useDict from '@/hooks/useDict';
 import type { DictOption } from '@/types/dict';
@@ -103,7 +104,7 @@ const DepartmentPage = () => {
               type="link"
               icon={<EditOutlined />}
               onClick={() => handleUpdate(record)}
-              perms={['system:department:update']}
+              perms={[PERM.DEPARTMENT_UPDATE]}
             >
               修改
             </AuthButton>
@@ -112,7 +113,7 @@ const DepartmentPage = () => {
               type="link"
               icon={<DeleteOutlined />}
               onClick={() => handleDelete(record)}
-              perms={['system:department:delete']}
+              perms={[PERM.DEPARTMENT_DELETE]}
             >
               删除
             </AuthButton>
@@ -135,7 +136,7 @@ const DepartmentPage = () => {
             type="primary"
             icon={<PlusOutlined />}
             onClick={handleAdd}
-            perms={['system:department:create']}
+            perms={[PERM.DEPARTMENT_CREATE]}
           >
             新增部门
           </AuthButton>

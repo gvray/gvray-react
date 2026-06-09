@@ -3,6 +3,7 @@ import PageContainer from '@/components/PageContainer';
 import PageLoading from '@/components/PageLoading';
 import PagePlaceholder from '@/components/PagePlaceholder';
 import StatusTag from '@/components/StatusTag';
+import { PERM } from '@/constants';
 import { useFeedback } from '@/hooks';
 import useDict from '@/hooks/useDict';
 import {
@@ -222,7 +223,7 @@ export default function AuthRolePage() {
                 onClick={handleSubmit}
                 loading={submitting}
                 disabled={!hasChanges()}
-                requirePermissions={['system:user:update']}
+                requirePermissions={[PERM.USER_UPDATE_ROLES]}
               >
                 保存分配
               </AuthButton>
