@@ -1,3 +1,5 @@
+import { AuthButton } from '@/components';
+import { PERM } from '@/constants';
 import { logger } from '@/utils';
 import {
   ApiOutlined,
@@ -190,9 +192,15 @@ const TabSecurity: React.FC = () => {
           />
         </Form.Item>
         <Form.Item>
-          <Button type="primary" htmlType="submit" block>
+          <AuthButton
+            perms={[PERM.USER_RESET_PASSWORD]}
+            mode="disabled"
+            type="primary"
+            htmlType="submit"
+            block
+          >
             修改密码
-          </Button>
+          </AuthButton>
         </Form.Item>
       </Form>
     </Card>
