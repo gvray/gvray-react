@@ -109,6 +109,7 @@ build_image() {
         [ "${VERSION}" != "latest" ] && extra_tag="--tag ${FULL_IMAGE_NAME}:${VERSION}"
 
         docker build \
+            --platform "${platform}" \
             --build-arg "BUILD_DATE=${BUILD_DATE}" \
             --build-arg "GIT_COMMIT=${GIT_COMMIT}" \
             --build-arg "GIT_BRANCH=${GIT_BRANCH}" \
