@@ -1,6 +1,6 @@
 # 贡献指南（Contributing Guide）
 
-感谢你对 React Umi Admin 的关注与贡献！本文档说明如何参与项目开发、提交代码和报告问题。
+感谢你对 Gvray Admin 的关注与贡献！本文档说明如何参与项目开发、提交代码和报告问题。
 
 ---
 
@@ -16,7 +16,7 @@
 
 ### 2.1 报告 Bug
 
-1. 在 [Issues](https://github.com/gvray/react-umi-admin/issues) 中搜索是否已有相同问题
+1. 在 [Issues](https://github.com/gvray/gvray-react/issues) 中搜索是否已有相同问题
 2. 如果没有，创建新 Issue，请包含：
    - **环境信息**：Node.js 版本、pnpm 版本、浏览器、操作系统
    - **复现步骤**：清晰的操作步骤
@@ -42,8 +42,8 @@
 
 ```bash
 # Fork 项目到你的 GitHub 账号，然后克隆
-git clone https://github.com/<your-username>/react-umi-admin.git
-cd react-umi-admin
+git clone https://github.com/<your-username>/gvray-react.git
+cd gvray-react
 pnpm install
 ```
 
@@ -271,7 +271,7 @@ import { ROOT_PARENT_ID } from '../src/constants';
 
 ## 9. 联系方式
 
-- **GitHub Issues**：[gvray/react-umi-admin/issues](https://github.com/gvray/react-umi-admin/issues)
+- **GitHub Issues**：[gvray/gvray-react/issues](https://github.com/gvray/gvray-react/issues)
 - **作者**：Gavin Ray <gavinbirkhoff@gmail.com>
 
 感谢你的贡献！

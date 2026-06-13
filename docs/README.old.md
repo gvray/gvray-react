@@ -1,4 +1,4 @@
-# React Umi Admin — 企业级 RBAC 权限管理系统 & 前端架构解决方案
+# Gvray Admin — 企业级 RBAC 权限管理系统 & 前端架构解决方案
 
 <!-- keywords: react, umi, ant-design, rbac, admin, dashboard, permission, access-control -->
 
@@ -27,28 +27,28 @@
 
 ### ⚙️ 架构特性
 
-- [x] 约定式多环境构建和变量配置 [#33](https://github.com/gvray/react-umi-admin/issues/33) [#15](https://github.com/gvray/react-umi-admin/issues/15)
-- [x] 主题定制和管理 [#24](https://github.com/gvray/react-umi-admin/issues/24)
+- [x] 约定式多环境构建和变量配置 [#33](https://github.com/gvray/gvray-react/issues/33) [#15](https://github.com/gvray/gvray-react/issues/15)
+- [x] 主题定制和管理 [#24](https://github.com/gvray/gvray-react/issues/24)
 - [x] 自定义布局 Layout 和菜单
 - [x] 用户登录鉴权
-- [x] 网络请求模块 基于 axios [#32](https://github.com/gvray/react-umi-admin/issues/32)
-- [x] 请求方案 [#6](https://github.com/gvray/react-umi-admin/issues/6)
+- [x] 网络请求模块 基于 axios [#32](https://github.com/gvray/gvray-react/issues/32)
+- [x] 请求方案 [#6](https://github.com/gvray/gvray-react/issues/6)
 - [x] 系统异常处理
 - [ ] 权限管理
-- [x] UI 组件库 这里集成 antd5.x [#4](https://github.com/gvray/react-umi-admin/issues/4)
-- [x] 全局状态管理 [#5](https://github.com/gvray/react-umi-admin/issues/5)
-- [x] 国际化(多语言) 在`~src/locales`支持国际化定义 [#7](https://github.com/gvray/react-umi-admin/issues/7)
-- [x] Mock 本地数据模拟 `~mock/` 里的文件都会自动加载 [#8](https://github.com/gvray/react-umi-admin/issues/8) MOCK_ENABLED 开启/关闭功能
+- [x] UI 组件库 这里集成 antd5.x [#4](https://github.com/gvray/gvray-react/issues/4)
+- [x] 全局状态管理 [#5](https://github.com/gvray/gvray-react/issues/5)
+- [x] 国际化(多语言) 在`~src/locales`支持国际化定义 [#7](https://github.com/gvray/gvray-react/issues/7)
+- [x] Mock 本地数据模拟 `~mock/` 里的文件都会自动加载 [#8](https://github.com/gvray/gvray-react/issues/8) MOCK_ENABLED 开启/关闭功能
 - [ ] 路由 以及 keepalive
 - [ ] 路由数据加载
-- [x] 本地代理 [#34](https://github.com/gvray/react-umi-admin/issues/34)
-- [x] 编码规范以及`git`提交验证 [#12](https://github.com/gvray/react-umi-admin/issues/12)
-- [x] 工程代码调试 [#13](https://github.com/gvray/react-umi-admin/issues/13)
+- [x] 本地代理 [#34](https://github.com/gvray/gvray-react/issues/34)
+- [x] 编码规范以及`git`提交验证 [#12](https://github.com/gvray/gvray-react/issues/12)
+- [x] 工程代码调试 [#13](https://github.com/gvray/gvray-react/issues/13)
 - [ ] 测试
-- [x] 样式管理方案 [#17](https://github.com/gvray/react-umi-admin/issues/17)
+- [x] 样式管理方案 [#17](https://github.com/gvray/gvray-react/issues/17)
 - [x] 全面支持 Typescript
 - [x] 支持 OpenApi，类型定义自动同步
-- [x] 微生成器 [#35](https://github.com/gvray/react-umi-admin/issues/35) Umi 中内置了众多微生成器，协助你在开发中快速地完成一些繁琐的工作。
+- [x] 微生成器 [#35](https://github.com/gvray/gvray-react/issues/35) Umi 中内置了众多微生成器，协助你在开发中快速地完成一些繁琐的工作。
 - [ ] 开发插件
 - [ ] MPA 模式
 - [x] 打包构建优化
@@ -84,7 +84,7 @@ Node.js 20+ · pnpm · Cursor / VSCode · 现代主流浏览器
 
 ## 🗄️ 后台数据
 
-后端 API 地址：[nest-admin](https://github.com/gvray/nest-admin)（开发中）
+后端 API 地址：[gvray-admin](https://github.com/gvray/gvray-admin)（开发中）
 
 当前项目支持**前端独立开发**（Mock）与**后端联调**两种模式：
 
@@ -92,7 +92,7 @@ Node.js 20+ · pnpm · Cursor / VSCode · 现代主流浏览器
 - 通过环境变量切换数据源：
   - APP_MOCK_ENABLED=true 启用本地 Mock
   - APP_API_URL=/api 指向 Mock 接口前缀
-- 当需要全量真实数据，请启动后端 nest-admin，并设置：
+- 当需要全量真实数据，请启动后端 gvray-admin，并设置：
   - APP_MOCK_ENABLED=false 关闭 Mock
   - APP_API_URL=http://localhost:8001 指向后端服务
 - 目前 Mock 仅覆盖登录与用户模块，其余模块需连接后端
@@ -109,7 +109,7 @@ pnpm install
 pnpm start
 
 # 或者分别启动不同环境（建议在对应 .env 文件中配置变量）
-# 推荐：如需查看全量页面与数据，使用 staging 并先启动后端 nest-admin
+# 推荐：如需查看全量页面与数据，使用 staging 并先启动后端 gvray-admin
 pnpm start:dev      # 开发环境，端口 9527（默认使用 Mock）
 pnpm start:staging  # 测试环境，端口 9528（连接后端）
 

@@ -14,7 +14,7 @@ YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
 # 配置变量
-IMAGE_NAME="react-umi-admin"
+IMAGE_NAME="gvray-react"
 REGISTRY="${DOCKER_REGISTRY:-docker.io}"
 NAMESPACE="${DOCKER_NAMESPACE:-gvray}"
 VERSION="${VERSION:-latest}"

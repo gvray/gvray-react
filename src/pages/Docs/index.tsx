@@ -8,7 +8,7 @@ export default function DocsPage() {
         <ul style={{ paddingLeft: 18, margin: 0 }}>
           <li>开发环境（dev，端口 9527）：默认启用本地 Mock</li>
           <li>
-            测试环境（staging，端口 9528）：连接后端 nest-admin，提供全量数据
+            测试环境（staging，端口 9528）：连接后端 gvray-admin，提供全量数据
           </li>
         </ul>
         <div style={{ fontWeight: 600, margin: '12px 0 8px' }}>环境变量</div>

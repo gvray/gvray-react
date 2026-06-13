@@ -1,4 +1,4 @@
-# React Umi Admin — 企业级 RBAC 权限管理系统 & 前端架构解决方案
+# Gvray Admin — 企业级 RBAC 权限管理系统 & 前端架构解决方案
 
 <!-- keywords: react, umi, ant-design, rbac, admin, dashboard, permission, access-control -->
 
@@ -6,9 +6,7 @@
 
 ## 🚀 项目理念
 
-我是多年一线前端架构师，希望通过本项目把个人经验沉淀为企业级中后台前端标准样板。它不仅实现完整 RBAC 权限管理，也融合现代前端最佳实践，追求极致可维护性、可扩展性与复用性。这是一个可复用的前端架构，让复杂业务在稳定、高性能基础上持续演进。前后端同步开发，部分数据仍在持续更新。  
-未来规划：全面迁移至 Vite，性能与体验全面升级。  
-⭐⭐⭐⭐⭐ 觉得这个项目有价值？点个 Star，支持高可维护、高可复用的前端实践！
+我是多年一线前端架构师，希望通过本项目把个人经验沉淀为企业级中后台前端标准样板。它不仅实现完整 RBAC 权限管理，也融合现代前端最佳实践，追求极致可维护性、可扩展性与复用性。这是一个可复用的前端架构，让复杂业务在稳定、高性能基础上持续演进。前后端同步开发，部分数据仍在持续更新。未来规划：全面迁移至 Vite，性能与体验全面升级。 ⭐⭐⭐⭐⭐ 觉得这个项目有价值？点个 Star，支持高可维护、高可复用的前端实践！
 
 ## 🔥 项目展示
 
@@ -104,7 +102,7 @@ Node.js 20+ · pnpm · Cursor / VSCode · 现代主流浏览器
 
 🧠 Tip: 建议使用 `.nvmrc` 文件统一 Node 版本，并在团队协作中启用 `corepack` 绑定 pnpm 版本。
 
-后端 API 地址：[nest-admin](https://github.com/gvray/nest-admin)（开发中）
+后端 API 地址：[gvray-admin](https://github.com/gvray/gvray-admin)
 
 ```bash
 # 安装依赖
@@ -114,7 +112,7 @@ pnpm install
 pnpm start
 
 # 或者分别启动不同环境（建议在对应 .env 文件中配置变量）
-# 推荐：如需查看全量页面与数据，使用 staging 并先启动后端 nest-admin
+# 推荐：如需查看全量页面与数据，使用 staging 并先启动后端 gvray-admin
 pnpm start:dev      # 开发环境，端口 9527（默认使用 Mock）
 pnpm start:staging  # 测试环境，端口 9528（连接后端）
 
@@ -142,6 +140,6 @@ APP_MOCK_ENABLED=false
 
 ## 🧩 其他技术栈生态
 
-- Vue 3 + Vite + Pinia 版本（[vue-pinia-admin](https://github.com/gvray/vue-pinia-admin)，🚧 开发中）
-- React + Vite 版本（react-vite-admin，🚧 开发中）
-- Next.js 版本（next-admin，🚧 开发中）
+- Vue3 版本（[gvray-vue](https://github.com/gvray/gvray-vue)，🚧 开发中）
+- React + Vite 版本（gvray-vite，🚧 开发中）
+- Next.js 版本（gvray-next，🚧 开发中）

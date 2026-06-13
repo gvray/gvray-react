@@ -66,7 +66,7 @@ export interface ServerConfig {
 
 export const DEFAULT_SERVER_CONFIG: ServerConfig = {
   system: {
-    name: 'React Umi Admin',
+    name: 'Gvray Admin',
     description: '',
     logo: '/logo.svg',
     favicon: '/favicon.ico',

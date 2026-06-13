@@ -145,7 +145,7 @@ export DOCKER_NAMESPACE=your-namespace
 export VERSION=1.0.0
 
 # 容器配置
-export CONTAINER_NAME=react-umi-admin-web
+export CONTAINER_NAME=gvray-react-web
 export ENVIRONMENT=production
 ```
 
@@ -191,7 +191,7 @@ pnpm docker:logs
 pnpm docker:compose:logs
 
 # 查看资源使用
-docker stats react-umi-admin-web
+docker stats gvray-react-web
 
 # 健康检查
 curl http://localhost:8080/health
@@ -204,7 +204,7 @@ curl http://localhost:8080/health
 pnpm docker:logs
 
 # 查看最近 100 行日志
-docker logs --tail=100 react-umi-admin-web
+docker logs --tail=100 gvray-react-web
 
 # 查看 Nginx 访问日志
 tail -f logs/nginx/access.log
@@ -217,7 +217,7 @@ tail -f logs/nginx/error.log
 
 ```bash
 # 进入容器 shell
-docker exec -it react-umi-admin-web sh
+docker exec -it gvray-react-web sh
 ```
 
 ## 🔒 安全最佳实践
@@ -241,7 +241,7 @@ USER nextjs
 ./docker/scripts/build.sh -s
 
 # 或手动扫描
-trivy image react-umi-admin:latest
+trivy image gvray-react:latest
 ```
 
 ### 3. 最小化镜像
@@ -314,13 +314,13 @@ deploy:
 
 ```bash
 # 查看容器日志
-docker logs react-umi-admin-web
+docker logs gvray-react-web
 
 # 检查容器状态
-docker inspect react-umi-admin-web
+docker inspect gvray-react-web
 
 # 查看健康检查状态
-docker inspect --format='{{.State.Health.Status}}' react-umi-admin-web
+docker inspect --format='{{.State.Health.Status}}' gvray-react-web
 ```
 
 ### 健康检查失败
@@ -330,7 +330,7 @@ docker inspect --format='{{.State.Health.Status}}' react-umi-admin-web
 curl http://localhost:8080/health
 
 # 进入容器检查
-docker exec -it react-umi-admin-web sh
+docker exec -it gvray-react-web sh
 curl http://localhost/health
 ```
 
@@ -354,22 +354,22 @@ docker build --no-cache --progress=plain .
 lsof -i :8080
 
 # 修改端口映射
-docker run -p 8888:80 react-umi-admin:latest
+docker run -p 8888:80 gvray-react:latest
 ```
 
 ## 📚 常用命令速查
 
-| 命令                                     | 说明              |
-| ---------------------------------------- | ----------------- |
-| `pnpm docker:build`                      | 构建镜像          |
-| `pnpm docker:run`                        | 运行容器          |
-| `pnpm docker:logs`                       | 查看日志          |
-| `pnpm docker:stop`                       | 停止容器          |
-| `pnpm docker:compose:up`                 | 启动所有服务      |
-| `pnpm docker:compose:down`               | 停止所有服务      |
-| `pnpm docker:compose:logs`               | 查看 compose 日志 |
-| `docker exec -it react-umi-admin-web sh` | 进入容器          |
-| `docker stats react-umi-admin-web`       | 查看资源使用      |
+| 命令                                 | 说明              |
+| ------------------------------------ | ----------------- |
+| `pnpm docker:build`                  | 构建镜像          |
+| `pnpm docker:run`                    | 运行容器          |
+| `pnpm docker:logs`                   | 查看日志          |
+| `pnpm docker:stop`                   | 停止容器          |
+| `pnpm docker:compose:up`             | 启动所有服务      |
+| `pnpm docker:compose:down`           | 停止所有服务      |
+| `pnpm docker:compose:logs`           | 查看 compose 日志 |
+| `docker exec -it gvray-react-web sh` | 进入容器          |
+| `docker stats gvray-react-web`       | 查看资源使用      |
 
 ## 🔗 相关资源
 

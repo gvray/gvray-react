@@ -1,4 +1,4 @@
-# 🗺️ React Umi Admin / 前端平台功能 Roadmap
+# 🗺️ Gvray Admin / 前端平台功能 Roadmap
 
 超全能力清单，涵盖已实现、规划中、未来可能功能。状态说明：
 

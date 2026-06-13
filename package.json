@@ -1,5 +1,5 @@
 {
-  "name": "react-umi-admin",
+  "name": "gvray-react",
   "description": "基于react18，umi4，antd5等的中后台管理模版，可以快速开展我们的业务功能。",
   "keywords": [
     "react",
@@ -23,9 +23,9 @@
     "docker:compose:logs": "docker-compose logs -f",
     "docker:compose:up": "docker-compose up -d",
     "docker:deploy": "tsx scripts/docker-deploy.ts",
-    "docker:logs": "docker logs -f react-umi-admin-web",
-    "docker:run": "docker run -d --name react-umi-admin-web -p 8080:80 gvray/react-umi-admin:latest",
-    "docker:stop": "docker stop react-umi-admin-web && docker rm react-umi-admin-web",
+    "docker:logs": "docker logs -f gvray-react-web",
+    "docker:run": "docker run -d --name gvray-react-web -p 8080:80 gvray/gvray-react:latest",
+    "docker:stop": "docker stop gvray-react-web && docker rm gvray-react-web",
     "gen:api": "tsx scripts/gen-api-types.ts",
     "postinstall": "umi setup",
     "lint": "pnpm lint:js && pnpm lint:prettier && pnpm tsc",

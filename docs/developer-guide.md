@@ -26,8 +26,8 @@
 ### 1.3 克隆与安装
 
 ```bash
-git clone https://github.com/gvray/react-umi-admin.git
-cd react-umi-admin
+git clone https://github.com/gvray/gvray-react.git
+cd gvray-react
 pnpm install
 ```
 
@@ -41,12 +41,12 @@ pnpm install
 
 项目根目录下按环境维护 `.env` 文件：
 
-| 文件           | 环境 | 说明                           |
-| -------------- | ---- | ------------------------------ |
-| `.env.dev`     | 开发 | 默认使用 Mock，端口 9527       |
-| `.env.staging` | 测试 | 连接后端 nest-admin，端口 9528 |
-| `.env.prod`    | 生产 | 生产环境配置，端口 9529        |
-| `.env.example` | 模板 | 环境变量模板，用于缺失检查     |
+| 文件           | 环境 | 说明                            |
+| -------------- | ---- | ------------------------------- |
+| `.env.dev`     | 开发 | 默认使用 Mock，端口 9527        |
+| `.env.staging` | 测试 | 连接后端 gvray-admin，端口 9528 |
+| `.env.prod`    | 生产 | 生产环境配置，端口 9529         |
+| `.env.example` | 模板 | 环境变量模板，用于缺失检查      |
 
 ### 2.2 环境变量说明
 
@@ -134,7 +134,7 @@ pnpm clean              # 清理 dist 和 node_modules
 ## 4. 项目结构
 
 ```
-react-umi-admin/
+gvray-react/
 ├── config/                    # Umi 配置
 │   ├── config.ts              # 主配置（路由、主题、插件等）
 │   ├── config.dev.ts          # 开发环境覆盖配置
@@ -291,7 +291,7 @@ export default {
 
 ### 7.3 覆盖范围
 
-当前 Mock 覆盖：登录、用户、角色、权限、部门、岗位、字典、资源、仪表盘等模块。如需全量真实数据，请启动后端 [nest-admin](https://github.com/gvray/nest-admin)。
+当前 Mock 覆盖：登录、用户、角色、权限、部门、岗位、字典、资源、仪表盘等模块。如需全量真实数据，请启动后端 [gvray-admin](https://github.com/gvray/gvray-admin)。
 
 ---
 

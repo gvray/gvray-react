@@ -13,9 +13,9 @@ services:
       dockerfile: Dockerfile
       args:
         NODE_ENV: production
-    image: ${DOCKER_REGISTRY:-docker.io}/${DOCKER_NAMESPACE:-gvray}/react-umi-admin:${VERSION:-latest}
+    image: ${DOCKER_REGISTRY:-docker.io}/${DOCKER_NAMESPACE:-gvray}/gvray-react:${VERSION:-latest}
     platform: ${PLATFORM:-linux/amd64}
-    container_name: react-umi-admin-web
+    container_name: gvray-react-web
     restart: unless-stopped
     ports:
       - "8080:80"
@@ -34,87 +34,5 @@ services:
       retries: 3
       start_period: 10s
     labels:
-      - "com.example.description=React UMI Admin Frontend"
+      - "com.example.description=Gvray Admin Frontend"
       - "com.example.version=1.0.0"
-
-  # ==========================================
-  # 后端 API 服务（示例）
-  # ==========================================
-  # backend:
-  #   image: your-backend-image:latest
-  #   container_name: react-umi-admin-backend
-  #   restart: unless-stopped
-  #   ports:
-  #     - "3000:3000"
-  #   environment:
-  #     - TZ=Asia/Shanghai
-  #     - NODE_ENV=production
-  #     - DATABASE_URL=postgresql://user:password@db:5432/dbname
-  #   networks:
-  #     - app-network
-  #   depends_on:
-  #     - db
-  #   healthcheck:
-  #     test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
-  #     interval: 30s
-  #     timeout: 3s
-  #     retries: 3
-
-  # ==========================================
-  # 数据库服务（示例）
-  # ==========================================
-  # db:
-  #   image: postgres:15-alpine
-  #   container_name: react-umi-admin-db
-  #   restart: unless-stopped
-  #   environment:
-  #     - POSTGRES_USER=admin
-  #     - POSTGRES_PASSWORD=password
-  #     - POSTGRES_DB=admin_db
-  #     - TZ=Asia/Shanghai
-  #   volumes:
-  #     - postgres-data:/var/lib/postgresql/data
-  #   networks:
-  #     - app-network
-  #   healthcheck:
-  #     test: ["CMD-SHELL", "pg_isready -U admin"]
-  #     interval: 10s
-  #     timeout: 5s
-  #     retries: 5
-
-  # ==========================================
-  # Redis 缓存服务（示例）
-  # ==========================================
-  # redis:
-  #   image: redis:7-alpine
-  #   container_name: react-umi-admin-redis
-  #   restart: unless-stopped
-  #   command: redis-server --appendonly yes
-  #   volumes:
-  #     - redis-data:/data
-  #   networks:
-  #     - app-network
-  #   healthcheck:
-  #     test: ["CMD", "redis-cli", "ping"]
-  #     interval: 10s
-  #     timeout: 3s
-  #     retries: 3
-
-# ==========================================
-# 网络配置
-# ==========================================
-networks:
-  app-network:
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 172.20.0.0/16
-
-# ==========================================
-# 数据卷配置
-# ==========================================
-volumes:
-  postgres-data:
-    driver: local
-  redis-data:
-    driver: local

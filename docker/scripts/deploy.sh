@@ -15,11 +15,11 @@ BLUE='\033[0;34m'
 NC='\033[0m'
 
 # 配置变量
-IMAGE_NAME="react-umi-admin"
+IMAGE_NAME="gvray-react"
 REGISTRY="${DOCKER_REGISTRY:-docker.io}"
 NAMESPACE="${DOCKER_NAMESPACE:-gvray}"
 VERSION="${VERSION:-latest}"
-CONTAINER_NAME="${CONTAINER_NAME:-react-umi-admin-web}"
+CONTAINER_NAME="${CONTAINER_NAME:-gvray-react-web}"
 ENVIRONMENT="${ENVIRONMENT:-production}"
 PLATFORM="${PLATFORM:-linux/amd64}"
 
