@@ -1,6 +1,7 @@
-import { AuthButton } from '@/components';
-import { PERM } from '@/constants';
-import { logger } from '@/utils';
+import { LOGIN_PATH } from '@/constants';
+import { changePassword } from '@/services/profile';
+import { useAuthStore } from '@/stores';
+import { logger, tokenManager } from '@/utils';
 import {
   ApiOutlined,
   ChromeOutlined,
@@ -31,6 +32,7 @@ import {
 } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { useState } from 'react';
+import { history } from 'umi';
 import styles from './index.less';
 
 const { Text } = Typography;
@@ -107,6 +109,9 @@ const MOCK_TOKENS: TokenItem[] = [
 const TabSecurity: React.FC = () => {
   const [sessions, setSessions] = useState(MOCK_SESSIONS);
   const [tokens, setTokens] = useState(MOCK_TOKENS);
+  const [passwordForm] = Form.useForm();
+  const [passwordLoading, setPasswordLoading] = useState(false);
+  const clearAuth = useAuthStore((s) => s.clearAuth);
 
   const handleKickSession = (id: string) => {
     setSessions((prev) => prev.filter((s) => s.id !== id));
@@ -116,6 +121,25 @@ const TabSecurity: React.FC = () => {
   const handleDeleteToken = (id: string) => {
     setTokens((prev) => prev.filter((t) => t.id !== id));
     message.success('Token 已删除');
+  };
+
+  const handleChangePassword = async (values: API.ChangePasswordDto) => {
+    try {
+      setPasswordLoading(true);
+      const res = await changePassword({
+        oldPassword: values.oldPassword,
+        newPassword: values.newPassword,
+      });
+      message.success(res.message || '密码修改成功，请重新登录');
+      passwordForm.resetFields();
+      tokenManager.clearTokens();
+      clearAuth();
+      history.push(LOGIN_PATH);
+    } catch (error) {
+      logger.error(error);
+    } finally {
+      setPasswordLoading(false);
+    }
   };
 
   // ─── Card 1: Password Security ────────────────────────
@@ -142,11 +166,9 @@ const TabSecurity: React.FC = () => {
         </div>
       </div>
       <Form
+        form={passwordForm}
         layout="vertical"
-        onFinish={(values) => {
-          message.success('密码修改成功！');
-          logger.info('password changed', values);
-        }}
+        onFinish={handleChangePassword}
       >
         <Form.Item
           name="oldPassword"
@@ -192,15 +214,14 @@ const TabSecurity: React.FC = () => {
           />
         </Form.Item>
         <Form.Item>
-          <AuthButton
-            perms={[PERM.USER_RESET_PASSWORD]}
-            mode="disabled"
+          <Button
             type="primary"
             htmlType="submit"
+            loading={passwordLoading}
             block
           >
             修改密码
-          </AuthButton>
+          </Button>
         </Form.Item>
       </Form>
     </Card>

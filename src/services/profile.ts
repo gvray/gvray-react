@@ -15,3 +15,11 @@ export function queryProfilePermissions() {
     { method: 'GET' },
   );
 }
+
+/** 修改当前用户密码 */
+export function changePassword(data: API.ChangePasswordDto) {
+  return request<API.Response<void>>('/profile/change-password', {
+    method: 'POST',
+    data,
+  });
+}
