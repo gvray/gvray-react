@@ -5,7 +5,6 @@ import {
 } from '@/constants';
 import { useAppStore, usePreferences } from '@/stores';
 import {
-  BellOutlined,
   LayoutOutlined,
   ReloadOutlined,
   SettingOutlined,
@@ -23,7 +22,6 @@ import {
   Tag,
   Typography,
 } from 'antd';
-import { useState } from 'react';
 import styles from './index.less';
 
 const { Text } = Typography;
@@ -78,17 +76,6 @@ const TabPreferences: React.FC = () => {
     return val !== undefined;
   };
 
-  // 本地临时偏好（暂无后端持久化）
-  const [localPrefs, setLocalPrefs] = useState({
-    emailNotif: true,
-    smsNotif: false,
-    pushNotif: true,
-  });
-
-  const toggleLocal = (key: keyof typeof localPrefs) => {
-    setLocalPrefs((prev) => ({ ...prev, [key]: !prev[key] }));
-  };
-
   /** 服务端默认值标签 */
   const ServerDefault: React.FC<{ label: string }> = ({ label }) => (
     <Tag color="blue" style={{ fontSize: 11, marginLeft: 6 }}>
@@ -106,7 +93,7 @@ const TabPreferences: React.FC = () => {
   return (
     <Row gutter={[16, 16]}>
       {/* 外观与布局 */}
-      <Col span={12}>
+      <Col xs={24} xxl={12}>
         <Card
           title={
             <>
@@ -268,7 +255,7 @@ const TabPreferences: React.FC = () => {
       </Col>
 
       {/* 数据与功能 */}
-      <Col span={12}>
+      <Col xs={24} xxl={12}>
         <Card
           title={
             <>
@@ -362,58 +349,8 @@ const TabPreferences: React.FC = () => {
         </Card>
       </Col>
 
-      {/* 消息提醒 */}
-      <Col span={12}>
-        <Card
-          title={
-            <>
-              <BellOutlined /> 消息提醒
-            </>
-          }
-          size="small"
-          className={styles.prefCard}
-        >
-          <List
-            dataSource={[
-              {
-                title: '邮件通知',
-                desc: '接收系统邮件',
-                key: 'emailNotif' as const,
-              },
-              {
-                title: '短信通知',
-                desc: '接收重要短信',
-                key: 'smsNotif' as const,
-              },
-              {
-                title: '推送通知',
-                desc: '浏览器推送',
-                key: 'pushNotif' as const,
-              },
-            ]}
-            renderItem={(item) => (
-              <List.Item>
-                <List.Item.Meta
-                  avatar={<BellOutlined style={{ color: '#8c8c8c' }} />}
-                  title={<Text style={{ fontSize: 13 }}>{item.title}</Text>}
-                  description={
-                    <Text type="secondary" style={{ fontSize: 12 }}>
-                      {item.desc}
-                    </Text>
-                  }
-                />
-                <Switch
-                  checked={localPrefs[item.key]}
-                  onChange={() => toggleLocal(item.key)}
-                />
-              </List.Item>
-            )}
-          />
-        </Card>
-      </Col>
-
       {/* 重置 */}
-      <Col span={12}>
+      <Col xs={24} xxl={12}>
         <Card
           title={
             <>

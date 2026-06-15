@@ -1,5 +1,4 @@
-import { queryLoginLogList } from '@/services/loginLog';
-import { SearchOutlined } from '@ant-design/icons';
+import { ReloadOutlined, SearchOutlined } from '@ant-design/icons';
 import {
   Button,
   Card,
@@ -12,44 +11,14 @@ import {
   Typography,
 } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import { useCallback, useEffect, useState } from 'react';
 import styles from './index.less';
+import { useProfileLoginLogModel } from './model';
 
 const { Text } = Typography;
 const { RangePicker } = DatePicker;
 
 const TabLoginLog: React.FC = () => {
-  const [data, setData] = useState<API.LoginLogResponseDto[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [total, setTotal] = useState(0);
-  const [page, setPage] = useState(1);
-  const [statusFilter, setStatusFilter] = useState<number | undefined>();
-  const [keyword, setKeyword] = useState('');
-
-  const fetchData = useCallback(async () => {
-    setLoading(true);
-    try {
-      const params: Record<string, unknown> = {
-        page,
-        pageSize: 10,
-      };
-      if (statusFilter !== undefined) params.status = statusFilter;
-      if (keyword) params.account = keyword;
-      const res = await queryLoginLogList(params as API.LoginLogsFindAllParams);
-      if (res?.data) {
-        setData(res.data.items || []);
-        setTotal(res.data.total || 0);
-      }
-    } catch {
-      // silent
-    } finally {
-      setLoading(false);
-    }
-  }, [page, statusFilter, keyword]);
-
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+  const model = useProfileLoginLogModel();
 
   const columns: ColumnsType<API.LoginLogResponseDto> = [
     {
@@ -91,11 +60,14 @@ const TabLoginLog: React.FC = () => {
       title: '状态',
       dataIndex: 'status',
       width: 80,
-      render: (status: number) => (
-        <Tag color={status === 1 ? 'green' : 'red'}>
-          {status === 1 ? '成功' : '失败'}
-        </Tag>
-      ),
+      render: (status: number | string) => {
+        const success = status === 1 || status === 'success';
+        return (
+          <Tag color={success ? 'green' : 'red'}>
+            {success ? '成功' : '失败'}
+          </Tag>
+        );
+      },
     },
     {
       title: '失败原因',
@@ -103,7 +75,7 @@ const TabLoginLog: React.FC = () => {
       ellipsis: true,
       render: (text: string) =>
         text ? (
-          <Text type="danger" style={{ fontSize: 12 }}>
+          <Text type="danger" className={styles.tableMetaText}>
             {text}
           </Text>
         ) : (
@@ -118,55 +90,53 @@ const TabLoginLog: React.FC = () => {
         <Input
           placeholder="搜索账号"
           prefix={<SearchOutlined />}
-          style={{ width: 200 }}
+          className={styles.logFilterControl}
           allowClear
-          value={keyword}
-          onChange={(e) => setKeyword(e.target.value)}
-          onPressEnter={() => {
-            setPage(1);
-            fetchData();
-          }}
+          value={model.keyword}
+          onChange={(event) => model.setKeyword(event.target.value)}
+          onPressEnter={model.handleSearch}
         />
         <Select
           placeholder="登录状态"
-          style={{ width: 120 }}
+          className={styles.logStatusSelect}
           allowClear
-          value={statusFilter}
-          onChange={(v) => {
-            setStatusFilter(v);
-            setPage(1);
-          }}
+          value={model.statusFilter}
+          onChange={model.handleStatusChange}
           options={[
-            { value: 1, label: '成功' },
-            { value: 0, label: '失败' },
+            { value: 'success', label: '成功' },
+            { value: 'failure', label: '失败' },
           ]}
         />
-        <RangePicker />
-        <Space>
+        <RangePicker
+          className={styles.logRangePicker}
+          value={model.dateRange}
+          onChange={(dates) => model.setDateRange(dates)}
+        />
+        <Space className={styles.logActions}>
           <Button
             type="primary"
             icon={<SearchOutlined />}
-            onClick={() => {
-              setPage(1);
-              fetchData();
-            }}
+            onClick={model.handleSearch}
           >
             查询
+          </Button>
+          <Button icon={<ReloadOutlined />} onClick={model.handleReset}>
+            重置
           </Button>
         </Space>
       </div>
       <Table
         columns={columns}
-        dataSource={data}
+        dataSource={model.data}
         rowKey="id"
-        loading={loading}
-        scroll={{ x: 1000 }}
+        loading={model.loading}
+        scroll={{ x: 'max-content' }}
         pagination={{
-          current: page,
-          total,
+          current: model.page,
+          total: model.total,
           pageSize: 10,
-          showTotal: (t) => `共 ${t} 条`,
-          onChange: (p) => setPage(p),
+          showTotal: (total) => `共 ${total} 条`,
+          onChange: model.setPage,
         }}
       />
     </Card>

@@ -1,17 +1,12 @@
 import { PageContainer } from '@/components';
-import { useAuthStore } from '@/stores';
 import {
   BellOutlined,
-  CalendarOutlined,
-  CameraOutlined,
   CheckCircleFilled,
   ClockCircleOutlined,
   ExclamationCircleFilled,
   HistoryOutlined,
   IdcardOutlined,
   LockOutlined,
-  MailOutlined,
-  PhoneOutlined,
   SafetyCertificateOutlined,
   SettingOutlined,
   TeamOutlined,
@@ -19,20 +14,17 @@ import {
 } from '@ant-design/icons';
 import {
   Avatar,
-  Button,
   Card,
   Progress,
+  Space,
   Tabs,
   Tag,
   Tooltip,
   Typography,
-  Upload,
-  message,
 } from 'antd';
-import type { UploadChangeParam } from 'antd/es/upload';
-import dayjs from 'dayjs';
-import { styled } from 'umi';
+import type { ReactNode } from 'react';
 import styles from './index.less';
+import { useProfilePageModel } from './model';
 import TabLoginLog from './TabLoginLog';
 import TabNotifications from './TabNotifications';
 import TabPermissions from './TabPermissions';
@@ -42,294 +34,224 @@ import TabSecurity from './TabSecurity';
 
 const { Title, Text } = Typography;
 
-// ─── Styled helpers ─────────────────────────────────────
-
-const FlexLayout = styled.div`
-  display: flex;
-  gap: 20px;
-  align-items: flex-start;
-
-  @media (max-width: 1200px) {
-    flex-direction: column;
-  }
-`;
-
-const PanelCard = styled(Card)`
-  border-radius: 16px;
-  border: none;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
-`;
-
-// ─── Component ──────────────────────────────────────────
+const TAB_META: Array<{
+  key: string;
+  icon: ReactNode;
+  label: string;
+  children: ReactNode;
+}> = [
+  {
+    key: 'profile',
+    icon: <UserOutlined />,
+    label: '基本信息',
+    children: <TabProfile />,
+  },
+  {
+    key: 'security',
+    icon: <LockOutlined />,
+    label: '安全中心',
+    children: <TabSecurity />,
+  },
+  {
+    key: 'permissions',
+    icon: <SafetyCertificateOutlined />,
+    label: '我的权限',
+    children: <TabPermissions />,
+  },
+  {
+    key: 'loginLog',
+    icon: <HistoryOutlined />,
+    label: '登录记录',
+    children: <TabLoginLog />,
+  },
+  {
+    key: 'notifications',
+    icon: <BellOutlined />,
+    label: '消息通知',
+    children: <TabNotifications />,
+  },
+  {
+    key: 'preferences',
+    icon: <SettingOutlined />,
+    label: '系统偏好',
+    children: <TabPreferences />,
+  },
+];
 
 export default function ProfilePage() {
-  const profile = useAuthStore((s) => s.profile);
+  const model = useProfilePageModel();
+  const emailBound = !!model.profile?.email;
+  const phoneBound = !!model.profile?.phone;
+  const departmentName = model.profile?.department?.name || '未设置部门';
+  const positionName = model.profile?.positions?.[0]?.name || '未设置岗位';
 
-  const handleAvatarChange = (info: UploadChangeParam) => {
-    if (info.file.status === 'done') {
-      message.success('头像上传成功！');
-    }
-  };
-
-  // ─── Completeness ─────────────────────────────────────
-  const completenessChecks = [
-    { label: '设置头像', done: !!profile?.avatar, icon: <CameraOutlined /> },
-    { label: '绑定邮箱', done: !!profile?.email, icon: <MailOutlined /> },
-    { label: '绑定手机', done: !!profile?.phone, icon: <PhoneOutlined /> },
-    { label: '设置昵称', done: !!profile?.nickname, icon: <IdcardOutlined /> },
-    { label: '安全设置', done: true, icon: <SafetyCertificateOutlined /> },
-  ];
-  const doneCount = completenessChecks.filter((c) => c.done).length;
-  const completenessPercent = Math.round(
-    (doneCount / completenessChecks.length) * 100,
-  );
-
-  // ─── Stats ────────────────────────────────────────────
-  const roleCount = profile?.roles?.length ?? 0;
-  const daysSinceJoin = profile?.createdAt
-    ? dayjs().diff(dayjs(profile.createdAt), 'day')
-    : 0;
-
-  // ─── Tab items ────────────────────────────────────────
-  const tabItems = [
-    {
-      key: 'profile',
-      label: (
-        <span>
-          <UserOutlined /> 基本信息
-        </span>
-      ),
-      children: <TabProfile profile={profile} />,
-    },
-    {
-      key: 'security',
-      label: (
-        <span>
-          <LockOutlined /> 安全中心
-        </span>
-      ),
-      children: <TabSecurity />,
-    },
-    {
-      key: 'permissions',
-      label: (
-        <span>
-          <SafetyCertificateOutlined /> 我的权限
-        </span>
-      ),
-      children: <TabPermissions />,
-    },
-    {
-      key: 'preferences',
-      label: (
-        <span>
-          <SettingOutlined /> 系统偏好
-        </span>
-      ),
-      children: <TabPreferences />,
-    },
-    {
-      key: 'loginLog',
-      label: (
-        <span>
-          <HistoryOutlined /> 登录记录
-        </span>
-      ),
-      children: <TabLoginLog />,
-    },
-    {
-      key: 'notifications',
-      label: (
-        <span>
-          <BellOutlined /> 消息通知
-        </span>
-      ),
-      children: <TabNotifications />,
-    },
-  ];
-
-  const isOnline = profile?.status === 1;
+  const tabItems = TAB_META.map((item) => ({
+    key: item.key,
+    label: (
+      <span className={styles.tabLabel}>
+        {item.icon}
+        {item.label}
+      </span>
+    ),
+    children: item.children,
+  }));
 
   return (
     <PageContainer className={styles.profilePage}>
-      <FlexLayout className="profile-flex">
-        <PanelCard className={styles.leftPanel}>
-          {/* ── Avatar Hero ── */}
-          <div className={styles.avatarHero}>
-            <div className={styles.heroBg} />
-            <div className={styles.avatarWrap}>
+      <div className={styles.profileShell}>
+        <section className={styles.profileOverview}>
+          <section className={styles.profileHero}>
+            <div className={styles.heroIdentity}>
               <Avatar
-                size={96}
-                src={
-                  profile?.avatar ||
-                  'https://api.dicebear.com/9.x/bottts/svg?seed=GavinRay'
-                }
+                size={72}
+                src={model.avatarSrc}
                 icon={<UserOutlined />}
                 className={styles.avatarRing}
               />
-              <div
-                className={styles.onlineDot}
-                style={{ background: isOnline ? '#52c41a' : '#d9d9d9' }}
-              />
-              <div className={styles.avatarUploadBtn}>
-                <Upload showUploadList={false} onChange={handleAvatarChange}>
-                  <Button
-                    type="primary"
-                    shape="circle"
-                    icon={<CameraOutlined />}
-                  />
-                </Upload>
+
+              <div className={styles.heroMain}>
+                <Space size={10} wrap className={styles.heroTitleRow}>
+                  <Title level={3} className={styles.userName}>
+                    {model.displayName}
+                  </Title>
+                  <Tag color={model.accountStatusColor}>
+                    {model.accountStatusLabel}
+                  </Tag>
+                  {model.profile?.isSuperAdmin && (
+                    <Tag color="red">超级管理员</Tag>
+                  )}
+                </Space>
+                <div className={styles.heroMetaLine}>
+                  <span>@{model.profile?.username || '-'}</span>
+                  <span>{model.profile?.userId || '-'}</span>
+                  <span>{departmentName}</span>
+                  <span>{positionName}</span>
+                </div>
+                <div className={styles.roleTags}>
+                  {model.profile?.roles?.slice(0, 3).map((role) => (
+                    <Tooltip
+                      key={role.roleId}
+                      title={role.description || role.name}
+                      styles={{ body: { maxWidth: 280 } }}
+                    >
+                      <Tag color="blue">{role.name}</Tag>
+                    </Tooltip>
+                  ))}
+                  {(model.profile?.roles?.length ?? 0) > 3 && (
+                    <Tooltip
+                      title={model.profile?.roles
+                        ?.slice(3)
+                        .map((role) => role.description || role.name)
+                        .join('、')}
+                    >
+                      <Tag>+{(model.profile?.roles?.length ?? 0) - 3}</Tag>
+                    </Tooltip>
+                  )}
+                  {!model.profile?.roles?.length && <Tag>暂无角色</Tag>}
+                </div>
               </div>
             </div>
-            <div className={styles.nameRow}>
-              <Title level={4} className={styles.userName}>
-                {profile?.nickname || profile?.username || '用户名'}
-              </Title>
-              <Text className={styles.userBio}>
-                专注于系统管理和用户体验优化
-              </Text>
-              <div className={styles.roleTags}>
-                {profile?.roles?.map((r) => (
-                  <Tooltip key={r.roleId} title={r.description || r.name}>
-                    <Tag color="blue">{r.description || r.name}</Tag>
-                  </Tooltip>
-                ))}
-                <Tag color={isOnline ? 'green' : 'default'}>
-                  {isOnline ? '在线' : '离线'}
+          </section>
+
+          <section className={styles.profileSummary}>
+            <Card className={styles.summaryCard}>
+              <div className={styles.summaryHeader}>
+                <div className={styles.summaryIcon}>
+                  <IdcardOutlined />
+                </div>
+                <div className={styles.summaryMeta}>
+                  <Text type="secondary">资料与状态</Text>
+                  <div className={styles.summaryTitle}>
+                    {model.completenessPercent}% 完整
+                  </div>
+                </div>
+              </div>
+              <Progress
+                percent={model.completenessPercent}
+                showInfo={false}
+                strokeColor={{ from: '#1677ff', to: '#722ed1' }}
+              />
+              <div className={styles.summaryRows}>
+                <div className={styles.summaryRow}>
+                  <span>资料项</span>
+                  <Text type="secondary">
+                    {model.doneCount}/{model.completenessChecks.length} 已完成
+                  </Text>
+                </div>
+                <div className={styles.summaryRow}>
+                  <span>账号状态</span>
+                  <Tag color={model.accountStatusColor}>
+                    {model.accountStatusLabel}
+                  </Tag>
+                </div>
+                <div className={styles.summaryRow}>
+                  <span>更新时间</span>
+                  <Text type="secondary">
+                    <ClockCircleOutlined />{' '}
+                    {model.profile?.updatedAt
+                      ? new Date(model.profile.updatedAt).toLocaleDateString()
+                      : '-'}
+                  </Text>
+                </div>
+              </div>
+            </Card>
+
+            <Card className={styles.summaryCard}>
+              <div className={styles.summaryHeader}>
+                <div className={styles.summaryIcon}>
+                  <TeamOutlined />
+                </div>
+                <div className={styles.summaryMeta}>
+                  <Text type="secondary">联系与组织</Text>
+                  <div className={styles.summaryTitle}>{departmentName}</div>
+                </div>
+              </div>
+              <div className={styles.bindingStatus}>
+                <Tag color={emailBound ? 'green' : 'default'}>
+                  {emailBound ? (
+                    <CheckCircleFilled />
+                  ) : (
+                    <ExclamationCircleFilled />
+                  )}
+                  邮箱{emailBound ? '已绑定' : '未绑定'}
+                </Tag>
+                <Tag color={phoneBound ? 'green' : 'default'}>
+                  {phoneBound ? (
+                    <CheckCircleFilled />
+                  ) : (
+                    <ExclamationCircleFilled />
+                  )}
+                  手机{phoneBound ? '已绑定' : '未绑定'}
                 </Tag>
               </div>
-            </div>
-          </div>
-
-          {/* ── Stats Row ── */}
-          <div className={styles.statsRow}>
-            <div className={styles.statItem}>
-              <div className={styles.statValue}>{roleCount}</div>
-              <div className={styles.statLabel}>角色</div>
-            </div>
-            <div className={styles.statItem}>
-              <div className={styles.statValue}>{daysSinceJoin}</div>
-              <div className={styles.statLabel}>在职天数</div>
-            </div>
-            <div className={styles.statItem}>
-              <div className={styles.statValue}>{completenessPercent}%</div>
-              <div className={styles.statLabel}>完善度</div>
-            </div>
-          </div>
-
-          <div className={styles.sectionDivider} />
-
-          {/* ── Info Section ── */}
-          <div className={styles.infoSection}>
-            <div className={styles.infoSectionTitle}>联系信息</div>
-            <div className={styles.infoRow}>
-              <MailOutlined className={styles.infoIcon} />
-              <span className={styles.infoLabel}>邮箱</span>
-              <span className={styles.infoValue}>
-                {profile?.email || '未绑定'}
-                {profile?.email ? (
-                  <CheckCircleFilled
-                    style={{ color: '#52c41a', marginLeft: 6, fontSize: 12 }}
-                  />
-                ) : (
-                  <ExclamationCircleFilled
-                    style={{ color: '#faad14', marginLeft: 6, fontSize: 12 }}
-                  />
-                )}
-              </span>
-            </div>
-            <div className={styles.infoRow}>
-              <PhoneOutlined className={styles.infoIcon} />
-              <span className={styles.infoLabel}>手机</span>
-              <span className={styles.infoValue}>
-                {profile?.phone || '未绑定'}
-                {profile?.phone ? (
-                  <CheckCircleFilled
-                    style={{ color: '#52c41a', marginLeft: 6, fontSize: 12 }}
-                  />
-                ) : (
-                  <ExclamationCircleFilled
-                    style={{ color: '#faad14', marginLeft: 6, fontSize: 12 }}
-                  />
-                )}
-              </span>
-            </div>
-            <div className={styles.infoRow}>
-              <TeamOutlined className={styles.infoIcon} />
-              <span className={styles.infoLabel}>部门</span>
-              <span className={styles.infoValue}>
-                {profile?.department?.name || '未设置'}
-              </span>
-            </div>
-            <div className={styles.infoRow}>
-              <UserOutlined className={styles.infoIcon} />
-              <span className={styles.infoLabel}>岗位</span>
-              <span className={styles.infoValue}>
-                {profile?.positions?.[0]?.name || '未设置'}
-              </span>
-            </div>
-            <div className={styles.infoRow}>
-              <CalendarOutlined className={styles.infoIcon} />
-              <span className={styles.infoLabel}>注册</span>
-              <span className={styles.infoValue}>
-                {profile?.createdAt
-                  ? dayjs(profile.createdAt).format('YYYY-MM-DD')
-                  : '-'}
-              </span>
-            </div>
-            <div className={styles.infoRow}>
-              <ClockCircleOutlined className={styles.infoIcon} />
-              <span className={styles.infoLabel}>最近登录</span>
-              <span className={styles.infoValue}>
-                {profile?.updatedAt
-                  ? dayjs(profile.updatedAt).format('YYYY-MM-DD')
-                  : '-'}
-              </span>
-            </div>
-          </div>
-
-          <div className={styles.sectionDivider} />
-
-          {/* ── Completeness ── */}
-          <div className={styles.completenessSection}>
-            <div className={styles.completenessHeader}>
-              <span>资料完善度</span>
-              <Text type="secondary" style={{ fontSize: 12 }}>
-                {doneCount}/{completenessChecks.length}
-              </Text>
-            </div>
-            <Progress
-              percent={completenessPercent}
-              strokeColor={{ from: '#667eea', to: '#764ba2' }}
-            />
-            <div className={styles.completenessItems}>
-              {completenessChecks.map((item) => (
-                <div key={item.label} className={styles.completenessItem}>
-                  <span
-                    className={styles.itemIcon}
-                    style={{
-                      color: item.done ? '#52c41a' : 'rgba(0,0,0,0.25)',
-                    }}
-                  >
-                    {item.done ? <CheckCircleFilled /> : item.icon}
-                  </span>
-                  <span className={styles.itemLabel}>{item.label}</span>
-                  {item.done ? (
-                    <Tag color="green" style={{ margin: 0, fontSize: 11 }}>
-                      已完成
-                    </Tag>
-                  ) : (
-                    <Tag style={{ margin: 0, fontSize: 11 }}>待完善</Tag>
-                  )}
+              <div className={styles.summaryRows}>
+                <div className={styles.summaryRow}>
+                  <span>部门</span>
+                  <Text type="secondary">{departmentName}</Text>
                 </div>
-              ))}
-            </div>
-          </div>
-        </PanelCard>
-        <PanelCard className={styles.rightPanel}>
-          <Tabs defaultActiveKey="profile" items={tabItems} />
-        </PanelCard>
-      </FlexLayout>
+                <div className={styles.summaryRow}>
+                  <span>岗位</span>
+                  <Text type="secondary">{positionName}</Text>
+                </div>
+                <div className={styles.summaryRow}>
+                  <span>维护</span>
+                  <Text type="secondary">基础资料由系统维护</Text>
+                </div>
+              </div>
+            </Card>
+          </section>
+        </section>
+
+        <main className={styles.profileMain}>
+          <Card className={styles.tabsCard}>
+            <Tabs
+              className={styles.responsiveTabs}
+              defaultActiveKey="profile"
+              items={tabItems}
+            />
+          </Card>
+        </main>
+      </div>
     </PageContainer>
   );
 }

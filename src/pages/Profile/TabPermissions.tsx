@@ -1,10 +1,10 @@
-import { queryProfilePermissions } from '@/services/profile';
 import { ApartmentOutlined, ApiOutlined, TagOutlined } from '@ant-design/icons';
-import { listToTree } from '@gvray/eskit';
 import { Card, Select, Spin, Tabs, Tag, Tooltip, Tree, Typography } from 'antd';
 import type { DataNode } from 'antd/es/tree';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import styles from './index.less';
+import type { PermNode } from './model';
+import { useProfilePermissionsModel } from './model';
 
 const { Text } = Typography;
 
@@ -24,78 +24,39 @@ const TYPE_LABEL: Record<string, string> = {
 
 const ALL_TYPES = Object.keys(TYPE_LABEL);
 
-type PermNode = API.UserPermissionSimpleDto & { children?: PermNode[] };
-
 function permToTreeData(nodes: PermNode[]): DataNode[] {
-  return nodes.map((n) => ({
-    key: n.permissionId,
+  return nodes.map((node) => ({
+    key: node.permissionId,
     title: (
-      <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-        <Tag color={TYPE_COLOR[n.type] ?? 'default'} style={{ margin: 0 }}>
-          {TYPE_LABEL[n.type] ?? n.type}
+      <span className={styles.permissionNodeTitle}>
+        <Tag
+          color={TYPE_COLOR[node.type] ?? 'default'}
+          className={styles.inlineTag}
+        >
+          {TYPE_LABEL[node.type] ?? node.type}
         </Tag>
-        <Text strong style={{ fontSize: 13 }}>
-          {n.name}
+        <Text strong className={styles.permissionName}>
+          {node.name}
         </Text>
-        <Text type="secondary" style={{ fontSize: 12 }}>
-          {n.code}
+        <Text type="secondary" className={styles.permissionCode}>
+          {node.code}
         </Text>
-        <Tag color="cyan" style={{ margin: 0, fontSize: 11 }}>
-          {n.action}
+        <Tag color="cyan" className={styles.permissionAction}>
+          {node.action}
         </Tag>
       </span>
     ),
-    children: n.children?.length ? permToTreeData(n.children) : undefined,
+    children: node.children?.length ? permToTreeData(node.children) : undefined,
   }));
 }
 
-function collectKeys(nodes: PermNode[]): string[] {
-  const keys: string[] = [];
-  for (const n of nodes) {
-    keys.push(n.permissionId);
-    if (n.children?.length) keys.push(...collectKeys(n.children));
-  }
-  return keys;
-}
-
 const TabPermissions: React.FC = () => {
-  const [typeFilter, setTypeFilter] = useState<string[]>([]);
-  const [expandedKeys, setExpandedKeys] = useState<string[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [permData, setPermData] =
-    useState<API.UserPermissionsResponseDto | null>(null);
+  const model = useProfilePermissionsModel();
+  const treeData = useMemo(() => permToTreeData(model.tree), [model.tree]);
 
-  useEffect(() => {
-    queryProfilePermissions()
-      .then((res) => {
-        if (res?.data) setPermData(res.data);
-      })
-      .finally(() => setLoading(false));
-  }, []);
-
-  const tree = useMemo<PermNode[]>(() => {
-    if (!permData?.permissions) return [];
-    const list: PermNode[] = typeFilter.length
-      ? permData.permissions.filter((p: API.UserPermissionSimpleDto) =>
-          typeFilter.includes(p.type),
-        )
-      : (permData.permissions as PermNode[]);
-
-    return listToTree(list, {
-      idKey: 'permissionId',
-      parentKey: 'parentPermissionId',
-      keepEmptyChildren: false,
-    });
-  }, [permData, typeFilter]);
-
-  const treeData = useMemo(() => {
-    setExpandedKeys(collectKeys(tree));
-    return permToTreeData(tree);
-  }, [tree]);
-
-  if (loading) {
+  if (model.loading) {
     return (
-      <div style={{ textAlign: 'center', padding: 40 }}>
+      <div className={styles.centerLoading}>
         <Spin />
       </div>
     );
@@ -111,14 +72,16 @@ const TabPermissions: React.FC = () => {
         </>
       }
     >
-      <div
-        style={{ display: 'flex', flexWrap: 'wrap', gap: 8, padding: '4px 0' }}
-      >
-        {permData?.roles?.length ? (
-          permData.roles.map((r: API.UserRoleSimpleDto) => (
-            <Tooltip key={r.roleId} title={r.roleKey}>
-              <Tag color="blue" style={{ fontSize: 13, padding: '2px 10px' }}>
-                {r.description ? String(r.description) : r.name}
+      <div className={styles.roleList}>
+        {model.permData?.roles?.length ? (
+          model.permData.roles.map((role: API.UserRoleSimpleDto) => (
+            <Tooltip
+              key={role.roleId}
+              title={role.description || role.name}
+              styles={{ body: { maxWidth: 280 } }}
+            >
+              <Tag color="blue" className={styles.roleTag}>
+                {role.name}
               </Tag>
             </Tooltip>
           ))
@@ -143,44 +106,45 @@ const TabPermissions: React.FC = () => {
           mode="multiple"
           allowClear
           placeholder="按类型筛选"
-          style={{ minWidth: 200 }}
-          value={typeFilter}
-          onChange={setTypeFilter}
-          options={ALL_TYPES.map((t) => ({
-            value: t,
+          className={styles.permissionFilter}
+          value={model.typeFilter}
+          onChange={model.setTypeFilter}
+          options={ALL_TYPES.map((type) => ({
+            value: type,
             label: (
-              <Tag color={TYPE_COLOR[t]} style={{ margin: 0 }}>
-                {TYPE_LABEL[t]}
+              <Tag color={TYPE_COLOR[type]} className={styles.inlineTag}>
+                {TYPE_LABEL[type]}
               </Tag>
             ),
           }))}
         />
       }
     >
-      {permData?.isSuperAdmin && (
-        <div style={{ marginBottom: 12 }}>
+      {model.permData?.isSuperAdmin && (
+        <div className={styles.superAdminTip}>
           <Tag color="red">超级管理员</Tag>
-          <Text type="secondary" style={{ fontSize: 12 }}>
-            拥有全部权限 (*:*:*)
-          </Text>
+          <Text type="secondary">拥有全部权限 (*:*:*)</Text>
         </div>
       )}
-      {treeData.length > 0 ? (
-        <Tree
-          treeData={treeData}
-          expandedKeys={expandedKeys}
-          onExpand={(keys) => setExpandedKeys(keys as string[])}
-          selectable={false}
-          showLine={{ showLeafIcon: false }}
-        />
-      ) : (
-        <Text type="secondary">暂无权限数据</Text>
-      )}
+      <div className={styles.treeScroll}>
+        {treeData.length > 0 ? (
+          <Tree
+            treeData={treeData}
+            expandedKeys={model.expandedKeys}
+            onExpand={(keys) => model.setExpandedKeys(keys as string[])}
+            selectable={false}
+            showLine={{ showLeafIcon: false }}
+          />
+        ) : (
+          <Text type="secondary">暂无权限数据</Text>
+        )}
+      </div>
     </Card>
   );
 
   return (
     <Tabs
+      className={styles.innerTabs}
       items={[
         {
           key: 'roles',
@@ -202,7 +166,7 @@ const TabPermissions: React.FC = () => {
         },
       ]}
       tabBarExtraContent={
-        permData?.isSuperAdmin ? (
+        model.permData?.isSuperAdmin ? (
           <Tooltip title="拥有系统全部权限">
             <Tag color="red">超级管理员</Tag>
           </Tooltip>
