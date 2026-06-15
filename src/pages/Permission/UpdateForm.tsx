@@ -3,9 +3,9 @@ import { DEFAULT_MODAL_TITLE } from '@/constants';
 import { useFeedback } from '@/hooks';
 import { createPermission, updatePermission } from '@/services/permission';
 import type { DictOption } from '@/types/dict';
-import { createFormLayout, logger } from '@/utils';
-import { VIRTUAL_ROOT_ID } from '@/utils/tree';
+import { logger } from '@/utils';
 import { QuestionCircleOutlined } from '@ant-design/icons';
+import { createFormLayout, VIRTUAL_ROOT_ID } from '@gvray/adminkit';
 import {
   Form,
   FormInstance,

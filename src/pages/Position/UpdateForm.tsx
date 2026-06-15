@@ -3,7 +3,8 @@ import { DEFAULT_MODAL_TITLE } from '@/constants';
 import { useFeedback } from '@/hooks';
 import { createPosition, updatePosition } from '@/services/position';
 import type { DictOption } from '@/types/dict';
-import { createFormLayout, logger } from '@/utils';
+import { logger } from '@/utils';
+import { createFormLayout } from '@gvray/adminkit';
 import { Form, FormInstance, Input, InputNumber, Modal, Radio } from 'antd';
 import React, { useImperativeHandle, useState } from 'react';
 

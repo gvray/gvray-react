@@ -2,7 +2,8 @@ import { FormGrid } from '@/components';
 import { DEFAULT_MODAL_TITLE } from '@/constants';
 import { useFeedback } from '@/hooks';
 import { createUser, updateUser } from '@/services/user';
-import { createFormLayout, logger } from '@/utils';
+import { logger } from '@/utils';
+import { createFormLayout } from '@gvray/adminkit';
 import {
   Form,
   FormInstance,

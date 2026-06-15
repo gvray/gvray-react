@@ -2,7 +2,8 @@ import { FormGrid } from '@/components';
 import { DEFAULT_MODAL_TITLE } from '@/constants';
 import { useFeedback } from '@/hooks';
 import { createRole, updateRole } from '@/services/role';
-import { createFormLayout, logger } from '@/utils';
+import { logger } from '@/utils';
+import { createFormLayout } from '@gvray/adminkit';
 import { Form, FormInstance, Input, InputNumber, Modal, Radio } from 'antd';
 import React, { useImperativeHandle, useState } from 'react';
 

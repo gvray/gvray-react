@@ -84,7 +84,7 @@ const TabProfile: React.FC<TabProfileProps> = ({ profile }) => {
               {currentProfile?.roles?.map((role) => (
                 <Tooltip
                   key={role.roleId}
-                  title={role.description || role.name}
+                  title={String(role.description || role.name)}
                   styles={{ body: { maxWidth: 280 } }}
                 >
                   <Tag color="blue">{role.name}</Tag>

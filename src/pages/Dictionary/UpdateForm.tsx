@@ -6,7 +6,8 @@ import {
   updateDictionaryType,
 } from '@/services/dictionary';
 import type { DictOption } from '@/types/dict';
-import { createFormLayout, logger } from '@/utils';
+import { logger } from '@/utils';
+import { createFormLayout } from '@gvray/adminkit';
 import { Form, Input, InputNumber, Modal, Select } from 'antd';
 import { forwardRef, useImperativeHandle, useState } from 'react';
 

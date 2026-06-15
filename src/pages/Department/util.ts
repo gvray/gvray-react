@@ -3,7 +3,7 @@ import {
   VIRTUAL_ROOT_ID,
   withVirtualRoot as withVirtualRootGeneric,
   type VirtualRootConfig,
-} from '@/utils/tree';
+} from '@gvray/adminkit';
 
 /**
  * 部门模块的虚拟根节点配置
@@ -34,6 +34,6 @@ export const normalizeToBackend = <T extends Record<string, any>>(
   return normalizeVirtualRoot(
     values,
     VIRTUAL_ROOT_ID,
-    DEPARTMENT_VIRTUAL_ROOT_CONFIG.parentIdField,
+    DEPARTMENT_VIRTUAL_ROOT_CONFIG.parentIdField as string,
   );
 };

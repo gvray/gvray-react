@@ -1,5 +1,5 @@
-import { pruneEmptyChildren } from '@/utils';
 import { ReloadOutlined, SearchOutlined } from '@ant-design/icons';
+import { pruneEmptyChildren } from '@gvray/adminkit';
 import {
   Button,
   Flex,

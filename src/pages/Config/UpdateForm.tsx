@@ -4,7 +4,8 @@ import { DEFAULT_MODAL_TITLE } from '@/constants';
 import { useFeedback } from '@/hooks';
 import { createConfig, updateConfig } from '@/services/config';
 import type { DictOption } from '@/types/dict';
-import { createFormLayout, logger } from '@/utils';
+import { logger } from '@/utils';
+import { createFormLayout } from '@gvray/adminkit';
 import { Form, FormInstance, Input, InputNumber, Modal, Select } from 'antd';
 import { forwardRef, useImperativeHandle, useState } from 'react';
 

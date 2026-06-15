@@ -77,7 +77,7 @@ const TabPermissions: React.FC = () => {
           model.permData.roles.map((role: API.UserRoleSimpleDto) => (
             <Tooltip
               key={role.roleId}
-              title={role.description || role.name}
+              title={String(role.description || role.name)}
               styles={{ body: { maxWidth: 280 } }}
             >
               <Tag color="blue" className={styles.roleTag}>

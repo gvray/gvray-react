@@ -131,7 +131,7 @@ export default function ProfilePage() {
                   {model.profile?.roles?.slice(0, 3).map((role) => (
                     <Tooltip
                       key={role.roleId}
-                      title={role.description || role.name}
+                      title={String(role.description || role.name)}
                       styles={{ body: { maxWidth: 280 } }}
                     >
                       <Tag color="blue">{role.name}</Tag>
