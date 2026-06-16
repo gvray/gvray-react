@@ -43,7 +43,7 @@ const routes = [
         component: 'User',
         meta: {
           title: '用户管理',
-          permissions: ['system:user'],
+          permissions: ['system:user:list'],
         },
       },
       {
@@ -51,7 +51,7 @@ const routes = [
         component: 'Role',
         meta: {
           title: '角色管理',
-          permissions: ['system:role'],
+          permissions: ['system:role:list'],
         },
       },
       {
@@ -59,7 +59,15 @@ const routes = [
         component: 'Permission',
         meta: {
           title: '权限管理',
-          permissions: ['system:permission'],
+          permissions: ['system:permission:list'],
+        },
+      },
+      {
+        path: '/system/menu',
+        component: 'Menu',
+        meta: {
+          title: '菜单管理',
+          permissions: ['system:menu:list'],
         },
       },
       {
@@ -67,7 +75,7 @@ const routes = [
         component: 'Department',
         meta: {
           title: '部门管理',
-          permissions: ['system:department'],
+          permissions: ['system:department:list'],
         },
       },
       {
@@ -75,7 +83,7 @@ const routes = [
         component: 'Position',
         meta: {
           title: '职位管理',
-          permissions: ['system:position'],
+          permissions: ['system:position:list'],
         },
       },
       {
@@ -83,7 +91,7 @@ const routes = [
         component: 'Dictionary',
         meta: {
           title: '字典管理',
-          permissions: ['system:dictionary'],
+          permissions: ['system:dictionary:list'],
         },
       },
       {
@@ -91,7 +99,7 @@ const routes = [
         component: 'Dictionary/Items',
         meta: {
           title: '字典项管理',
-          permissions: ['system:dictionary'],
+          permissions: ['system:dictionary:list'],
         },
       },
       {
@@ -99,14 +107,13 @@ const routes = [
         component: 'Config',
         meta: {
           title: '系统配置',
-          permissions: ['system:config'],
+          permissions: ['system:config:list'],
         },
       },
       {
         path: '/system/log',
         meta: {
           title: '日志管理',
-          permissions: ['system:log'],
         },
         routes: [
           {
@@ -114,7 +121,7 @@ const routes = [
             component: 'Log/Login',
             meta: {
               title: '登录日志',
-              permissions: ['system:log-login'],
+              permissions: ['system:log-login:list'],
             },
           },
           {
@@ -122,7 +129,7 @@ const routes = [
             component: 'Log/Operation',
             meta: {
               title: '操作日志',
-              permissions: ['system:log-operation'],
+              permissions: ['system:log-operation:list'],
             },
           },
         ],
@@ -133,7 +140,7 @@ const routes = [
         component: 'User/AuthRole',
         meta: {
           title: '用户分配角色',
-          permissions: ['system:user:update'],
+          permissions: ['system:user:update-roles'],
         },
       },
       // 角色分配权限
@@ -142,7 +149,7 @@ const routes = [
         component: 'Role/AuthPermission',
         meta: {
           title: '角色分配权限',
-          permissions: ['system:role:update'],
+          permissions: ['system:role:update-permissions'],
         },
       },
       // 角色分配用户
@@ -151,7 +158,7 @@ const routes = [
         component: 'Role/AuthUser',
         meta: {
           title: '角色分配用户',
-          permissions: ['system:role:update'],
+          permissions: ['system:role:update-users'],
         },
       },
     ],

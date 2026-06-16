@@ -12,38 +12,41 @@ importers:
         specifier: ^5.3.0
         version: 5.6.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@gvray/adminkit':
-        specifier: ^1.1.0
-        version: 1.1.0
+        specifier: ^1.1.1
+        version: 1.1.1
       '@gvray/colorkit':
-        specifier: 1.1.0
-        version: 1.1.0
+        specifier: 1.1.1
+        version: 1.1.1
       '@gvray/datekit':
-        specifier: ^1.1.0
-        version: 1.1.0
+        specifier: ^1.1.1
+        version: 1.1.1
       '@gvray/domkit':
-        specifier: ^1.1.0
-        version: 1.1.0
+        specifier: ^1.1.1
+        version: 1.1.1
       '@gvray/eskit':
-        specifier: ^1.3.0
-        version: 1.3.0
+        specifier: ^1.3.1
+        version: 1.3.1
       '@gvray/formatkit':
-        specifier: ^1.1.0
-        version: 1.1.0
+        specifier: ^1.1.1
+        version: 1.1.1
       '@gvray/logger':
         specifier: ^1.1.0
         version: 1.1.0
       '@gvray/mathkit':
-        specifier: 1.1.0
-        version: 1.1.0
+        specifier: 1.1.1
+        version: 1.1.1
       '@gvray/pathkit':
-        specifier: ^1.1.0
-        version: 1.1.0
+        specifier: ^1.1.1
+        version: 1.1.1
       '@gvray/request':
         specifier: ^1.0.0
         version: 1.0.0
       '@gvray/requestkit':
-        specifier: ^1.1.0
-        version: 1.1.0
+        specifier: ^1.1.1
+        version: 1.1.1
+      '@gvray/validationkit':
+        specifier: 1.0.2
+        version: 1.0.2
       antd:
         specifier: ^5.14.1
         version: 5.29.3(moment@2.30.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -1128,38 +1131,41 @@ packages:
     resolution: {integrity: sha512-KWk80UPIzPmUg+P0rKh6TqspRw0G6eux1PuJr+zz47ftMaZ9QDwbGzHZbtzWkl5hgayM/qrKRutllRC7D/vVXQ==, tarball: https://registry.npmjs.org/@formatjs/intl-utils/-/intl-utils-2.3.0.tgz}
     deprecated: the package is rather renamed to @formatjs/ecma-abstract with some changes in functionality (primarily selectUnit is removed and we don't plan to make any further changes to this package
 
-  '@gvray/adminkit@1.1.0':
-    resolution: {integrity: sha512-3R3zOw7OQWuAx1i4S1jhrLzpbHK6W0mlHqqKJ0SMO7M78zE0X6df+D19qlZy2+3w7xdpiSXPpIsI+EoGZtecwA==, tarball: https://registry.npmjs.org/@gvray/adminkit/-/adminkit-1.1.0.tgz}
+  '@gvray/adminkit@1.1.1':
+    resolution: {integrity: sha512-/HM3qM2cTBwY8USHLALoxPYhBTH2QGRbf0uRAtwnskXxDkBkze5ZPtsPN33zlqBdvP5eQ5bfSCggScBeldQqEQ==, tarball: https://registry.npmjs.org/@gvray/adminkit/-/adminkit-1.1.1.tgz}
 
-  '@gvray/colorkit@1.1.0':
-    resolution: {integrity: sha512-wsv1l6uBzGEOS1gSS1D1+0Ce7gJR7C4zzDbZoM4VlssDyZpyNJi3FMhjAaUbQf9kdEPemlM70UxReoXYbvSoXw==, tarball: https://registry.npmjs.org/@gvray/colorkit/-/colorkit-1.1.0.tgz}
+  '@gvray/colorkit@1.1.1':
+    resolution: {integrity: sha512-mOCxrqzwkievb0Sp4e6+vo5sFFDmTbh1L+j2++j+NAC7C39CSYDV6CJz2zwnFd3WjTIcZgfmEjQF3XczQ/8SGg==, tarball: https://registry.npmjs.org/@gvray/colorkit/-/colorkit-1.1.1.tgz}
 
-  '@gvray/datekit@1.1.0':
-    resolution: {integrity: sha512-BN+RmKTDGcy0M5gvrc5ZUtR2U3OftzCCFpec55Q1QRh7d0tu+vCXSvB+hMYUcgfB/BQ92H5/7qhLrsPRS0maCQ==, tarball: https://registry.npmjs.org/@gvray/datekit/-/datekit-1.1.0.tgz}
+  '@gvray/datekit@1.1.1':
+    resolution: {integrity: sha512-HMDt7cJIqu2eZRw9b/WPYGfRYXuCCFSQqNeNZFdAfZYtKW/fJnZhaXFiq1AAxYzIuiUfmKKGVpiL55BqH0kMNw==, tarball: https://registry.npmjs.org/@gvray/datekit/-/datekit-1.1.1.tgz}
 
-  '@gvray/domkit@1.1.0':
-    resolution: {integrity: sha512-6gvf808USMiLaj+zHGT//sXZCminmFlMp2eyV8uebWXQcuVHSDUEbU1xtcIWLldhM9Fwf5NwvgCkVfcRDg218Q==, tarball: https://registry.npmjs.org/@gvray/domkit/-/domkit-1.1.0.tgz}
+  '@gvray/domkit@1.1.1':
+    resolution: {integrity: sha512-ycZA7eIWvJ07waZpjqeWoTMrdhc8cI2x+ZIhQi7+SjfXuTF/lK8M0ulA5qZWTyyY94tttQKweXS/Z48dMlVAFA==, tarball: https://registry.npmjs.org/@gvray/domkit/-/domkit-1.1.1.tgz}
 
-  '@gvray/eskit@1.3.0':
-    resolution: {integrity: sha512-33ohBKv2uLPRO2MJf/0zTAClXGOtvK2QLM0AFIR+ovLJ6WWSv85NR6nhcOiYUVJCUjdpucsF3EZ7ORPsF2dzwg==, tarball: https://registry.npmjs.org/@gvray/eskit/-/eskit-1.3.0.tgz}
+  '@gvray/eskit@1.3.1':
+    resolution: {integrity: sha512-AG7ZAXZX81mZUeG0c0ad+Qr48IcJo3lDYDOb6riPYiOiX/fa1/bMUOYNzMX2sQN3cLCs6LmWeOjxMLeQVSXdqw==, tarball: https://registry.npmjs.org/@gvray/eskit/-/eskit-1.3.1.tgz}
 
-  '@gvray/formatkit@1.1.0':
-    resolution: {integrity: sha512-JjcNP/m9oih+Y1g5q6CT+8gdBGUOqJyAlmC//Iw4keoVkO3Yq9TBfI0pug050BxXYTTtiVblXfgmSn9ADrotmA==, tarball: https://registry.npmjs.org/@gvray/formatkit/-/formatkit-1.1.0.tgz}
+  '@gvray/formatkit@1.1.1':
+    resolution: {integrity: sha512-HXtdD0tGwti5YO7CUZUGsaZhMBjhHgjEDOfxAsxrjI3n5SKWHCaPTFiJtdtzw7QJ1Pbtm64E0kT2dZ1qE3J9Fg==, tarball: https://registry.npmjs.org/@gvray/formatkit/-/formatkit-1.1.1.tgz}
 
   '@gvray/logger@1.1.0':
     resolution: {integrity: sha512-AU6goLvIBZbAbA26AJ+/NZcuwHctHQH+OhhmZAqqywuAEiec7HtHjql80s5GptzFTO7AZ5z/Io4Pyd8lsn1kCw==, tarball: https://registry.npmjs.org/@gvray/logger/-/logger-1.1.0.tgz}
 
-  '@gvray/mathkit@1.1.0':
-    resolution: {integrity: sha512-tgs1aC5rx/COhEJ1tIUV6umFk0Jh67iG0RKrWR6QrntAKJdU3GNhdby5zvXTQ/bvNHse81gSTKzOuLYmr9ySvA==, tarball: https://registry.npmjs.org/@gvray/mathkit/-/mathkit-1.1.0.tgz}
+  '@gvray/mathkit@1.1.1':
+    resolution: {integrity: sha512-AvrOBmsOv90sViEgaY64JvyaC6lGtsFhD1sSUH/A+OBR3v8b6ShDS03+ZI/1KsiY0neG1bsNAsuaGYfr+mV7Kw==, tarball: https://registry.npmjs.org/@gvray/mathkit/-/mathkit-1.1.1.tgz}
 
-  '@gvray/pathkit@1.1.0':
-    resolution: {integrity: sha512-E+9Rz1oqW8bhqVbqbNjVuv0itkIoERaaHslqWiWtwv+/dRmdwsTk6tz6fzGvUWxnOISqbn2pdP36woEz33YMww==, tarball: https://registry.npmjs.org/@gvray/pathkit/-/pathkit-1.1.0.tgz}
+  '@gvray/pathkit@1.1.1':
+    resolution: {integrity: sha512-h569tf+cu05BoDLtHruvDCZZaxCnYelUMSQjD7arQYAbbPORNeVClQJn73X7IlVtDn/V6FGCg0PTWHoBWayo8Q==, tarball: https://registry.npmjs.org/@gvray/pathkit/-/pathkit-1.1.1.tgz}
 
   '@gvray/request@1.0.0':
     resolution: {integrity: sha512-1TfSKNQdL54yTwCyCHVn/ItFfpIssAgJqxwr4p5YupImd4LdgoECWE7kRdOnip7qKoEfz7jjSbI7Xp7Hqc4nbA==, tarball: https://registry.npmjs.org/@gvray/request/-/request-1.0.0.tgz}
 
-  '@gvray/requestkit@1.1.0':
-    resolution: {integrity: sha512-dwl6GRUP2IepFOZRwAT+Te/5njtUB+7v+r/QOOamlO4/Sm4jPXzmdg44JmVE6pNwLmOr/MPDDCogSOF+8P41OQ==, tarball: https://registry.npmjs.org/@gvray/requestkit/-/requestkit-1.1.0.tgz}
+  '@gvray/requestkit@1.1.1':
+    resolution: {integrity: sha512-KNduO7vQkMOH4fyeMrhseZ+r0m5vVVbj7PyG8miRMj6zFlgtlYoA3t8DIi08mBPKIHg2+eWxj6gwGhfkV/3yjA==, tarball: https://registry.npmjs.org/@gvray/requestkit/-/requestkit-1.1.1.tgz}
+
+  '@gvray/validationkit@1.0.2':
+    resolution: {integrity: sha512-r0uNtMh2BJ7+gatysbGghGFsWqpQOPqUhWj5efdRm3ETTMYPD5M+JS9ZIQZ1UVWEinKrgJUfUKGOyp5YG6+Zug==, tarball: https://registry.npmjs.org/@gvray/validationkit/-/validationkit-1.0.2.tgz}
 
   '@humanwhocodes/config-array@0.13.0':
     resolution: {integrity: sha512-DZLEEqFWQFiyK6h5YIeynKx7JlvCYWL0cImfSRXZ9l4Sg2efkFGTuFf6vzXjK1cq6IYkU+Eg/JizXw+TD2vRNw==, tarball: https://registry.npmjs.org/@humanwhocodes/config-array/-/config-array-0.13.0.tgz}
@@ -7735,29 +7741,29 @@ snapshots:
 
   '@formatjs/intl-utils@2.3.0': {}
 
-  '@gvray/adminkit@1.1.0':
+  '@gvray/adminkit@1.1.1':
     dependencies:
-      '@gvray/eskit': 1.3.0
+      '@gvray/eskit': 1.3.1
 
-  '@gvray/colorkit@1.1.0': {}
+  '@gvray/colorkit@1.1.1': {}
 
-  '@gvray/datekit@1.1.0': {}
+  '@gvray/datekit@1.1.1': {}
 
-  '@gvray/domkit@1.1.0':
+  '@gvray/domkit@1.1.1':
     dependencies:
-      '@gvray/eskit': 1.3.0
+      '@gvray/eskit': 1.3.1
 
-  '@gvray/eskit@1.3.0': {}
+  '@gvray/eskit@1.3.1': {}
 
-  '@gvray/formatkit@1.1.0': {}
+  '@gvray/formatkit@1.1.1': {}
 
   '@gvray/logger@1.1.0': {}
 
-  '@gvray/mathkit@1.1.0': {}
+  '@gvray/mathkit@1.1.1': {}
 
-  '@gvray/pathkit@1.1.0':
+  '@gvray/pathkit@1.1.1':
     dependencies:
-      '@gvray/eskit': 1.3.0
+      '@gvray/eskit': 1.3.1
 
   '@gvray/request@1.0.0':
     dependencies:
@@ -7765,7 +7771,9 @@ snapshots:
     transitivePeerDependencies:
       - debug
 
-  '@gvray/requestkit@1.1.0': {}
+  '@gvray/requestkit@1.1.1': {}
+
+  '@gvray/validationkit@1.0.2': {}
 
   '@humanwhocodes/config-array@0.13.0':
     dependencies:

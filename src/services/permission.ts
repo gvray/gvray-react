@@ -10,22 +10,13 @@ export function queryPermissionList(params?: API.PermissionsFindAllParams) {
   });
 }
 
-/** 获取权限树 */
+/** 获取权限树（供角色分配权限使用） */
 export function queryPermissionTree(params?: API.PermissionsGetTreeParams) {
   return request<API.Response<API.PermissionResponseDto[]>>(
     '/system/permissions/tree',
     {
       method: 'GET',
       params,
-    },
-  );
-}
-/** 获取权限父级列表 */
-export function queryPermissionParentList() {
-  return request<API.Response<API.PermissionResponseDto[]>>(
-    '/system/permissions/parent-list',
-    {
-      method: 'GET',
     },
   );
 }
@@ -36,17 +27,6 @@ export function getPermissionById(permissionId: string) {
     `/system/permissions/${permissionId}`,
     {
       method: 'GET',
-    },
-  );
-}
-
-/** 创建权限 */
-export function createPermission(data: API.CreatePermissionDto) {
-  return request<API.Response<API.PermissionResponseDto>>(
-    '/system/permissions',
-    {
-      method: 'POST',
-      data,
     },
   );
 }
@@ -65,17 +45,9 @@ export function updatePermission(
   );
 }
 
-/** 删除权限 */
-export function deletePermission(permissionId: string) {
-  return request<API.Response<void>>(`/system/permissions/${permissionId}`, {
-    method: 'DELETE',
-  });
-}
-
-/** 批量删除权限 */
-export function batchDeletePermissions(data: API.BatchDeletePermissionsDto) {
-  return request<API.Response<void>>('/system/permissions/batch-delete', {
+/** 扫描并同步权限 */
+export function scanPermissions() {
+  return request<API.Response<void>>('/system/permissions/scan', {
     method: 'POST',
-    data,
   });
 }

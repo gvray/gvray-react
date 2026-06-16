@@ -30,6 +30,13 @@ export const PERM = {
   PERMISSION_DELETE: 'system:permission:delete',
   PERMISSION_SCAN: 'system:permission:scan',
 
+  MENU: 'system:menu',
+  MENU_VIEW: 'system:menu:view',
+  MENU_LIST: 'system:menu:list',
+  MENU_CREATE: 'system:menu:create',
+  MENU_UPDATE: 'system:menu:update',
+  MENU_DELETE: 'system:menu:delete',
+
   DEPARTMENT: 'system:department',
   DEPARTMENT_VIEW: 'system:department:view',
   DEPARTMENT_LIST: 'system:department:list',

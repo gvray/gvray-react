@@ -1,58 +1,45 @@
 import type { TableProColumnsType } from '@/components/TablePro';
+import type { PermissionTreeNode } from './model';
 
 export const getPermissionColumns =
-  (): TableProColumnsType<API.PermissionResponseDto> => {
+  (): TableProColumnsType<PermissionTreeNode> => {
     return [
       {
         title: '名称',
         dataIndex: 'name',
         key: 'name',
         fixed: 'left',
-        advancedSearch: {
-          type: 'INPUT',
-        },
+        width: 200,
       },
       {
-        title: '图标',
-        dataIndex: 'icon',
-        key: 'icon',
-        width: 80,
-      },
-      {
-        title: '类型',
-        dataIndex: 'type',
-        key: 'type',
-        advancedSearch: {
-          type: 'SELECT',
-        },
-        width: 120,
-      },
-      {
-        title: '操作类型',
-        dataIndex: 'action',
-        key: 'action',
-        advancedSearch: {
-          type: 'SELECT',
-        },
-        width: 120,
-      },
-      {
-        title: '权限点',
+        title: '权限代码',
         dataIndex: 'code',
         key: 'code',
-        advancedSearch: {
-          type: 'INPUT',
-        },
-        width: 220,
+        width: 280,
       },
       {
-        title: '创建时间',
-        dataIndex: 'createdAt',
-        key: 'createdAt',
+        title: '动作',
+        dataIndex: 'action',
+        key: 'action',
+        width: 120,
+      },
+      {
+        title: '描述',
+        dataIndex: 'description',
+        key: 'description',
+        width: 240,
+      },
+      {
+        title: '来源',
+        dataIndex: 'origin',
+        key: 'origin',
+        width: 100,
+      },
+      {
+        title: '更新时间',
+        dataIndex: 'updatedAt',
+        key: 'updatedAt',
         width: 160,
-        advancedSearch: {
-          type: 'DATE_RANGE',
-        },
       },
     ];
   };

@@ -38,8 +38,8 @@ interface SideNavProps {
  */
 const transformMenuItems = (menuData: any[]): MenuProps['items'] => {
   return (menuData || []).map((item: any) => ({
-    key: item.meta?.path || item.key,
-    icon: item.meta?.icon ? <AntIcon icon={item.meta.icon} /> : undefined,
+    key: item.path || item.key,
+    icon: item.icon ? <AntIcon icon={item.icon} /> : undefined,
     label: item.name || item.label,
     children: item.children?.length
       ? transformMenuItems(item.children)

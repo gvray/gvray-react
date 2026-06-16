@@ -1,205 +1,196 @@
 import {
-  AntIcon,
   AuthButton,
   DateTimeFormat,
   PageContainer,
-  StatusTag,
   TablePro,
 } from '@/components';
 import { TableProRef } from '@/components/TablePro';
 import { PERM } from '@/constants';
 import { useFeedback } from '@/hooks';
-import useDict from '@/hooks/useDict';
-import type { DictOption } from '@/types/dict';
 import { callRef, logger } from '@/utils';
-import {
-  DeleteOutlined,
-  EditOutlined,
-  ExclamationCircleOutlined,
-  PlusOutlined,
-} from '@ant-design/icons';
-import { Modal, Space } from 'antd';
-import { useRef } from 'react';
+import { EditOutlined, SyncOutlined } from '@ant-design/icons';
+import { Space, Tag } from 'antd';
+import { useRef, useState } from 'react';
 import UpdateForm, { UpdateFormRef } from './UpdateForm';
 import { getPermissionColumns } from './columns';
-import { usePermissionModel } from './model';
+import {
+  getDefaultExpandedKeys,
+  type PermissionTreeNode,
+  usePermissionModel,
+} from './model';
 
-export interface PermissionMeta {
-  permissionId: string;
-  name: string;
-  action: string;
-  code?: string;
-  children?: PermissionMeta[];
-  [key: string]: any;
-}
-
-type PermissionDict = {
-  permission_action: DictOption[];
-  permission_type: DictOption[];
-};
-
-const ResourcePage = () => {
+const PermissionPage = () => {
   const updateFormRef = useRef<UpdateFormRef>(null);
   const tableProRef = useRef<TableProRef>(null);
-  const dict = useDict<PermissionDict>([
-    'permission_action',
-    'permission_type',
-  ]);
   const { message } = useFeedback();
-  const { fetchPermissionTree, fetchPermissionDetail, removePermission } =
-    usePermissionModel();
+  const {
+    scanning,
+    fetchPermissionList,
+    fetchPermissionDetail,
+    syncPermissions,
+  } = usePermissionModel();
+
+  const [expandedKeys, setExpandedKeys] = useState<string[]>([]);
 
   const tableReload = () => {
     callRef(tableProRef, (t) => t.reload());
   };
 
-  const handleAdd = () => {
-    callRef(updateFormRef, (t) => t.show('添加权限'));
-  };
-
-  const handleDelete = async (record: API.PermissionResponseDto) => {
-    Modal.confirm({
-      title: `系统提示`,
-      icon: <ExclamationCircleOutlined />,
-      content: `是否确认删除权限编号为"${record.permissionId}"的数据项？`,
-      okText: '确认',
-      cancelText: '取消',
-      onOk() {
-        return removePermission(record.permissionId)
-          .then(() => {
-            tableReload();
-            message.success(`删除成功`);
-          })
-          .catch((error) => {
-            logger.error(error);
-          });
-      },
-    });
-  };
-
-  const handleUpdate = async (record: API.PermissionResponseDto) => {
-    const permissionId = record.permissionId;
+  const handleSync = async () => {
     try {
-      const data: any = await fetchPermissionDetail(permissionId);
-      callRef(updateFormRef, (t) => t.show('修改权限', data));
+      await syncPermissions();
+      message.success('权限扫描同步成功');
+      tableReload();
     } catch (error) {
       logger.error(error);
     }
   };
+
+  const handleUpdate = async (record: PermissionTreeNode) => {
+    if (record.isVirtual) return;
+    try {
+      const data = await fetchPermissionDetail(record.permissionId);
+      callRef(updateFormRef, (t) => t.show('修改权限描述', data));
+    } catch (error) {
+      logger.error(error);
+    }
+  };
+
   const handleOk = () => {
     tableReload();
   };
-  let columns = getPermissionColumns().map((column: any) => {
-    if (column.dataIndex === 'icon') {
+
+  const columns = getPermissionColumns().map((column: any) => {
+    if ('dataIndex' in column && column.dataIndex === 'name') {
       return {
         ...column,
-        render: (_: any, record: API.PermissionResponseDto) => {
-          // TODO: icon类型需要确认
-          const icon: any = record?.menuMeta?.icon;
-          if (icon) return <AntIcon icon={icon} />;
-          if (record?.type === 'API') return <AntIcon icon="ApiOutlined" />;
-          if (record?.type === 'BUTTON')
-            return <AntIcon icon="ControlOutlined" />;
-          return '-';
+        render: (_: string, record: PermissionTreeNode) => {
+          if (record.nodeType === 'DOMAIN') {
+            return (
+              <Tag color="purple" style={{ fontWeight: 600 }}>
+                {record.name}
+              </Tag>
+            );
+          }
+          if (record.nodeType === 'RESOURCE') {
+            return (
+              <Tag color="blue" style={{ fontWeight: 600 }}>
+                {record.name}
+              </Tag>
+            );
+          }
+          return <span>{record.name}</span>;
+        },
+      };
+    }
+    if ('dataIndex' in column && column.dataIndex === 'code') {
+      return {
+        ...column,
+        render: (code: string, record: PermissionTreeNode) => {
+          if (record.isVirtual) {
+            return <Tag>{code}</Tag>;
+          }
+          return <code>{code}</code>;
+        },
+      };
+    }
+    if ('dataIndex' in column && column.dataIndex === 'origin') {
+      return {
+        ...column,
+        render: (origin: string, record: PermissionTreeNode) => {
+          if (record.isVirtual) return '-';
+          return (
+            <Tag color={origin === 'SYSTEM' ? 'blue' : 'green'}>
+              {origin === 'SYSTEM' ? '系统' : '用户'}
+            </Tag>
+          );
+        },
+      };
+    }
+    if ('dataIndex' in column && column.dataIndex === 'updatedAt') {
+      return {
+        ...column,
+        render: (time: string, record: PermissionTreeNode) => {
+          if (record.isVirtual || !time) return '-';
+          return <DateTimeFormat value={time} />;
         },
       };
     }
     if ('dataIndex' in column && column.dataIndex === 'action') {
       return {
         ...column,
-        advancedSearch: {
-          type: 'SELECT',
-          value: dict.permission_action,
+        render: (action: string, record: PermissionTreeNode) => {
+          if (record.isVirtual) return '-';
+          return action || '-';
         },
-        render: (action: string) => (
-          <StatusTag value={action} options={dict.permission_action} />
-        ),
       };
     }
-    if ('dataIndex' in column && column.dataIndex === 'type') {
+    if ('dataIndex' in column && column.dataIndex === 'description') {
       return {
         ...column,
-        advancedSearch: {
-          type: 'SELECT',
-          value: dict.permission_type,
+        render: (desc: string, record: PermissionTreeNode) => {
+          if (record.isVirtual) return '-';
+          return desc || '-';
         },
-        render: (type: string) => (
-          <StatusTag value={type} options={dict.permission_type} />
-        ),
-      };
-    }
-    if ('dataIndex' in column && column.dataIndex === 'code') {
-      return {
-        ...column,
-        render: (code: string) => code || '-',
-      };
-    }
-    if ('dataIndex' in column && column.dataIndex === 'createdAt') {
-      return {
-        ...column,
-        render: (time: string) => <DateTimeFormat value={time} />,
       };
     }
     return column;
   });
-  columns = [
-    ...columns,
-    {
-      title: '操作',
-      key: 'action',
-      render: (record: API.PermissionResponseDto) => {
-        return (
-          <Space size={0}>
-            <AuthButton
-              type="link"
-              icon={<EditOutlined />}
-              onClick={() => handleUpdate(record)}
-              perms={[PERM.PERMISSION_UPDATE]}
-            >
-              修改
-            </AuthButton>
-            <AuthButton
-              danger
-              type="link"
-              icon={<DeleteOutlined />}
-              onClick={() => handleDelete(record)}
-              perms={[PERM.PERMISSION_DELETE]}
-            >
-              删除
-            </AuthButton>
-          </Space>
-        );
-      },
+
+  const actionColumn = {
+    title: '操作',
+    key: 'action',
+    width: 100,
+    render: (record: PermissionTreeNode) => {
+      if (record.isVirtual) return null;
+      return (
+        <Space size={0}>
+          <AuthButton
+            type="link"
+            icon={<EditOutlined />}
+            onClick={() => handleUpdate(record)}
+            perms={[PERM.PERMISSION_UPDATE]}
+          >
+            编辑
+          </AuthButton>
+        </Space>
+      );
     },
-  ];
+  };
+
   return (
     <PageContainer>
       <TablePro
-        tree={true}
+        tree
         ref={tableProRef}
-        rowKey={'permissionId'}
-        columns={columns as any}
-        request={fetchPermissionTree}
+        rowKey="permissionId"
+        columns={[...columns, actionColumn] as any}
+        request={async (params) => {
+          const result = await fetchPermissionList(params);
+          setExpandedKeys(getDefaultExpandedKeys(result.data));
+          return result;
+        }}
         expandable={{
           rowExpandable: (record) =>
-            record.children && record.children.length > 0,
-          defaultExpandAllRows: true,
+            Boolean(record.children && record.children.length > 0),
+          expandedRowKeys: expandedKeys,
+          onExpandedRowsChange: (keys) => setExpandedKeys(keys as string[]),
         }}
         toolbarRender={() => (
           <AuthButton
             type="primary"
-            icon={<PlusOutlined />}
-            onClick={handleAdd}
-            perms={[PERM.PERMISSION_CREATE]}
+            icon={<SyncOutlined spin={scanning} />}
+            onClick={handleSync}
+            loading={scanning}
+            perms={[PERM.PERMISSION_SCAN]}
           >
-            新增权限
+            扫描同步
           </AuthButton>
         )}
       />
-      {/* 权限新增修改弹出层 */}
-      <UpdateForm ref={updateFormRef} onOk={handleOk} dict={dict} />
+      <UpdateForm ref={updateFormRef} onOk={handleOk} />
     </PageContainer>
   );
 };
 
-export default ResourcePage;
+export default PermissionPage;

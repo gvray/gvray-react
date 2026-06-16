@@ -6,23 +6,23 @@ import {
 } from '@gvray/adminkit';
 
 /**
- * 权限模块的虚拟根节点配置
+ * 菜单模块的虚拟根节点配置
  */
-export const PERMISSION_VIRTUAL_ROOT_CONFIG: VirtualRootConfig = {
-  idField: 'permissionId',
+export const MENU_VIRTUAL_ROOT_CONFIG: VirtualRootConfig = {
+  idField: 'menuId',
   idValue: VIRTUAL_ROOT_ID,
   nameField: 'name',
-  nameValue: '顶级权限（无上级）',
-  parentIdField: 'parentPermissionId',
+  nameValue: '顶级菜单（无上级）',
+  parentIdField: 'parentMenuId',
 };
 
 /**
- * 为权限数据添加虚拟根节点
+ * 为菜单数据添加虚拟根节点
  */
 export const withVirtualRoot = <T extends Record<string, any>>(
   data: T[],
 ): T[] => {
-  return withVirtualRootGeneric(data, PERMISSION_VIRTUAL_ROOT_CONFIG);
+  return withVirtualRootGeneric(data, MENU_VIRTUAL_ROOT_CONFIG);
 };
 
 /**
@@ -34,6 +34,6 @@ export const normalizeToBackend = <T extends Record<string, any>>(
   return normalizeVirtualRoot(
     values,
     VIRTUAL_ROOT_ID,
-    PERMISSION_VIRTUAL_ROOT_CONFIG.parentIdField as string,
+    MENU_VIRTUAL_ROOT_CONFIG.parentIdField as string,
   );
 };

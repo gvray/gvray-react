@@ -1,26 +1,44 @@
 /**
  * 此文件由 scripts/gen-api-types.ts 自动生成
- * 生成时间: 2026-06-09T13:49:09.897Z
+ * 生成时间: 2026-06-16T13:47:02.777Z
  * 数据来源: http://localhost:8001/api-json
  * 请勿手动修改此文件
  */
 
 declare namespace API {
   interface RegisterDto {
-    /** 用户邮箱 */
+    /**
+     * 用户邮箱
+     * @example test@example.com
+     */
     email?: string;
-    /** 用户名 */
+    /**
+     * 用户名
+     * @example test_user
+     */
     username: string;
-    /** 昵称 */
+    /**
+     * 昵称
+     * @example 测试用户
+     */
     nickname: string;
-    /** 密码 */
+    /**
+     * 密码
+     * @example 123456
+     */
     password: string;
   }
 
   interface LoginDto {
-    /** 用户名/邮箱/手机号 */
+    /**
+     * 用户名/邮箱/手机号
+     * @example admin
+     */
     account: string;
-    /** 密码 */
+    /**
+     * 密码
+     * @example 123456
+     */
     password: string;
   }
 
@@ -32,36 +50,27 @@ declare namespace API {
     refreshToken: string;
   }
 
-  interface MenuMetaDto {
+  interface AuthMenuResponseDto {
+    /** 菜单唯一标识符（UUID） */
+    menuId: string;
+    /** 父级菜单ID */
+    parentMenuId?: Record<string, unknown>;
+    /** 菜单名称 */
+    name: string;
+    /** 菜单类型 */
+    type: string;
+    /** 绑定权限码 */
+    permissionCode?: Record<string, unknown>;
     /** 菜单路径 */
     path?: Record<string, unknown>;
     /** 菜单图标 */
     icon?: Record<string, unknown>;
     /** 是否隐藏 */
-    hidden?: boolean;
-    /** 组件标识 */
-    component?: Record<string, unknown>;
-    /** 排序 */
-    sort?: number;
-  }
-
-  interface MenuResponseDto {
-    /** 权限唯一标识符（UUID） */
-    permissionId: string;
-    /** 父级权限ID（菜单层级） */
-    parentPermissionId?: Record<string, unknown>;
-    /** 权限名称 */
-    name: string;
-    /** 权限代码 */
-    code: string;
-    /** 权限类型 */
-    type: string;
-    /** 操作类型 */
-    action: string;
-    /** 菜单元数据 */
-    meta?: MenuMetaDto;
+    hidden: boolean;
+    /** 排序权重 */
+    sort: number;
     /** 子节点 */
-    children?: MenuResponseDto[];
+    children?: AuthMenuResponseDto[];
   }
 
   interface CreateUserDto {
@@ -452,51 +461,17 @@ declare namespace API {
     ids: string[];
   }
 
-  interface CreateMenuMetaDto {
-    /** 菜单路径 */
-    path?: string;
-    /** 菜单图标 */
-    icon?: string;
-    /** 菜单是否隐藏 */
-    hidden?: boolean;
-    /** 组件标识 */
-    component?: string;
-    /** 排序 */
-    sort?: number;
-  }
-
   interface CreatePermissionDto {
     /** 权限名称 */
     name: string;
     /** 权限代码（唯一） */
     code: string;
-    /** 权限类型 */
-    type: 'DIRECTORY' | 'MENU' | 'BUTTON' | 'API';
-    /** 父级菜单的权限ID（仅非菜单时需要） */
-    parentPermissionId?: string;
-    /** 操作类型（菜单默认为list或view） */
-    action?:
-      | 'list'
-      | 'view'
-      | 'create'
-      | 'update'
-      | 'delete'
-      | 'clean'
-      | 'clear'
-      | 'import'
-      | 'export'
-      | 'scan'
-      | 'update-users'
-      | 'update-roles'
-      | 'update-permissions'
-      | 'update-data-scope'
-      | 'reset-password';
+    /** 操作类型 */
+    action: string;
+    /** HTTP 方法 */
+    httpMethod?: string;
     /** 权限描述 */
     description?: string;
-    /** 备注信息 */
-    remark?: string;
-    /** 菜单元信息（仅菜单） */
-    menuMeta?: CreateMenuMetaDto;
   }
 
   interface PermissionResponseDto {
@@ -511,73 +486,16 @@ declare namespace API {
     code: string;
     /** 操作类型 */
     action: string;
-    /** 权限类型 */
-    type: string;
+    /** HTTP 方法 */
+    httpMethod: string;
     /** 权限来源 */
     origin: 'USER' | 'SYSTEM';
-    /** 父权限ID（仅非菜单） */
-    parentPermissionId?: string;
     /** 权限描述 */
     description?: string;
-    /** 备注信息 */
-    remark?: string;
-    /** 菜单元数据（仅 DIRECTORY 和 MENU 类型有） */
-    menuMeta?: MenuMetaDto;
     /** 创建时间 */
     createdAt: string;
     /** 更新时间 */
     updatedAt: string;
-  }
-
-  interface PermissionTreeNodeDto {
-    /**
-     * 权限唯一标识符（UUID）
-     * @example a3d7d76e-5a4e-4f0a-93c3-d0b2b27d471e
-     */
-    permissionId: string;
-    /** 权限名称 */
-    name: string;
-    /** 权限代码 */
-    code: string;
-    /** 操作类型 */
-    action: string;
-    /** 权限类型 */
-    type: string;
-    /** 权限来源 */
-    origin: 'USER' | 'SYSTEM';
-    /** 父权限ID（仅非菜单） */
-    parentPermissionId?: string;
-    /** 权限描述 */
-    description?: string;
-    /** 备注信息 */
-    remark?: string;
-    /** 菜单元数据（仅 DIRECTORY 和 MENU 类型有） */
-    menuMeta?: MenuMetaDto;
-    /** 创建时间 */
-    createdAt: string;
-    /** 更新时间 */
-    updatedAt: string;
-    /** 子权限列表 */
-    children?: PermissionTreeNodeDto[];
-  }
-
-  interface SimplePermissionTreeNodeDto {
-    /** 权限ID */
-    key: string;
-    /** 权限名称 */
-    title: string;
-    /** 权限代码 */
-    code: string;
-    /** 权限类型 */
-    type: string;
-    /** 父权限ID */
-    parentId?: Record<string, unknown>;
-    /** 操作动作 */
-    action?: string;
-    /** 排序值 */
-    sort?: number;
-    /** 子节点 */
-    children?: SimplePermissionTreeNodeDto[];
   }
 
   interface UpdatePermissionDto {
@@ -585,38 +503,115 @@ declare namespace API {
     name?: string;
     /** 权限代码（唯一） */
     code?: string;
-    /** 权限类型 */
-    type?: 'DIRECTORY' | 'MENU' | 'BUTTON' | 'API';
-    /** 父级菜单的权限ID（仅非菜单时需要） */
-    parentPermissionId?: string;
-    /** 操作类型（菜单默认为list或view） */
-    action?:
-      | 'list'
-      | 'view'
-      | 'create'
-      | 'update'
-      | 'delete'
-      | 'clean'
-      | 'clear'
-      | 'import'
-      | 'export'
-      | 'scan'
-      | 'update-users'
-      | 'update-roles'
-      | 'update-permissions'
-      | 'update-data-scope'
-      | 'reset-password';
+    /** 操作类型 */
+    action?: string;
+    /** HTTP 方法 */
+    httpMethod?: string;
     /** 权限描述 */
     description?: string;
-    /** 备注信息 */
-    remark?: string;
-    /** 菜单元信息（仅菜单） */
-    menuMeta?: CreateMenuMetaDto;
   }
 
   interface BatchDeletePermissionsDto {
     /** 待删除权限ID列表 */
     ids: string[];
+  }
+
+  interface CreateMenuDto {
+    /** 菜单名称 */
+    name: string;
+    /** 菜单类型 */
+    type: 'CATALOG' | 'MENU';
+    /** 绑定权限码，如 system:user:list */
+    permissionCode?: string;
+    /** 菜单路径（唯一） */
+    path: string;
+    /** 菜单图标 */
+    icon?: string;
+    /** 是否隐藏 */
+    hidden?: boolean;
+    /** 排序权重 */
+    sort?: number;
+    /** 状态 */
+    status?: 'enabled' | 'disabled';
+    /** 父级菜单ID */
+    parentMenuId?: string;
+  }
+
+  interface MenuResponseDto {
+    /** 菜单唯一标识符（UUID） */
+    menuId: string;
+    /** 菜单名称 */
+    name: string;
+    /** 菜单类型 */
+    type: 'CATALOG' | 'MENU';
+    /** 绑定权限码 */
+    permissionCode?: Record<string, unknown>;
+    /** 菜单路径 */
+    path?: Record<string, unknown>;
+    /** 菜单图标 */
+    icon?: Record<string, unknown>;
+    /** 是否隐藏 */
+    hidden: boolean;
+    /** 排序权重 */
+    sort: number;
+    /** 状态 */
+    status: string;
+    /** 父菜单ID */
+    parentMenuId?: Record<string, unknown>;
+    /** 创建时间 */
+    createdAt: string;
+    /** 更新时间 */
+    updatedAt: string;
+  }
+
+  interface MenuTreeNodeDto {
+    /** 菜单唯一标识符（UUID） */
+    menuId: string;
+    /** 菜单名称 */
+    name: string;
+    /** 菜单类型 */
+    type: 'CATALOG' | 'MENU';
+    /** 绑定权限码 */
+    permissionCode?: Record<string, unknown>;
+    /** 菜单路径 */
+    path?: Record<string, unknown>;
+    /** 菜单图标 */
+    icon?: Record<string, unknown>;
+    /** 是否隐藏 */
+    hidden: boolean;
+    /** 排序权重 */
+    sort: number;
+    /** 状态 */
+    status: string;
+    /** 父菜单ID */
+    parentMenuId?: Record<string, unknown>;
+    /** 创建时间 */
+    createdAt: string;
+    /** 更新时间 */
+    updatedAt: string;
+    /** 子菜单列表 */
+    children?: MenuTreeNodeDto[];
+  }
+
+  interface UpdateMenuDto {
+    /** 菜单名称 */
+    name?: string;
+    /** 菜单类型 */
+    type?: 'CATALOG' | 'MENU';
+    /** 绑定权限码，如 system:user:list */
+    permissionCode?: string;
+    /** 菜单路径（唯一） */
+    path?: string;
+    /** 菜单图标 */
+    icon?: string;
+    /** 是否隐藏 */
+    hidden?: boolean;
+    /** 排序权重 */
+    sort?: number;
+    /** 状态 */
+    status?: 'enabled' | 'disabled';
+    /** 父级菜单ID */
+    parentMenuId?: string;
   }
 
   interface CreateDepartmentDto {
@@ -1322,14 +1317,12 @@ declare namespace API {
     name: string;
     /** 权限代码 */
     code: string;
-    /** 权限类型 */
-    type: string;
     /** 操作动作 */
     action: string;
+    /** HTTP 方法 */
+    httpMethod: string;
     /** 权限描述 */
     description?: Record<string, unknown>;
-    /** 父权限ID */
-    parentPermissionId?: Record<string, unknown>;
   }
 
   interface UserPermissionsResponseDto {
@@ -1468,17 +1461,13 @@ declare namespace API {
     code?: string;
     /** 操作类型 */
     action?: string;
-    /** 权限类型 */
-    type?: string;
-    /** 父权限ID */
-    parentPermissionId?: string;
     /** 创建时间开始（YYYY-MM-DD） */
     createdAtStart?: string;
     /** 创建时间结束（YYYY-MM-DD） */
     createdAtEnd?: string;
   }
 
-  interface PermissionsGetTreeParams {
+  interface MenuFindAllParams {
     /** 页码 */
     page?: number;
     /** 每页数量 */
@@ -1487,16 +1476,41 @@ declare namespace API {
     sortBy?: string;
     /** 排序方向 */
     sortOrder?: 'asc' | 'desc';
-    /** 权限名称 */
+    /** 菜单名称 */
     name?: string;
-    /** 权限代码 */
-    code?: string;
-    /** 操作类型 */
-    action?: string;
-    /** 权限类型 */
-    type?: string;
-    /** 父权限ID */
-    parentPermissionId?: string;
+    /** 菜单路径 */
+    path?: string;
+    /** 菜单类型 */
+    type?: 'CATALOG' | 'MENU';
+    /** 状态 */
+    status?: string;
+    /** 父菜单ID */
+    parentMenuId?: string;
+    /** 创建时间开始（YYYY-MM-DD） */
+    createdAtStart?: string;
+    /** 创建时间结束（YYYY-MM-DD） */
+    createdAtEnd?: string;
+  }
+
+  interface MenuGetTreeParams {
+    /** 页码 */
+    page?: number;
+    /** 每页数量 */
+    pageSize?: number;
+    /** 排序字段 */
+    sortBy?: string;
+    /** 排序方向 */
+    sortOrder?: 'asc' | 'desc';
+    /** 菜单名称 */
+    name?: string;
+    /** 菜单路径 */
+    path?: string;
+    /** 菜单类型 */
+    type?: 'CATALOG' | 'MENU';
+    /** 状态 */
+    status?: string;
+    /** 父菜单ID */
+    parentMenuId?: string;
     /** 创建时间开始（YYYY-MM-DD） */
     createdAtStart?: string;
     /** 创建时间结束（YYYY-MM-DD） */

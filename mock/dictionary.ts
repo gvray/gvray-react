@@ -24,6 +24,10 @@ export default {
         { value: 'female', label: '女' },
         { value: 'other', label: '其他' },
       ],
+      menu_status: [
+        { value: 'enabled', label: '启用' },
+        { value: 'disabled', label: '禁用' },
+      ],
     };
 
     const result: Record<string, Array<{ value: string; label: string }>> = {};

@@ -3,7 +3,7 @@ import { useFeedback } from '@/hooks';
 import type { DictOption } from '@/types/dict';
 import { logger } from '@/utils';
 import { CopyOutlined, EyeOutlined } from '@ant-design/icons';
-import { copyText } from '@gvray/adminkit';
+import { copyText } from '@gvray/domkit';
 import { Button, Descriptions, Modal, Tag, Typography } from 'antd';
 import React from 'react';
 import { styled } from 'umi';
