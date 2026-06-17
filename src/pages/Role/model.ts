@@ -1,4 +1,4 @@
-import { queryPermissionTree } from '@/services/permission';
+import { queryPermissionFlat } from '@/services/permission';
 import { deleteRole, getRoleById, queryRoleList } from '@/services/role';
 import { logger } from '@/utils';
 import { useCallback, useEffect, useState } from 'react';
@@ -7,7 +7,7 @@ export const useUpdataFormModel = (open: boolean) => {
   const [data, setData] = useState<API.PermissionResponseDto[]>([]);
   const fetchPermissionTree = async () => {
     try {
-      const res = await queryPermissionTree();
+      const res = await queryPermissionFlat();
       if (res.data) {
         setData(res.data);
       }

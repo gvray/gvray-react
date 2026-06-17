@@ -23,12 +23,6 @@ export const getRoleColumns = (): TableProColumnsType<API.RoleResponseDto> => {
       width: 180,
     },
     {
-      title: '显示顺序',
-      dataIndex: 'sort',
-      key: 'sort',
-      width: 100,
-    },
-    {
       title: '状态',
       dataIndex: 'status',
       key: 'status',

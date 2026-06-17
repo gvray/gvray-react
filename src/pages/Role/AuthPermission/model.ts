@@ -1,4 +1,4 @@
-import { queryPermissionList } from '@/services/permission';
+import { queryPermissionFlat } from '@/services/permission';
 import { assignRolePermissions, getRoleById } from '@/services/role';
 import { useCallback, useState } from 'react';
 
@@ -11,9 +11,9 @@ export const useAuthPermission = () => {
   );
 
   const fetchPermissionList = useCallback(async () => {
-    const res = await queryPermissionList();
-    if (res.data?.items?.length) {
-      setPermissions(res.data.items);
+    const res = await queryPermissionFlat();
+    if (res.data?.length) {
+      setPermissions(res.data);
     }
   }, []);
 

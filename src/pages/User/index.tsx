@@ -26,7 +26,7 @@ import { useUserModel } from './model';
 const { Paragraph } = Typography;
 
 type UserDict = {
-  user_status: DictOption[];
+  common_status: DictOption[];
   user_gender: DictOption[];
 };
 
@@ -34,7 +34,7 @@ const UserPage = () => {
   const navigate = useNavigate();
   const updateFormRef = useRef<UpdateFormRef>(null);
   const tableProRef = useRef<TableProRef>(null);
-  const dict = useDict<UserDict>(['user_status', 'user_gender']);
+  const dict = useDict<UserDict>(['common_status', 'user_gender']);
   const { fetchUserList, fetchUserDetail, removeUser } = useUserModel();
 
   const tableReload = () => {
@@ -108,10 +108,10 @@ const UserPage = () => {
         ...column,
         advancedSearch: {
           type: 'SELECT',
-          value: dict['user_status'],
+          value: dict['common_status'],
         },
         render: (status: string) => (
-          <StatusTag value={status} options={dict['user_status']} />
+          <StatusTag value={status} options={dict['common_status']} />
         ),
       };
     }

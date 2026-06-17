@@ -276,7 +276,7 @@ const UpdateFormFunction: React.ForwardRefRenderFunction<
               label="状态"
               rules={[{ required: true, message: '状态不能为空' }]}
             >
-              <Radio.Group options={dict.menu_status} />
+              <Radio.Group options={dict.common_status} />
             </Form.Item>
           </FormGrid.Item>
           <FormGrid.Item span={12}>

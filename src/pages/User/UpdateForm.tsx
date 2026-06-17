@@ -238,7 +238,7 @@ const UpdateFormFunction: ForwardRefRenderFunction<
           <FormGrid.Item>
             <Form.Item name="status" label="用户状态">
               <Radio.Group
-                options={dict['user_status']?.filter(
+                options={dict['common_status']?.filter(
                   (item) => item.value !== 'banned' && item.value !== 'pending',
                 )}
               ></Radio.Group>

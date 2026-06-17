@@ -1,7 +1,7 @@
 import {
   deleteMenu,
   getMenuById,
-  queryMenuParentList,
+  queryMenuOptions,
   queryMenuTree,
 } from '@/services/menu';
 import { logger } from '@/utils';
@@ -30,7 +30,7 @@ export const useUpdataFormModel = (open: boolean) => {
   const [data, setData] = useState<API.MenuTreeNodeDto[]>([]);
   const fetchMenuTree = async () => {
     try {
-      const res = await queryMenuParentList();
+      const res = await queryMenuOptions();
       if (res.data) {
         setData(res.data);
       }

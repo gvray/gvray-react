@@ -27,13 +27,13 @@ import { useAuthUser } from './model';
 const { Text } = Typography;
 
 type RoleDict = {
-  role_status: DictOption[];
+  common_status: DictOption[];
 };
 
 export default function AuthUserPage() {
   const { roleId = '' } = useParams<{ roleId: string }>();
   const navigate = useNavigate();
-  const dict = useDict<RoleDict>(['role_status']);
+  const dict = useDict<RoleDict>(['common_status']);
   const { message } = useFeedback();
   const [selectedUserIds, setSelectedUserIds] = useState<string[]>([]);
   const [searchText, setSearchText] = useState<string>('');
@@ -177,7 +177,7 @@ export default function AuthUserPage() {
               <span className="label">状态</span>
               <StatusTag
                 value={selectedRole.status}
-                options={dict.role_status}
+                options={dict.common_status}
               />
             </div>
             {selectedRole.remark && (

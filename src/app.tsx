@@ -2,8 +2,9 @@ import { LOGIN_PATH } from '@/constants';
 import { resolveServerConfig } from '@/constants/settings';
 import { queryMenus } from '@/services/auth';
 import { getRuntimeConfig } from '@/services/config';
+import { getDictionaryItemsByTypeCodes } from '@/services/dictionary';
 import { queryProfile } from '@/services/profile';
-import { useAppStore, useAuthStore } from '@/stores';
+import { useAppStore, useAuthStore, useDictStore } from '@/stores';
 import { history, matchRoutes } from 'umi';
 import { logger, redirectToLogin, tokenManager } from './utils';
 
@@ -53,6 +54,22 @@ export async function getInitialState() {
   // 认证数据 → 分发到 AuthStore
   if (profile) {
     useAuthStore.getState().setAuth(profile, menus);
+  }
+
+  // 预加载常用字典到全局缓存
+  try {
+    if (!useDictStore.getState().getDict('common_status')) {
+      const dictRes = await getDictionaryItemsByTypeCodes({
+        typeCodes: 'common_status',
+      });
+      if (dictRes.data?.common_status) {
+        useDictStore
+          .getState()
+          .setDict('common_status', dictRes.data.common_status);
+      }
+    }
+  } catch (error) {
+    logger.error('预加载 common_status 字典失败', error);
   }
 
   logger.info('App 初始化完成');

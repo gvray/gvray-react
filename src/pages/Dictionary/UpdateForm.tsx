@@ -121,7 +121,7 @@ const UpdateForm = forwardRef<UpdateFormRef, UpdateFormProps>(
                 rules={[{ required: true, message: '请选择状态' }]}
                 {...createFormLayout(8)}
               >
-                <Select placeholder="请选择" options={dict.dictionary_status} />
+                <Select placeholder="请选择" options={dict.common_status} />
               </Form.Item>
             </FormGrid.Item>
             <FormGrid.Item span={12}>

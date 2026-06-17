@@ -43,7 +43,7 @@ import { useAuthPermission } from './model';
 const { Text } = Typography;
 
 type RoleDict = {
-  role_status: DictOption[];
+  common_status: DictOption[];
 };
 
 const ACTION_MAP: Record<string, { label: string; color: string }> = {
@@ -83,7 +83,7 @@ interface TreeNode {
 export default function AuthPermissionPage() {
   const { roleId = '' } = useParams<{ roleId: string }>();
   const navigate = useNavigate();
-  const dict = useDict<RoleDict>(['role_status']);
+  const dict = useDict<RoleDict>(['common_status']);
   const { message } = useFeedback();
   const [selectedPermissionIds, setSelectedPermissionIds] = useState<string[]>(
     [],
@@ -399,7 +399,7 @@ export default function AuthPermissionPage() {
               <span className="label">状态</span>
               <StatusTag
                 value={selectedRole.status}
-                options={dict.role_status}
+                options={dict.common_status}
               />
             </div>
             {selectedRole.remark && (

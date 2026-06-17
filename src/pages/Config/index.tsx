@@ -17,28 +17,29 @@ import {
   ExclamationCircleOutlined,
   EyeOutlined,
 } from '@ant-design/icons';
-import { Modal, Space, Tag, Typography } from 'antd';
+import { Modal, Space, Tag, Tooltip, Typography } from 'antd';
 import { useRef, useState } from 'react';
-import UpdateForm, { UpdateFormRef } from './UpdateForm';
 import { getConfigColumns } from './columns';
 import ConfigValueViewer from './components/ConfigValueViewer';
 import { useConfigModel } from './model';
+import UpdateForm, { UpdateFormRef } from './UpdateForm';
 
 const { Text } = Typography;
 
 const ConfigPage = () => {
   const updateFormRef = useRef<UpdateFormRef>(null);
   const tableProRef = useRef<TableProRef>(null);
+  const { fetchConfigList, fetchConfigDetail, removeConfig } = useConfigModel();
   const dict = useDict<{
     config_group: DictOption[];
     config_status: DictOption[];
     config_type: DictOption[];
   }>(['config_group', 'config_status', 'config_type']);
-  const { fetchConfigList, fetchConfigDetail, removeConfig } = useConfigModel();
+  const { message } = useFeedback();
+
   const [viewVisible, setViewVisible] = useState(false);
   const [currentConfig, setCurrentConfig] =
     useState<API.ConfigResponseDto | null>(null);
-  const { message } = useFeedback();
 
   const tableReload = () => {
     callRef(tableProRef, (t) => t.reload());
@@ -50,7 +51,7 @@ const ConfigPage = () => {
 
   const handleDelete = (record: API.ConfigResponseDto) => {
     Modal.confirm({
-      title: '系统提示',
+      title: `系统提示`,
       icon: <ExclamationCircleOutlined />,
       content: `是否确认删除配置"${record.name}"的数据项？`,
       okText: '确认',
@@ -59,7 +60,7 @@ const ConfigPage = () => {
         return removeConfig(record.configId)
           .then(() => {
             tableReload();
-            message.success('删除成功');
+            message.success(`删除成功`);
           })
           .catch((error) => {
             logger.error(error);
@@ -146,10 +147,6 @@ const ConfigPage = () => {
     if (column.dataIndex === 'group') {
       return {
         ...column,
-        advancedSearch: {
-          type: 'SELECT',
-          value: dict['config_group'],
-        },
         render: (group: string) => {
           const label =
             dict['config_group']?.find((d) => String(d.value) === group)
@@ -179,49 +176,93 @@ const ConfigPage = () => {
     return column;
   });
 
-  columns = [
-    ...columns,
-    {
-      title: '操作',
-      key: 'action',
-      width: 200,
-      fixed: 'right',
-      render: (record: any) => (
-        <Space size={0}>
-          <AuthButton
-            type="link"
-            icon={<EyeOutlined />}
+  // 插入「配置值」列（放在排序后、状态前）
+  const valueColumn: any = {
+    title: '配置值',
+    dataIndex: 'value',
+    key: 'value',
+    width: 240,
+    ellipsis: true,
+    render: (_: any, record: API.ConfigResponseDto) => {
+      if (record.type === 'json') {
+        return (
+          <Tag
+            color="purple"
+            style={{ cursor: 'pointer' }}
             onClick={() => handleView(record)}
-            perms={[PERM.CONFIG_VIEW]}
           >
-            查看
-          </AuthButton>
-          <AuthButton
-            type="link"
-            icon={<EditOutlined />}
-            onClick={() => handleUpdate(record)}
-            perms={[PERM.CONFIG_UPDATE]}
-          >
-            修改
-          </AuthButton>
-          <AuthButton
-            danger
-            type="link"
-            icon={<DeleteOutlined />}
-            onClick={() => handleDelete(record)}
-            perms={[PERM.CONFIG_DELETE]}
-          >
-            删除
-          </AuthButton>
-        </Space>
-      ),
+            JSON 数据
+          </Tag>
+        );
+      }
+      if (record.type === 'boolean') {
+        return (
+          <Tag color={record.value === 'true' ? 'green' : 'red'}>
+            {record.value}
+          </Tag>
+        );
+      }
+      return (
+        <Tooltip title={record.value}>
+          <Text ellipsis style={{ fontFamily: 'monospace', fontSize: 13 }}>
+            {record.value}
+          </Text>
+        </Tooltip>
+      );
     },
-  ];
+  };
+
+  const actionColumn: any = {
+    title: '操作',
+    key: 'action',
+    width: 180,
+    fixed: 'right',
+    render: (record: API.ConfigResponseDto) => (
+      <Space size={0}>
+        <AuthButton
+          type="link"
+          icon={<EyeOutlined />}
+          onClick={() => handleView(record)}
+          perms={[PERM.CONFIG_VIEW]}
+        >
+          查看
+        </AuthButton>
+        <AuthButton
+          type="link"
+          icon={<EditOutlined />}
+          onClick={() => handleUpdate(record)}
+          perms={[PERM.CONFIG_UPDATE]}
+        >
+          修改
+        </AuthButton>
+        <AuthButton
+          danger
+          type="link"
+          icon={<DeleteOutlined />}
+          onClick={() => handleDelete(record)}
+          perms={[PERM.CONFIG_DELETE]}
+        >
+          删除
+        </AuthButton>
+      </Space>
+    ),
+  };
+
+  const groupIndex = columns.findIndex((c: any) => c.dataIndex === 'group');
+  if (groupIndex !== -1) {
+    columns.splice(groupIndex + 1, 0, valueColumn);
+  } else {
+    columns.push(valueColumn);
+  }
+  columns.push(actionColumn);
 
   return (
     <PageContainer>
       <TablePro
         rowKey="configId"
+        ref={tableProRef}
+        columns={columns}
+        request={fetchConfigList}
         toolbarRender={() => (
           <AuthButton
             type="primary"
@@ -231,9 +272,6 @@ const ConfigPage = () => {
             新增配置
           </AuthButton>
         )}
-        ref={tableProRef}
-        columns={columns}
-        request={fetchConfigList}
       />
       <UpdateForm ref={updateFormRef} dict={dict} onOk={handleOk} />
       {currentConfig && (

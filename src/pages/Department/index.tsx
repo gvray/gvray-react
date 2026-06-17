@@ -24,14 +24,14 @@ import { getDepartmentColumns } from './columns';
 import { useDepartmentModel } from './model';
 
 type DepartmentDict = {
-  department_status: DictOption[];
+  common_status: DictOption[];
 };
 const DepartmentPage = () => {
   const updateFormRef = useRef<UpdateFormRef>(null);
   const { fetchDepartmentDetail, removeDepartment, fetchDepartmentTree } =
     useDepartmentModel();
   const tableProRef = useRef<TableProRef>(null);
-  const dict = useDict<DepartmentDict>(['department_status']);
+  const dict = useDict<DepartmentDict>(['common_status']);
   const { message } = useFeedback();
 
   const handleAdd = async () => {
@@ -75,10 +75,10 @@ const DepartmentPage = () => {
         ...column,
         advancedSearch: {
           type: 'SELECT',
-          value: dict.department_status,
+          value: dict.common_status,
         },
         render: (status: string | number) => (
-          <StatusTag value={status} options={dict.department_status} />
+          <StatusTag value={status} options={dict.common_status} />
         ),
       };
     }

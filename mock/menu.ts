@@ -189,12 +189,12 @@ export default {
     });
   },
 
-  'GET /api/system/menus/parent-list': async (_req: Request, res: Response) => {
+  'GET /api/system/menus/options': async (_req: Request, res: Response) => {
     await sleep(200);
     res.json({
       success: true,
       code: 200,
-      message: '获取菜单父级列表成功',
+      message: '获取菜单选项列表成功',
       data: flattenMenus(menuData),
     });
   },

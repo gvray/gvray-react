@@ -28,7 +28,7 @@ import { useDictionaryItems } from './model';
 const { Title, Text, Paragraph } = Typography;
 
 type DictionaryDict = {
-  dictionary_status: DictOption[];
+  common_status: DictOption[];
 };
 
 const DictionaryItemsPage = () => {
@@ -43,7 +43,7 @@ const DictionaryItemsPage = () => {
   const updateFormRef = useRef<UpdateFormRef>(null);
   const tableProRef = useRef<TableProRef>(null);
 
-  const dict = useDict<DictionaryDict>(['dictionary_status']);
+  const dict = useDict<DictionaryDict>(['common_status']);
   const { message } = useFeedback();
 
   useEffect(() => {
@@ -151,10 +151,10 @@ const DictionaryItemsPage = () => {
         ...column,
         advancedSearch: {
           type: 'SELECT',
-          value: dict.dictionary_status,
+          value: dict.common_status,
         },
         render: (status: string | number) => (
-          <StatusTag value={status} options={dict.dictionary_status} />
+          <StatusTag value={status} options={dict.common_status} />
         ),
       };
     }

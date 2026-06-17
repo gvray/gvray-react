@@ -12,7 +12,6 @@ import useDict from '@/hooks/useDict';
 import type { DictOption } from '@/types/dict';
 import { callRef, logger } from '@/utils';
 import {
-  BookOutlined,
   DeleteOutlined,
   EditOutlined,
   ExclamationCircleOutlined,
@@ -29,7 +28,7 @@ import { useDictionary } from './model';
 const { Text, Paragraph } = Typography;
 
 type DictionaryDict = {
-  dictionary_status: DictOption[];
+  common_status: DictOption[];
 };
 
 const DictionaryPage = () => {
@@ -42,7 +41,7 @@ const DictionaryPage = () => {
     removeDictionaryType,
   } = useDictionary();
 
-  const dict = useDict<DictionaryDict>(['dictionary_status']);
+  const dict = useDict<DictionaryDict>(['common_status']);
   const { message } = useFeedback();
 
   const tableReload = () => {
@@ -116,19 +115,18 @@ const DictionaryPage = () => {
         ...column,
         render: (name: string, record: API.DictionaryTypeResponseDto) => (
           <div>
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                marginBottom: '4px',
-              }}
-            >
-              <BookOutlined style={{ color: '#1890ff', marginRight: '8px' }} />
-              <Text strong>{name}</Text>
-            </div>
-            <div style={{ fontSize: '12px', color: '#666' }}>
-              {record.description || '暂无描述'}
-            </div>
+            <Text strong>{name}</Text>
+            {record.description && (
+              <div
+                style={{
+                  fontSize: 12,
+                  color: '#999',
+                  marginTop: 2,
+                }}
+              >
+                {record.description}
+              </div>
+            )}
           </div>
         ),
       };
@@ -143,23 +141,15 @@ const DictionaryPage = () => {
         ),
       };
     }
-    if (column.dataIndex === 'sort') {
-      return {
-        ...column,
-        render: (sort: number) => (
-          <Tag color={sort === 0 ? 'default' : 'green'}>{sort}</Tag>
-        ),
-      };
-    }
     if (column.dataIndex === 'status') {
       return {
         ...column,
         advancedSearch: {
           type: 'SELECT',
-          value: dict.dictionary_status,
+          value: dict.common_status,
         },
         render: (status: string | number) => (
-          <StatusTag value={status} options={dict.dictionary_status} />
+          <StatusTag value={status} options={dict.common_status} />
         ),
       };
     }

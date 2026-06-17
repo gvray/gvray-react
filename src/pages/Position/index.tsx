@@ -26,7 +26,7 @@ import { usePosition } from './model';
 const { Paragraph } = Typography;
 
 type PositionDict = {
-  position_status: DictOption[];
+  common_status: DictOption[];
 };
 
 const PositionPage = () => {
@@ -35,7 +35,7 @@ const PositionPage = () => {
   const { fetchPositionList, fetchPositionDetail, removePosition } =
     usePosition();
 
-  const dict = useDict<PositionDict>(['position_status']);
+  const dict = useDict<PositionDict>(['common_status']);
   const { message } = useFeedback();
 
   const tableReload = () => {
@@ -95,10 +95,10 @@ const PositionPage = () => {
         ...column,
         advancedSearch: {
           type: 'SELECT',
-          value: dict.position_status,
+          value: dict.common_status,
         },
         render: (status: string | number) => (
-          <StatusTag value={status} options={dict.position_status} />
+          <StatusTag value={status} options={dict.common_status} />
         ),
       };
     }

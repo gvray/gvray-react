@@ -36,12 +36,6 @@ export const getMenuColumns = (): TableProColumnsType<API.MenuTreeNodeDto> => {
       width: 200,
     },
     {
-      title: '排序',
-      dataIndex: 'sort',
-      key: 'sort',
-      width: 80,
-    },
-    {
       title: '状态',
       dataIndex: 'status',
       key: 'status',

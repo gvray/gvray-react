@@ -33,8 +33,8 @@ const OperationLogPage: React.FC = () => {
     null,
   );
   const dict = useDict<{
-    operation_status: DictOption[];
-  }>(['operation_status']);
+    common_status: DictOption[];
+  }>(['common_status']);
   const { message } = useFeedback();
 
   const tableReload = () => {
@@ -120,10 +120,10 @@ const OperationLogPage: React.FC = () => {
         ...column,
         advancedSearch: {
           type: 'SELECT',
-          value: dict.operation_status,
+          value: dict.common_status,
         },
         render: (status: string | number) => (
-          <StatusTag value={status} options={dict.operation_status} />
+          <StatusTag value={status} options={dict.common_status} />
         ),
       };
     }

@@ -9,7 +9,7 @@ import { PERM } from '@/constants';
 import { useFeedback } from '@/hooks';
 import { callRef, logger } from '@/utils';
 import { EditOutlined, SyncOutlined } from '@ant-design/icons';
-import { Space, Tag } from 'antd';
+import { Space, Tag, Tooltip, Typography } from 'antd';
 import { useRef, useState } from 'react';
 import UpdateForm, { UpdateFormRef } from './UpdateForm';
 import { getPermissionColumns } from './columns';
@@ -67,19 +67,23 @@ const PermissionPage = () => {
         render: (_: string, record: PermissionTreeNode) => {
           if (record.nodeType === 'DOMAIN') {
             return (
-              <Tag color="purple" style={{ fontWeight: 600 }}>
+              <Typography.Text strong style={{ fontSize: 14 }}>
                 {record.name}
-              </Tag>
+              </Typography.Text>
             );
           }
           if (record.nodeType === 'RESOURCE') {
             return (
-              <Tag color="blue" style={{ fontWeight: 600 }}>
+              <Typography.Text strong type="secondary">
                 {record.name}
-              </Tag>
+              </Typography.Text>
             );
           }
-          return <span>{record.name}</span>;
+          return (
+            <Tooltip title={record.name} placement="topLeft">
+              <span>{record.name}</span>
+            </Tooltip>
+          );
         },
       };
     }
@@ -87,10 +91,18 @@ const PermissionPage = () => {
       return {
         ...column,
         render: (code: string, record: PermissionTreeNode) => {
-          if (record.isVirtual) {
-            return <Tag>{code}</Tag>;
-          }
-          return <code>{code}</code>;
+          if (record.isVirtual) return '-';
+          if (!code) return '-';
+          return (
+            <Tooltip title={code} placement="topLeft">
+              <Typography.Text
+                code
+                copyable={{ text: code, tooltips: ['复制', '已复制'] }}
+              >
+                {code}
+              </Typography.Text>
+            </Tooltip>
+          );
         },
       };
     }
@@ -116,21 +128,18 @@ const PermissionPage = () => {
         },
       };
     }
-    if ('dataIndex' in column && column.dataIndex === 'action') {
-      return {
-        ...column,
-        render: (action: string, record: PermissionTreeNode) => {
-          if (record.isVirtual) return '-';
-          return action || '-';
-        },
-      };
-    }
     if ('dataIndex' in column && column.dataIndex === 'description') {
       return {
         ...column,
         render: (desc: string, record: PermissionTreeNode) => {
           if (record.isVirtual) return '-';
-          return desc || '-';
+          if (!desc)
+            return <Typography.Text type="secondary">-</Typography.Text>;
+          return (
+            <Tooltip title={desc} placement="topLeft">
+              <span>{desc}</span>
+            </Tooltip>
+          );
         },
       };
     }
@@ -165,8 +174,8 @@ const PermissionPage = () => {
         ref={tableProRef}
         rowKey="permissionId"
         columns={[...columns, actionColumn] as any}
-        request={async (params) => {
-          const result = await fetchPermissionList(params);
+        request={async () => {
+          const result = await fetchPermissionList();
           setExpandedKeys(getDefaultExpandedKeys(result.data));
           return result;
         }}

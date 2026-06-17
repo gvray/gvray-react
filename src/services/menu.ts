@@ -19,14 +19,11 @@ export function queryMenuTree(params?: API.MenuGetTreeParams) {
   });
 }
 
-/** 获取菜单父级列表 */
-export function queryMenuParentList() {
-  return request<API.Response<API.MenuTreeNodeDto[]>>(
-    '/system/menus/parent-list',
-    {
-      method: 'GET',
-    },
-  );
+/** 获取菜单选项列表（用于上级菜单选择） */
+export function queryMenuOptions() {
+  return request<API.Response<API.MenuTreeNodeDto[]>>('/system/menus/options', {
+    method: 'GET',
+  });
 }
 
 /** 获取菜单详情 */

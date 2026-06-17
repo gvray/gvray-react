@@ -19,25 +19,45 @@ import {
   PlusOutlined,
 } from '@ant-design/icons';
 import { Modal, Space, Tag } from 'antd';
-import { useRef } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import UpdateForm, { UpdateFormRef } from './UpdateForm';
 import { getMenuColumns } from './columns';
 import { useMenuModel } from './model';
 
 type MenuDict = {
-  menu_status: DictOption[];
+  common_status: DictOption[];
 };
 
 const MenuPage = () => {
   const updateFormRef = useRef<UpdateFormRef>(null);
   const tableProRef = useRef<TableProRef>(null);
-  const dict = useDict<MenuDict>(['menu_status']);
+  const dict = useDict<MenuDict>(['common_status']);
   const { message } = useFeedback();
   const { fetchMenuTree, fetchMenuDetail, removeMenu } = useMenuModel();
+  const [expandedRowKeys, setExpandedRowKeys] = useState<React.Key[]>([]);
 
   const tableReload = () => {
     callRef(tableProRef, (t) => t.reload());
   };
+
+  const handleRequest = useCallback(
+    async (params?: any) => {
+      const result = await fetchMenuTree(params);
+      const data = result.data as any;
+      const items = data?.items ?? data;
+      if (Array.isArray(items)) {
+        const firstLevelKeys = items
+          .filter(
+            (item: API.MenuTreeNodeDto) =>
+              item.children && item.children.length > 0,
+          )
+          .map((item: API.MenuTreeNodeDto) => item.menuId);
+        setExpandedRowKeys(firstLevelKeys);
+      }
+      return result;
+    },
+    [fetchMenuTree],
+  );
 
   const handleAdd = () => {
     callRef(updateFormRef, (t) => t.show('添加菜单'));
@@ -106,7 +126,7 @@ const MenuPage = () => {
       return {
         ...column,
         render: (status: string) => (
-          <StatusTag value={status} options={dict.menu_status} />
+          <StatusTag value={status} options={dict.common_status} />
         ),
       };
     }
@@ -174,11 +194,12 @@ const MenuPage = () => {
         ref={tableProRef}
         rowKey="menuId"
         columns={columns as any}
-        request={fetchMenuTree}
+        request={handleRequest}
         expandable={{
           rowExpandable: (record) =>
             Boolean(record.children && record.children.length > 0),
-          defaultExpandAllRows: true,
+          expandedRowKeys,
+          onExpandedRowsChange: (keys) => setExpandedRowKeys([...keys]),
         }}
         toolbarRender={() => (
           <AuthButton

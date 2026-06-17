@@ -1,11 +1,12 @@
 import {
   getPermissionById,
-  queryPermissionList,
+  queryPermissionFlat,
   scanPermissions,
   updatePermission,
 } from '@/services/permission';
 import { logger } from '@/utils';
 import { useCallback, useState } from 'react';
+import { useIntl } from 'umi';
 
 /** 虚拟节点类型标记 */
 type VirtualNodeType = 'DOMAIN' | 'RESOURCE' | 'ACTION';
@@ -27,6 +28,7 @@ export interface PermissionTreeNode extends API.PermissionResponseDto {
  */
 export function buildPermissionTree(
   list: API.PermissionResponseDto[],
+  getLabel?: (id: string, fallback: string) => string,
 ): PermissionTreeNode[] {
   const domainMap = new Map<string, PermissionTreeNode>();
 
@@ -41,9 +43,8 @@ export function buildPermissionTree(
     if (!domainMap.has(domain)) {
       domainMap.set(domain, {
         permissionId: `_domain_${domain}`,
-        name: domain,
+        name: getLabel?.(`permission.domain.${domain}`, domain) ?? domain,
         code: domain,
-        action: '',
         httpMethod: '',
         origin: 'SYSTEM',
         createdAt: '',
@@ -51,7 +52,7 @@ export function buildPermissionTree(
         nodeType: 'DOMAIN',
         isVirtual: true,
         children: [],
-      });
+      } as PermissionTreeNode);
     }
     const domainNode = domainMap.get(domain)!;
 
@@ -62,9 +63,10 @@ export function buildPermissionTree(
     if (!resourceNode) {
       resourceNode = {
         permissionId: `_resource_${resourceKey}`,
-        name: resource,
+        name:
+          getLabel?.(`permission.resource.${resourceKey}`, resourceKey) ??
+          resourceKey,
         code: resourceKey,
-        action: '',
         httpMethod: '',
         origin: 'SYSTEM',
         createdAt: '',
@@ -72,7 +74,7 @@ export function buildPermissionTree(
         nodeType: 'RESOURCE',
         isVirtual: true,
         children: [],
-      };
+      } as PermissionTreeNode;
       domainNode.children!.push(resourceNode);
     }
 
@@ -88,34 +90,33 @@ export function buildPermissionTree(
 }
 
 /**
- * 提取默认展开的节点 key（domain 和 resource 层级）
+ * 提取默认展开的节点 key（仅 domain 层级）
  */
 export function getDefaultExpandedKeys(tree: PermissionTreeNode[]): string[] {
-  const keys: string[] = [];
-  for (const domain of tree) {
-    keys.push(domain.permissionId);
-    for (const resource of domain.children || []) {
-      keys.push(resource.permissionId);
-    }
-  }
-  return keys;
+  return tree.map((domain) => domain.permissionId);
 }
 
 export function usePermissionModel() {
   const [loading, setLoading] = useState(false);
   const [scanning, setScanning] = useState(false);
+  const intl = useIntl();
 
-  const fetchPermissionList = useCallback(
-    async (params?: API.PermissionsFindAllParams) => {
-      const res = await queryPermissionList(params);
-      if (res?.data?.items) {
-        const tree = buildPermissionTree(res.data.items);
-        return { data: tree, total: res.data.total };
-      }
-      return { data: [] as PermissionTreeNode[], total: 0 };
+  const getLabel = useCallback(
+    (id: string, fallback: string) => {
+      const msg = intl.formatMessage({ id });
+      return msg === id ? fallback : msg;
     },
-    [],
+    [intl],
   );
+
+  const fetchPermissionList = useCallback(async () => {
+    const res = await queryPermissionFlat();
+    if (res?.data) {
+      const tree = buildPermissionTree(res.data, getLabel);
+      return { data: tree, total: res.data.length };
+    }
+    return { data: [] as PermissionTreeNode[], total: 0 };
+  }, [getLabel]);
 
   const fetchPermissionDetail = useCallback(async (permissionId: string) => {
     const { data } = await getPermissionById(permissionId);

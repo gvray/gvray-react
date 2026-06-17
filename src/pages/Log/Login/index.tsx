@@ -31,8 +31,8 @@ const LoginLog: React.FC = () => {
   const [deleting, setDeleting] = React.useState(false);
   const [clearing, setClearing] = React.useState(false);
   const dict = useDict<{
-    login_status: DictOption[];
-  }>(['login_status']);
+    common_status: DictOption[];
+  }>(['common_status']);
   const { message } = useFeedback();
 
   const tableReload = () => {
@@ -62,10 +62,10 @@ const LoginLog: React.FC = () => {
         ...column,
         advancedSearch: {
           type: 'SELECT',
-          value: dict.login_status,
+          value: dict.common_status,
         },
         render: (status: string | number) => (
-          <StatusTag value={status} options={dict.login_status} />
+          <StatusTag value={status} options={dict.common_status} />
         ),
       };
     }

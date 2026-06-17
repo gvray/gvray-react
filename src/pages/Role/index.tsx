@@ -32,14 +32,14 @@ import UpdateForm, { UpdateFormRef } from './UpdateForm';
 const { Paragraph } = Typography;
 
 type RoleDict = {
-  role_status: DictOption[];
+  common_status: DictOption[];
 };
 
 const RolePage = () => {
   const navigate = useNavigate();
   const updateFormRef = useRef<UpdateFormRef>(null);
   const tableProRef = useRef<TableProRef>(null);
-  const dict = useDict<RoleDict>(['role_status']);
+  const dict = useDict<RoleDict>(['common_status']);
   const { message } = useFeedback();
   const { permissions } = useAuth();
   const { fetchRoleList, fetchRoleDetail, removeRole } = useRoleModel();
@@ -172,10 +172,10 @@ const RolePage = () => {
         ...column,
         advancedSearch: {
           type: 'SELECT',
-          value: dict['role_status'],
+          value: dict['common_status'],
         },
         render: (status: number) => (
-          <StatusTag value={status} options={dict.role_status} />
+          <StatusTag value={status} options={dict.common_status} />
         ),
       };
     }

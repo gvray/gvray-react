@@ -139,7 +139,7 @@ const UpdateFormFunction: React.ForwardRefRenderFunction<
           </FormGrid.Item>
           <FormGrid.Item>
             <Form.Item name="status" label="状态">
-              <Radio.Group options={dict.role_status} />
+              <Radio.Group options={dict.common_status} />
             </Form.Item>
           </FormGrid.Item>
           <FormGrid.Item span={24}>

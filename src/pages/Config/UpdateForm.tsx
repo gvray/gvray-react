@@ -252,7 +252,7 @@ const UpdateForm = forwardRef<UpdateFormRef, UpdateFormProps>(
                 label="状态"
                 rules={[{ required: true, message: '请选择状态' }]}
               >
-                <Select placeholder="请选择" options={dict.config_status} />
+                <Select placeholder="请选择" options={dict.common_status} />
               </Form.Item>
             </FormGrid.Item>
 

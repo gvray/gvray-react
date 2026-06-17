@@ -10,13 +10,12 @@ export function queryPermissionList(params?: API.PermissionsFindAllParams) {
   });
 }
 
-/** 获取权限树（供角色分配权限使用） */
-export function queryPermissionTree(params?: API.PermissionsGetTreeParams) {
+/** 获取权限平铺列表（全量，前端组装权限树） */
+export function queryPermissionFlat() {
   return request<API.Response<API.PermissionResponseDto[]>>(
-    '/system/permissions/tree',
+    '/system/permissions/flat',
     {
       method: 'GET',
-      params,
     },
   );
 }

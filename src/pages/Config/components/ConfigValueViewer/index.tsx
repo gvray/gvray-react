@@ -96,7 +96,7 @@ const ConfigValueViewer: React.FC<ConfigValueViewerProps> = ({
         </Descriptions.Item>
         <Descriptions.Item label="排序权重">{config.sort}</Descriptions.Item>
         <Descriptions.Item label="状态">
-          <StatusTag value={config.status} options={dict.config_status} />
+          <StatusTag value={config.status} options={dict.common_status} />
         </Descriptions.Item>
         <Descriptions.Item label="创建时间">
           <DateTimeFormat value={config.createdAt} />
