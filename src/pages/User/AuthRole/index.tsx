@@ -26,7 +26,7 @@ export default function AuthRolePage() {
   const { userId = '' } = useParams<{ userId: string }>();
   const navigate = useNavigate();
   const { message } = useFeedback();
-  const dict = useDict(['common_status']);
+  const dict = useDict(['user_status']);
   const { roles, selectedUser, initializeData, submitUserRoles } =
     useAuthRole(userId);
   const [loading, setLoading] = useState(false);
@@ -163,7 +163,7 @@ export default function AuthRolePage() {
               <span className="label">状态</span>
               <StatusTag
                 value={selectedUser.status}
-                options={dict['common_status']}
+                options={dict['user_status']}
               />
             </div>
           </Card>

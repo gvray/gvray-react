@@ -25,7 +25,7 @@ import { getUserColumns } from './columns';
 import { useUserModel } from './model';
 
 type UserDict = {
-  common_status: DictOption[];
+  user_status: DictOption[];
   user_gender: DictOption[];
 };
 
@@ -33,7 +33,7 @@ const UserPage = () => {
   const navigate = useNavigate();
   const updateFormRef = useRef<UpdateFormRef>(null);
   const tableProRef = useRef<TableProRef>(null);
-  const dict = useDict<UserDict>(['common_status', 'user_gender']);
+  const dict = useDict<UserDict>(['user_status', 'user_gender']);
   const { fetchUserList, fetchUserDetail, removeUser } = useUserModel();
 
   const tableReload = () => {
@@ -103,10 +103,10 @@ const UserPage = () => {
         ...column,
         advancedSearch: {
           type: 'SELECT',
-          value: dict['common_status'],
+          value: dict['user_status'],
         },
         render: (status: string) => (
-          <StatusTag value={status} options={dict['common_status']} />
+          <StatusTag value={status} options={dict['user_status']} />
         ),
       };
     }

@@ -18,7 +18,7 @@ import {
   ExclamationCircleOutlined,
   EyeOutlined,
 } from '@ant-design/icons';
-import { Modal, Space, Tag, Tooltip } from 'antd';
+import { Modal, Space, Tag } from 'antd';
 import { useRef, useState } from 'react';
 import { getConfigColumns } from './columns';
 import ConfigValueViewer from './components/ConfigValueViewer';
@@ -32,9 +32,9 @@ const ConfigPage = () => {
   const { fetchConfigList, fetchConfigDetail, removeConfig } = useConfigModel();
   const dict = useDict<{
     config_group: DictOption[];
-    config_status: DictOption[];
+    common_status: DictOption[];
     config_type: DictOption[];
-  }>(['config_group', 'config_status', 'config_type']);
+  }>(['config_group', 'common_status', 'config_type']);
   const { message } = useFeedback();
 
   const [viewVisible, setViewVisible] = useState(false);
@@ -126,6 +126,10 @@ const ConfigPage = () => {
     if (column.dataIndex === 'group') {
       return {
         ...column,
+        advancedSearch: {
+          type: 'SELECT',
+          value: dict.config_group,
+        },
         render: (group: string) => {
           const label =
             dict['config_group']?.find((d) => String(d.value) === group)
@@ -139,10 +143,10 @@ const ConfigPage = () => {
         ...column,
         advancedSearch: {
           type: 'SELECT',
-          value: dict.config_status,
+          value: dict.common_status,
         },
         render: (status: string | number) => (
-          <StatusTag value={status} options={dict.config_status} />
+          <StatusTag value={status} options={dict.common_status} />
         ),
       };
     }
@@ -154,40 +158,6 @@ const ConfigPage = () => {
     }
     return column;
   });
-
-  // 插入「配置值」列（放在排序后、状态前）
-  const valueColumn: any = {
-    title: '配置值',
-    dataIndex: 'value',
-    key: 'value',
-    width: 240,
-    ellipsis: true,
-    render: (_: any, record: API.ConfigResponseDto) => {
-      if (record.type === 'json') {
-        return (
-          <Tag
-            color="purple"
-            className="value-json-tag"
-            onClick={() => handleView(record)}
-          >
-            JSON 数据
-          </Tag>
-        );
-      }
-      if (record.type === 'boolean') {
-        return (
-          <Tag color={record.value === 'true' ? 'green' : 'red'}>
-            {record.value}
-          </Tag>
-        );
-      }
-      return (
-        <Tooltip title={record.value}>
-          <Tag>{record.value}</Tag>
-        </Tooltip>
-      );
-    },
-  };
 
   const actionColumn: any = {
     title: '操作',
@@ -225,12 +195,6 @@ const ConfigPage = () => {
     ),
   };
 
-  const groupIndex = columns.findIndex((c: any) => c.dataIndex === 'group');
-  if (groupIndex !== -1) {
-    columns.splice(groupIndex + 1, 0, valueColumn);
-  } else {
-    columns.push(valueColumn);
-  }
   columns.push(actionColumn);
 
   return (

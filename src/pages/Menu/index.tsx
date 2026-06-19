@@ -115,6 +115,13 @@ const MenuPage = () => {
     if ('dataIndex' in column && column.dataIndex === 'type') {
       return {
         ...column,
+        advancedSearch: {
+          type: 'SELECT',
+          value: [
+            { label: '目录', value: 'CATALOG' },
+            { label: '菜单', value: 'MENU' },
+          ],
+        },
         render: (type: string) => (
           <Tag color={type === 'CATALOG' ? 'blue' : 'green'}>
             {type === 'CATALOG' ? '目录' : '菜单'}
@@ -125,6 +132,10 @@ const MenuPage = () => {
     if ('dataIndex' in column && column.dataIndex === 'status') {
       return {
         ...column,
+        advancedSearch: {
+          type: 'SELECT',
+          value: dict.common_status,
+        },
         render: (status: string) => (
           <StatusTag value={status} options={dict.common_status} />
         ),
