@@ -14,7 +14,7 @@ import {
   UndoOutlined,
   UserOutlined,
 } from '@ant-design/icons';
-import { Button, Card, Divider, Space, Tag, Typography } from 'antd';
+import { Button, Card, Space, Tag, Tooltip, Typography } from 'antd';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'umi';
 import styles from './index.less';
@@ -40,19 +40,16 @@ export default function AuthRolePage() {
     }
   }, [initializeData, userId]);
 
-  // 当用户数据加载完成后，设置初始选中的角色
   useEffect(() => {
     if (selectedUser?.roles) {
       setSelectedRoleIds(selectedUser.roles.map((role) => role.roleId));
     }
   }, [selectedUser]);
 
-  // 返回用户列表页面
   const handleBackToUsers = () => {
     navigate('/system/user');
   };
 
-  // 提交角色分配
   const handleSubmit = async () => {
     if (!selectedUser) return;
 
@@ -72,25 +69,20 @@ export default function AuthRolePage() {
     }
   };
 
-  // 重置选择
   const handleReset = () => {
     if (selectedUser?.roles) {
       setSelectedRoleIds(selectedUser.roles.map((role) => role.roleId));
     }
   };
 
-  // 全选
   const handleSelectAll = () => {
-    const allRoleIds = roles.map((role) => role.roleId);
-    setSelectedRoleIds(allRoleIds);
+    setSelectedRoleIds(roles.map((role) => role.roleId));
   };
 
-  // 清空选择
   const handleClearAll = () => {
     setSelectedRoleIds([]);
   };
 
-  // 切换角色选中状态
   const toggleRole = (roleId: string) => {
     setSelectedRoleIds((prev) =>
       prev.includes(roleId)
@@ -99,7 +91,6 @@ export default function AuthRolePage() {
     );
   };
 
-  // 判断是否有变更
   const hasChanges = () => {
     const originalIds = selectedUser?.roles?.map((r) => r.roleId) || [];
     if (originalIds.length !== selectedRoleIds.length) return true;
@@ -127,37 +118,31 @@ export default function AuthRolePage() {
   return (
     <PageContainer className={styles.pageContainer}>
       <div className={styles.pageWrapper}>
-        {/* 左侧边栏 - 用户信息 */}
         <div className={styles.sidebar}>
-          {/* 返回按钮 */}
-          <div className={styles.backBar} onClick={handleBackToUsers}>
-            <ArrowLeftOutlined className="back-icon" />
-            <span className="back-text">返回用户列表</span>
-          </div>
-
           <Card className={styles.userCard}>
             <div className={styles.userHeader}>
-              <div className={styles.avatar}>
-                {selectedUser.avatar ? (
-                  <img src={selectedUser.avatar} alt="avatar" />
-                ) : (
-                  selectedUser.nickname?.charAt(0).toUpperCase() ||
-                  selectedUser.username?.charAt(0).toUpperCase()
-                )}
-              </div>
+              <Tooltip title="返回用户列表">
+                <div className={styles.backButton} onClick={handleBackToUsers}>
+                  <ArrowLeftOutlined />
+                </div>
+              </Tooltip>
               <div className={styles.userInfo}>
-                <div className="name">
+                <div className={styles.userName}>
                   {selectedUser.nickname || selectedUser.username}
                 </div>
-                <div className="username">@{selectedUser.username}</div>
+                <div className={styles.userAccount}>
+                  @{selectedUser.username}
+                </div>
               </div>
             </div>
 
-            <Divider style={{ margin: '16px 0' }} />
+            <div className={styles.divider} />
 
             <div className={styles.infoItem}>
               <span className="label">邮箱</span>
-              <span className="value">{selectedUser.email || '-'}</span>
+              <span className={styles.infoValue}>
+                {selectedUser.email || '-'}
+              </span>
             </div>
             <div className={styles.infoItem}>
               <span className="label">状态</span>
@@ -168,9 +153,9 @@ export default function AuthRolePage() {
             </div>
           </Card>
 
-          <Card size="small" title="分配统计">
+          <Card size="small" title="分配统计" className={styles.statsCard}>
             <div className={styles.statsBox}>
-              <div className={`${styles.statItem} ${styles.statItemHighlight}`}>
+              <div className={`${styles.statItem} ${styles.highlight}`}>
                 <div className="number">{selectedRoleIds.length}</div>
                 <div className="label">已选择</div>
               </div>
@@ -181,7 +166,7 @@ export default function AuthRolePage() {
             </div>
           </Card>
 
-          <Card size="small" title="当前已分配">
+          <Card size="small" title="当前已分配" className={styles.assignedCard}>
             {selectedUser.roles && selectedUser.roles.length > 0 ? (
               <Space wrap size={[4, 8]}>
                 {selectedUser.roles.map((role) => (
@@ -196,64 +181,50 @@ export default function AuthRolePage() {
           </Card>
         </div>
 
-        {/* 右侧主内容区 */}
         <div className={styles.mainContent}>
-          {/* 顶部操作栏 */}
-          <div className={styles.actionBar}>
-            <div className={styles.actionLeft}>
-              <div className="title-icon">
-                <TeamOutlined />
-              </div>
-              <div className="title-content">
-                <div className="title">选择角色</div>
-                <div className="subtitle">
-                  当前用户拥有 {selectedUser?.roles?.length || 0} 个角色
-                </div>
-              </div>
-            </div>
-            <Space wrap>
-              <Button onClick={handleSelectAll}>全选</Button>
-              <Button onClick={handleClearAll}>清空</Button>
-              <Button icon={<UndoOutlined />} onClick={handleReset}>
-                重置
-              </Button>
-              <AuthButton
-                type="primary"
-                icon={<SaveOutlined />}
-                onClick={handleSubmit}
-                loading={submitting}
-                disabled={!hasChanges()}
-                perms={[PERM.USER_UPDATE_ROLES]}
-              >
-                保存分配
-              </AuthButton>
-            </Space>
-          </div>
+          <Space className={styles.actionBar} wrap align="center">
+            <Button onClick={handleSelectAll}>全选</Button>
+            <Button onClick={handleClearAll}>清空</Button>
+            <Button icon={<UndoOutlined />} onClick={handleReset}>
+              重置
+            </Button>
+            <AuthButton
+              type="primary"
+              icon={<SaveOutlined />}
+              onClick={handleSubmit}
+              loading={submitting}
+              disabled={!hasChanges()}
+              perms={[PERM.USER_UPDATE_ROLES]}
+            >
+              保存
+            </AuthButton>
+          </Space>
 
-          {/* 角色卡片网格 */}
-          <div className={styles.roleGrid}>
+          <div className={styles.contentBody}>
             {roles.length > 0 ? (
-              roles.map((role) => {
-                const isSelected = selectedRoleIds.includes(role.roleId);
-                return (
-                  <div
-                    key={role.roleId}
-                    className={`${styles.roleItem} ${
-                      isSelected ? styles.roleItemSelected : ''
-                    }`}
-                    onClick={() => toggleRole(role.roleId)}
-                  >
-                    <div className="check-icon">
-                      {isSelected && <CheckOutlined />}
+              <div className={styles.roleGrid}>
+                {roles.map((role) => {
+                  const isSelected = selectedRoleIds.includes(role.roleId);
+                  return (
+                    <div
+                      key={role.roleId}
+                      className={`${styles.roleItem} ${
+                        isSelected ? styles.selected : ''
+                      }`}
+                      onClick={() => toggleRole(role.roleId)}
+                    >
+                      <div className={styles.checkIcon}>
+                        {isSelected && <CheckOutlined />}
+                      </div>
+                      <div className={styles.roleName}>{role.name}</div>
+                      <div className={styles.roleKey}>{role.roleKey}</div>
+                      {role.remark && (
+                        <div className={styles.roleDesc}>{role.remark}</div>
+                      )}
                     </div>
-                    <div className="role-name">{role.name}</div>
-                    <div className="role-key">{role.roleKey}</div>
-                    {role.remark && (
-                      <div className="role-desc">{role.remark}</div>
-                    )}
-                  </div>
-                );
-              })
+                  );
+                })}
+              </div>
             ) : (
               <div className={styles.emptyState}>
                 <TeamOutlined className="icon" />

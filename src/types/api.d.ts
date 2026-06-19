@@ -1,6 +1,6 @@
 /**
  * 此文件由 scripts/gen-api-types.ts 自动生成
- * 生成时间: 2026-06-19T05:39:00.847Z
+ * 生成时间: 2026-06-19T11:57:09.571Z
  * 数据来源: http://localhost:8001/api-json
  * 请勿手动修改此文件
  */
@@ -1627,6 +1627,8 @@ declare namespace API {
     sortBy?: string;
     /** 排序方向 */
     sortOrder?: 'asc' | 'desc';
+    /** 关键词（匹配用户名、昵称、手机号、邮箱） */
+    keyword?: string;
     /** 用户名（模糊查询） */
     username?: string;
     /** 昵称（模糊查询） */

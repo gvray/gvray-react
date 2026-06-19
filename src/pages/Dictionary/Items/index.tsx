@@ -13,20 +13,20 @@ import type { DictOption } from '@/types/dict';
 import { callRef, logger } from '@/utils';
 import {
   ArrowLeftOutlined,
-  BookOutlined,
   DeleteOutlined,
   EditOutlined,
   ExclamationCircleOutlined,
   PlusOutlined,
 } from '@ant-design/icons';
-import { Card, Col, Modal, Row, Space, Tag, Typography } from 'antd';
+import { Button, Card, Modal, Space, Tag, Typography } from 'antd';
 import { useEffect, useRef } from 'react';
 import { useParams } from 'umi';
 import UpdateForm, { UpdateFormRef } from './UpdateForm';
 import { getDictionaryItemColumns } from './columns';
+import './index.less';
 import { useDictionaryItems } from './model';
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
 
 type DictionaryDict = {
   common_status: DictOption[];
@@ -190,34 +190,21 @@ const DictionaryItemsPage = () => {
 
   return (
     <PageContainer>
-      <Card style={{ marginBottom: 16 }}>
-        <Row align="middle" justify="space-between">
-          <Col>
-            <div>
-              <Title level={4} style={{ margin: 0, marginBottom: 4 }}>
-                <BookOutlined
-                  style={{ marginRight: '8px', color: '#1890ff' }}
-                />
-                {typeDetail?.name || '字典项管理'}
-              </Title>
-              <Text type="secondary">
-                编码：{typeDetail?.code} | 描述：
-                {typeDetail?.description || '暂无描述'}
-              </Text>
-            </div>
-          </Col>
-          <Col>
-            <AuthButton
-              type="link"
-              icon={<ArrowLeftOutlined />}
-              onClick={() => window.history.back()}
-              style={{ padding: 0, marginBottom: 8 }}
-            >
-              返回字典类型列表
-            </AuthButton>
-          </Col>
-        </Row>
-      </Card>
+      <div className="dict-items-header">
+        <Button
+          type="text"
+          icon={<ArrowLeftOutlined />}
+          onClick={() => window.history.back()}
+          className="dict-items-back"
+        />
+        <div className="dict-items-title">
+          <span>{typeDetail?.name || '字典项管理'}</span>
+        </div>
+        <Text type="secondary" className="dict-items-desc">
+          编码：{typeDetail?.code} · 描述：
+          {typeDetail?.description || '暂无描述'}
+        </Text>
+      </div>
 
       <Card>
         {typeDetail?.code && (

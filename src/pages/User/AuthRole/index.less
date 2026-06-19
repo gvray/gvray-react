@@ -2,38 +2,10 @@
   .pageWrapper {
     display: flex;
     gap: 16px;
-    height: calc(100vh - 120px);
-    min-height: 500px;
+    align-items: flex-start;
 
     @media (max-width: 1200px) {
       flex-direction: column;
-      height: auto;
-    }
-  }
-
-  .backBar {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 12px 16px;
-    background: var(--ant-bg-container);
-    border-radius: var(--ant-border-radius-lg);
-    border: 1px solid var(--ant-border-color);
-    cursor: pointer;
-    transition: all 0.2s;
-
-    &:hover {
-      border-color: var(--ant-primary-color);
-      color: var(--ant-primary-color);
-    }
-
-    :global(.back-icon) {
-      font-size: 14px;
-    }
-
-    :global(.back-text) {
-      font-size: 14px;
-      font-weight: 500;
     }
   }
 
@@ -46,13 +18,28 @@
 
     @media (max-width: 1200px) {
       width: 100%;
-      max-height: 400px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      align-items: stretch;
+    }
+
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+    }
+
+    :global(.ant-card-body) {
+      padding: 20px;
     }
   }
 
-  .userCard {
-    :global(.ant-card-body) {
-      padding: 20px;
+  .userCard,
+  .statsCard {
+    height: 100%;
+  }
+
+  .assignedCard {
+    @media (max-width: 1200px) {
+      grid-column: 1 / -1;
     }
   }
 
@@ -62,14 +49,14 @@
     gap: 12px;
   }
 
-  .avatar {
+  .backButton {
     width: 48px;
     height: 48px;
     border-radius: 8px;
     background: linear-gradient(
       135deg,
       var(--ant-primary-color) 0%,
-      var(--ant-purple-6, #722ed1) 100%
+      #1890ff 100%
     );
     display: flex;
     align-items: center;
@@ -78,33 +65,39 @@
     font-size: 20px;
     font-weight: 600;
     flex-shrink: 0;
+    cursor: pointer;
+    transition: all 0.2s;
+    overflow: hidden;
 
-    img {
-      width: 100%;
-      height: 100%;
-      border-radius: 8px;
-      object-fit: cover;
+    &:hover {
+      transform: translateX(-2px);
+      box-shadow: 0 4px 12px rgba(24, 144, 255, 0.35);
     }
   }
 
   .userInfo {
     flex: 1;
     min-width: 0;
+  }
 
-    :global(.name) {
-      font-size: 16px;
-      font-weight: 600;
-      color: var(--ant-heading-color);
-      margin-bottom: 2px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
+  .userName {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--ant-heading-color);
+    margin-bottom: 2px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 
-    :global(.username) {
-      font-size: 13px;
-      color: var(--ant-text-color-secondary);
-    }
+  .userAccount {
+    font-size: 13px;
+    color: var(--ant-text-color-secondary);
+  }
+
+  .divider {
+    border-top: 1px solid #f0f0f0;
+    margin: 16px 0;
   }
 
   .infoItem {
@@ -117,11 +110,16 @@
     :global(.label) {
       color: var(--ant-text-color-secondary);
     }
+  }
 
-    :global(.value) {
-      color: var(--ant-heading-color);
-      font-weight: 500;
-    }
+  .infoValue {
+    max-width: 150px;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--ant-heading-color);
+    font-weight: 500;
   }
 
   .statsBox {
@@ -134,11 +132,20 @@
     background: var(--ant-fill-color-quaternary);
     border: 1px solid var(--ant-border-color);
     border-radius: 8px;
-    padding: 12px;
+    padding: 10px 8px;
     text-align: center;
 
+    &.highlight {
+      background: var(--ant-primary-1);
+      border-color: var(--ant-primary-3);
+
+      :global(.number) {
+        color: var(--ant-primary-color);
+      }
+    }
+
     :global(.number) {
-      font-size: 24px;
+      font-size: 20px;
       font-weight: 600;
       color: var(--ant-heading-color);
       line-height: 1;
@@ -146,25 +153,18 @@
     }
 
     :global(.label) {
-      font-size: 12px;
+      font-size: 11px;
       color: var(--ant-text-color-secondary);
-    }
-  }
-
-  .statItemHighlight {
-    background: var(--ant-primary-1);
-    border: 1px solid var(--ant-primary-3);
-
-    :global(.number) {
-      color: var(--ant-primary-color);
     }
   }
 
   .mainContent {
     flex: 1;
-    display: flex;
-    flex-direction: column;
     min-width: 0;
+    background: var(--ant-bg-container);
+    border: 1px solid var(--ant-border-color);
+    border-radius: 8px;
+    overflow: hidden;
 
     @media (max-width: 1200px) {
       width: 100%;
@@ -172,158 +172,102 @@
   }
 
   .actionBar {
+    width: 100%;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
     gap: 12px;
-    margin-bottom: 12px;
     padding: 12px 16px;
-    background: var(--ant-bg-container);
-    border-radius: var(--ant-border-radius-lg);
-    border: 1px solid var(--ant-border-color);
+    border-bottom: 1px solid var(--ant-border-color);
     flex-wrap: wrap;
   }
 
-  .actionLeft {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex: 1;
-    min-width: 0;
-
-    :global(.title-icon) {
-      width: 32px;
-      height: 32px;
-      flex-shrink: 0;
-      border-radius: 8px;
-      background: linear-gradient(
-        135deg,
-        var(--ant-primary-color) 0%,
-        var(--ant-purple-6, #722ed1) 100%
-      );
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 16px;
-    }
-
-    :global(.title-content) {
-      flex: 1;
-      min-width: 0;
-    }
-
-    :global(.title) {
-      font-size: 16px;
-      font-weight: 600;
-      color: var(--ant-heading-color);
-      line-height: 1.2;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    :global(.subtitle) {
-      font-size: 12px;
-      color: var(--ant-text-color-secondary);
-      margin-top: 2px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
+  .contentBody {
+    padding: 12px 16px;
   }
 
   .roleGrid {
-    flex: 1;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     gap: 12px;
-    padding: 16px;
-    background: var(--ant-bg-container);
-    border-radius: var(--ant-border-radius-lg);
-    border: 1px solid var(--ant-border-color);
-    overflow-y: auto;
-    align-content: start;
   }
 
   .roleItem {
     position: relative;
-    padding: 16px;
+    padding: 14px;
+    min-height: 110px;
     border-radius: 8px;
-    border: 2px solid var(--ant-border-color-split);
     background: var(--ant-bg-container);
     cursor: pointer;
     transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
 
     &:hover {
-      border-color: var(--ant-primary-2);
-      box-shadow: 0 2px 8px rgba(24, 144, 255, 0.15);
+      box-shadow: 0 3px 6px rgba(24, 144, 255, 0.12);
+      transform: translateY(-1px);
     }
 
-    :global(.check-icon) {
-      position: absolute;
-      top: 8px;
-      right: 8px;
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      background: var(--ant-fill-color-secondary);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 12px;
-    }
-
-    :global(.role-name) {
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--ant-heading-color);
-      margin-bottom: 6px;
-      padding-right: 24px;
-    }
-
-    :global(.role-key) {
-      font-size: 12px;
-      color: var(--ant-primary-color);
+    &.selected {
       background: var(--ant-primary-1);
-      padding: 2px 8px;
-      border-radius: 4px;
-      display: inline-block;
-      margin-bottom: 8px;
-      font-family: 'SF Mono', Monaco, monospace;
-    }
+      box-shadow: none;
 
-    :global(.role-desc) {
-      font-size: 12px;
-      color: var(--ant-text-color-secondary);
-      line-height: 1.5;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
+      .checkIcon {
+        opacity: 1;
+      }
     }
   }
 
-  .roleItemSelected {
-    border-color: var(--ant-primary-color);
+  .checkIcon {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--ant-primary-color);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .roleName {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--ant-heading-color);
+    margin-bottom: 6px;
+    padding-right: 24px;
+  }
+
+  .roleKey {
+    font-size: 12px;
+    color: var(--ant-primary-color);
     background: var(--ant-primary-1);
+    padding: 2px 8px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-bottom: 8px;
+    font-family: 'SF Mono', Monaco, monospace;
+  }
 
-    &:hover {
-      border-color: var(--ant-primary-color);
-    }
-
-    :global(.check-icon) {
-      background: var(--ant-primary-color);
-    }
+  .roleDesc {
+    font-size: 12px;
+    color: var(--ant-text-color-secondary);
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 
   .emptyState {
     text-align: center;
     color: var(--ant-text-color-secondary);
     padding: 60px 20px;
-    grid-column: 1 / -1;
 
     .icon {
       font-size: 48px;

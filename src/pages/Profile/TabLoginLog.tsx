@@ -134,7 +134,7 @@ const TabLoginLog: React.FC = () => {
         pagination={{
           current: model.page,
           total: model.total,
-          pageSize: 10,
+          pageSize: model.pageSize,
           showTotal: (total) => `共 ${total} 条`,
           onChange: model.setPage,
         }}

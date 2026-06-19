@@ -1,7 +1,7 @@
 import { LOGIN_PATH } from '@/constants';
 import { queryLoginLogList } from '@/services/loginLog';
 import { changePassword, queryProfilePermissions } from '@/services/profile';
-import { useAuthStore } from '@/stores';
+import { useAuthStore, usePreferences } from '@/stores';
 import { logger, tokenManager } from '@/utils';
 import { listToTree } from '@gvray/eskit';
 import { FormInstance, message } from 'antd';
@@ -205,6 +205,7 @@ const INITIAL_NOTIFICATIONS: NotifItem[] = [
 ];
 
 export function useProfileLoginLogModel() {
+  const { pageSize } = usePreferences();
   const [data, setData] = useState<API.LoginLogResponseDto[]>([]);
   const [loading, setLoading] = useState(false);
   const [total, setTotal] = useState(0);
@@ -220,7 +221,7 @@ export function useProfileLoginLogModel() {
         const range = dateRange;
         const params: API.LoginLogsFindAllParams = {
           page,
-          pageSize: 10,
+          pageSize,
           ...overrides,
         };
         if (statusFilter !== undefined) params.status = statusFilter;
@@ -240,7 +241,7 @@ export function useProfileLoginLogModel() {
         setLoading(false);
       }
     },
-    [dateRange, keyword, page, statusFilter],
+    [dateRange, keyword, page, pageSize, statusFilter],
   );
 
   useEffect(() => {
@@ -269,6 +270,7 @@ export function useProfileLoginLogModel() {
     loading,
     total,
     page,
+    pageSize,
     setPage,
     statusFilter,
     keyword,

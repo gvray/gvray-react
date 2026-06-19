@@ -1,0 +1,53 @@
+.dict-items-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding: 0 4px;
+}
+
+.dict-items-back {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  color: white;
+  background: linear-gradient(
+    135deg,
+    var(--ant-primary-color) 0%,
+    #1890ff 100%
+  );
+  font-size: 14px;
+  transition: all 0.2s;
+
+  &:hover {
+    color: white !important;
+    background: linear-gradient(
+      135deg,
+      var(--ant-primary-color) 0%,
+      #1890ff 100%
+    ) !important;
+    transform: translateX(-2px);
+    box-shadow: 0 4px 12px rgba(24, 144, 255, 0.35);
+  }
+}
+
+.dict-items-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--ant-heading-color);
+}
+
+.dict-items-icon {
+  color: var(--ant-primary-color);
+}
+
+.dict-items-desc {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

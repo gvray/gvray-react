@@ -1,4 +1,4 @@
-import { queryRoleList } from '@/services/role';
+import { queryRoleOptions } from '@/services/role';
 import { assignUserRoles, getUserById } from '@/services/user';
 import { useCallback, useState } from 'react';
 
@@ -8,22 +8,19 @@ export const useAuthRole = (userId?: string) => {
     null,
   );
 
-  // 获取角色列表
   const fetchRoleList = useCallback(async () => {
-    const res = await queryRoleList();
-    if (res.data?.items?.length) {
-      setRoles(res.data.items);
+    const res = await queryRoleOptions();
+    if (res.data) {
+      setRoles(res.data);
     }
   }, []);
 
-  // 获取用户详情
   const fetchUserDetail = useCallback(async (userId: string) => {
     const res = await getUserById(userId);
     setSelectedUser(res.data);
     return res.data;
   }, []);
 
-  // 初始化数据
   const initializeData = useCallback(
     async (userId?: string) => {
       if (!userId) return;
@@ -32,7 +29,6 @@ export const useAuthRole = (userId?: string) => {
     [fetchRoleList, fetchUserDetail],
   );
 
-  // 提交角色分配
   const submitUserRoles = useCallback(
     async (values: API.AssignRolesDto) => {
       if (!userId) return false;

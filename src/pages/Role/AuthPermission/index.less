@@ -2,38 +2,10 @@
   .pageWrapper {
     display: flex;
     gap: 16px;
-    height: calc(100vh - 120px);
-    min-height: 500px;
+    align-items: flex-start;
 
     @media (max-width: 1200px) {
       flex-direction: column;
-      height: auto;
-    }
-  }
-
-  .backBar {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 12px 16px;
-    background: var(--ant-bg-container);
-    border-radius: 8px;
-    border: 1px solid var(--ant-border-color);
-    cursor: pointer;
-    transition: all 0.2s;
-
-    &:hover {
-      border-color: var(--ant-primary-color);
-      color: var(--ant-primary-color);
-    }
-
-    .backIcon {
-      font-size: 14px;
-    }
-
-    .backText {
-      font-size: 14px;
-      font-weight: 500;
     }
   }
 
@@ -43,15 +15,32 @@
     display: flex;
     flex-direction: column;
     gap: 12px;
-    overflow-y: auto;
 
     @media (max-width: 1200px) {
       width: 100%;
-      max-height: 400px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      align-items: stretch;
+      overflow: visible;
+    }
+
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
     }
 
     :global(.ant-card-body) {
       padding: 20px;
+    }
+  }
+
+  .roleCard,
+  .statsCard {
+    height: 100%;
+  }
+
+  .assignedCard {
+    @media (max-width: 1200px) {
+      grid-column: 1 / -1;
     }
   }
 
@@ -61,7 +50,7 @@
     gap: 12px;
   }
 
-  .roleAvatar {
+  .backButton {
     width: 48px;
     height: 48px;
     border-radius: 8px;
@@ -77,13 +66,20 @@
     font-size: 20px;
     font-weight: 600;
     flex-shrink: 0;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+      transform: translateX(-2px);
+      box-shadow: 0 4px 12px rgba(24, 144, 255, 0.35);
+    }
   }
 
   .roleInfo {
     flex: 1;
     min-width: 0;
 
-    :global(.name) {
+    .roleName {
       font-size: 16px;
       font-weight: 600;
       color: var(--ant-text-color);
@@ -104,6 +100,11 @@
     }
   }
 
+  .divider {
+    border-top: 1px solid #f0f0f0;
+    margin: 16px 0;
+  }
+
   .infoItem {
     display: flex;
     justify-content: space-between;
@@ -119,6 +120,16 @@
       color: var(--ant-text-color);
       font-weight: 500;
     }
+  }
+
+  .remarkText {
+    max-width: 150px;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--ant-text-color);
+    font-weight: 500;
   }
 
   .statsGrid {
@@ -152,15 +163,6 @@
       }
     }
 
-    &.green {
-      background: rgba(82, 196, 26, 0.1);
-      border-color: rgba(82, 196, 26, 0.3);
-
-      :global(.number) {
-        color: var(--ant-success-color);
-      }
-    }
-
     &.orange {
       background: rgba(250, 173, 20, 0.1);
       border-color: rgba(250, 173, 20, 0.3);
@@ -186,9 +188,11 @@
 
   .mainContent {
     flex: 1;
-    display: flex;
-    flex-direction: column;
     min-width: 0;
+    background: var(--ant-bg-container);
+    border: 1px solid var(--ant-border-color);
+    border-radius: 8px;
+    overflow: hidden;
 
     @media (max-width: 1200px) {
       width: 100%;
@@ -196,103 +200,19 @@
   }
 
   .actionBar {
+    width: 100%;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
     gap: 12px;
-    margin-bottom: 12px;
-    padding: 12px 16px;
-    background: var(--ant-bg-container);
-    border-radius: 8px;
-    border: 1px solid var(--ant-border-color);
-    flex-wrap: wrap;
-  }
-
-  .actionLeft {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex: 1;
-    min-width: 0;
-
-    .titleIcon {
-      width: 32px;
-      height: 32px;
-      flex-shrink: 0;
-      border-radius: 8px;
-      background: linear-gradient(
-        135deg,
-        var(--ant-primary-color) 0%,
-        #1890ff 100%
-      );
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 16px;
-    }
-
-    .titleContent {
-      flex: 1;
-      min-width: 0;
-
-      :global(.title) {
-        font-size: 16px;
-        font-weight: 600;
-        color: var(--ant-text-color);
-        line-height: 1.2;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-
-      :global(.subtitle) {
-        font-size: 12px;
-        color: var(--ant-text-color-secondary);
-        margin-top: 2px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-    }
-  }
-
-  .contentBody {
-    flex: 1;
-    background: var(--ant-bg-container);
-    border-radius: 8px;
-    border: 1px solid var(--ant-border-color);
-    overflow: hidden;
-
-    :global {
-      .ant-tabs-nav {
-        padding-left: 20px;
-        padding-right: 20px;
-      }
-    }
-  }
-
-  .tabContent {
-    height: 500px;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-  }
-
-  .tabToolbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
     padding: 12px 16px;
     border-bottom: 1px solid var(--ant-border-color);
+    flex-wrap: wrap;
     flex-shrink: 0;
   }
 
-  .treeWrapper {
-    flex: 1;
-    min-height: 0;
+  .contentBody {
     padding: 8px 16px;
-    overflow-y: auto;
 
     :global {
       .ant-tree {
@@ -309,152 +229,6 @@
     }
   }
 
-  .apiListWrapper {
-    flex: 1;
-    min-height: 0;
-    padding: 8px 16px;
-    overflow-y: auto;
-  }
-
-  .apiGroup {
-    margin-bottom: 16px;
-
-    .groupHeader {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 12px;
-      background: var(--ant-fill-color-quaternary);
-      border-radius: 6px;
-      margin-bottom: 12px;
-      cursor: pointer;
-
-      :global(.group-name) {
-        flex: 1;
-        font-weight: 600;
-        color: var(--ant-text-color);
-        font-size: 14px;
-      }
-
-      .groupTitle {
-        font-weight: 600;
-        color: var(--ant-text-color);
-        font-size: 14px;
-      }
-
-      .groupCount {
-        font-size: 12px;
-        color: var(--ant-text-color-secondary);
-      }
-    }
-
-    .groupContent {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-  }
-
-  .apiItem {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px 12px;
-    margin-left: 12px;
-    margin-bottom: 8px;
-    background: var(--ant-bg-container);
-    border: 1px solid var(--ant-border-color);
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.2s;
-
-    &:last-child {
-      margin-bottom: 0;
-    }
-
-    &:hover {
-      border-color: var(--ant-primary-color);
-      background: var(--ant-primary-2);
-    }
-
-    &.checked {
-      border-color: var(--ant-primary-color);
-      background: var(--ant-primary-1);
-    }
-
-    :global(.api-main) {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      min-width: 0;
-    }
-
-    :global(.api-name) {
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--ant-text-color);
-    }
-
-    :global(.api-code) {
-      font-size: 12px;
-      font-family: 'SF Mono', Monaco, monospace;
-      color: var(--ant-text-color-secondary);
-      padding: 2px 6px;
-      background: var(--ant-fill-color-quaternary);
-      border-radius: 3px;
-    }
-
-    .apiMethod {
-      padding: 2px 8px;
-      border-radius: 4px;
-      font-size: 11px;
-      font-weight: 600;
-      font-family: 'SF Mono', Monaco, monospace;
-      min-width: 50px;
-      text-align: center;
-
-      &.get {
-        background: #e6f7ff;
-        color: #1890ff;
-      }
-
-      &.post {
-        background: #f6ffed;
-        color: #52c41a;
-      }
-
-      &.put {
-        background: #fff7e6;
-        color: #fa8c16;
-      }
-
-      &.delete {
-        background: #fff1f0;
-        color: #ff4d4f;
-      }
-    }
-
-    .apiPath {
-      flex: 1;
-      font-size: 13px;
-      color: var(--ant-text-color);
-      font-family: 'SF Mono', Monaco, monospace;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    .apiDescription {
-      font-size: 12px;
-      color: var(--ant-text-color-secondary);
-      max-width: 200px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-  }
-
   .treeNodeLabel {
     display: inline-flex;
     align-items: center;
@@ -467,14 +241,6 @@
     .nodeName {
       font-size: 13px;
       color: var(--ant-text-color);
-    }
-
-    .nodeType {
-      font-size: 11px;
-      padding: 1px 6px;
-      border-radius: 3px;
-      background: #f0f0f0;
-      color: var(--ant-text-color-secondary);
     }
 
     .nodePermission {
