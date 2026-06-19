@@ -7,6 +7,7 @@ import {
   TablePro,
 } from '@/components';
 import { TableProRef } from '@/components/TablePro';
+import { PERM } from '@/constants';
 import { useFeedback } from '@/hooks';
 import useDict from '@/hooks/useDict';
 import type { DictOption } from '@/types/dict';
@@ -156,6 +157,7 @@ const DictionaryItemsPage = () => {
               size="small"
               icon={<EditOutlined />}
               onClick={() => handleUpdate(record)}
+              perms={[PERM.DICTIONARY_UPDATE]}
             >
               编辑
             </AuthButton>
@@ -165,6 +167,7 @@ const DictionaryItemsPage = () => {
               size="small"
               icon={<DeleteOutlined />}
               onClick={() => handleDelete(record)}
+              perms={[PERM.DICTIONARY_DELETE]}
             >
               删除
             </AuthButton>
@@ -215,6 +218,7 @@ const DictionaryItemsPage = () => {
                   type="primary"
                   icon={<PlusOutlined />}
                   onClick={handleAdd}
+                  perms={[PERM.DICTIONARY_CREATE]}
                 >
                   新增字典项
                 </AuthButton>
