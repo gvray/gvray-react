@@ -57,3 +57,14 @@ export function batchDeletePositions(data: API.BatchDeletePositionsDto) {
     data,
   });
 }
+
+/** 获取岗位选项列表 */
+export function queryPositionOptions() {
+  return request<API.Response<API.PositionResponseDto[]>>(
+    '/system/positions/options',
+    {
+      method: 'GET',
+      skipErrorHandler: true,
+    },
+  );
+}

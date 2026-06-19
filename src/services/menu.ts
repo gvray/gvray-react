@@ -23,6 +23,7 @@ export function queryMenuTree(params?: API.MenuGetTreeParams) {
 export function queryMenuOptions() {
   return request<API.Response<API.MenuTreeNodeDto[]>>('/system/menus/options', {
     method: 'GET',
+    skipErrorHandler: true,
   });
 }
 

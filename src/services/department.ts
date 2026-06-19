@@ -70,3 +70,14 @@ export function queryDepartmentTree(params?: API.DepartmentsGetTreeParams) {
     },
   );
 }
+
+/** 获取部门选项列表（用于上级部门选择） */
+export function queryDepartmentOptions() {
+  return request<API.Response<API.DepartmentResponseDto[]>>(
+    '/system/departments/options',
+    {
+      method: 'GET',
+      skipErrorHandler: true,
+    },
+  );
+}

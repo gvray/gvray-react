@@ -28,8 +28,7 @@ type DepartmentDict = {
 };
 const DepartmentPage = () => {
   const updateFormRef = useRef<UpdateFormRef>(null);
-  const { fetchDepartmentDetail, removeDepartment, fetchDepartmentTree } =
-    useDepartmentModel();
+  const { removeDepartment, fetchDepartmentTree } = useDepartmentModel();
   const tableProRef = useRef<TableProRef>(null);
   const dict = useDict<DepartmentDict>(['common_status']);
   const { message } = useFeedback();
@@ -57,14 +56,8 @@ const DepartmentPage = () => {
     });
   };
 
-  const handleUpdate = async (record: API.DepartmentResponseDto) => {
-    const departmentId = record.departmentId;
-    try {
-      const msg: any = await fetchDepartmentDetail(departmentId);
-      callRef(updateFormRef, (t) => t.show('修改部门', msg));
-    } catch (error) {
-      logger.error(error);
-    }
+  const handleUpdate = (record: API.DepartmentResponseDto) => {
+    callRef(updateFormRef, (t) => t.show('修改部门', record.departmentId));
   };
   const handleOk = () => {
     callRef(tableProRef, (t) => t.reload());

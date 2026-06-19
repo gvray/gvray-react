@@ -31,8 +31,7 @@ type PositionDict = {
 const PositionPage = () => {
   const updateFormRef = useRef<UpdateFormRef>(null);
   const tableProRef = useRef<TableProRef>(null);
-  const { fetchPositionList, fetchPositionDetail, removePosition } =
-    usePosition();
+  const { fetchPositionList, removePosition } = usePosition();
 
   const dict = useDict<PositionDict>(['common_status']);
   const { message } = useFeedback();
@@ -64,14 +63,8 @@ const PositionPage = () => {
     });
   };
 
-  const handleUpdate = async (record: API.PositionResponseDto) => {
-    const positionId = record.positionId;
-    try {
-      const msg = await fetchPositionDetail(String(positionId));
-      callRef(updateFormRef, (t) => t.show('修改岗位', { ...msg }));
-    } catch (error) {
-      logger.error(error);
-    }
+  const handleUpdate = (record: API.PositionResponseDto) => {
+    callRef(updateFormRef, (t) => t.show('修改岗位', record.positionId));
   };
 
   const handleOk = () => {

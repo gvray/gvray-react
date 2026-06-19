@@ -24,12 +24,8 @@ const PermissionPage = () => {
   const updateFormRef = useRef<UpdateFormRef>(null);
   const tableProRef = useRef<TableProRef>(null);
   const { message } = useFeedback();
-  const {
-    scanning,
-    fetchPermissionList,
-    fetchPermissionDetail,
-    syncPermissions,
-  } = usePermissionModel();
+  const { scanning, fetchPermissionList, syncPermissions } =
+    usePermissionModel();
 
   const [expandedKeys, setExpandedKeys] = useState<string[]>([]);
 
@@ -47,14 +43,9 @@ const PermissionPage = () => {
     }
   };
 
-  const handleUpdate = async (record: PermissionTreeNode) => {
+  const handleUpdate = (record: PermissionTreeNode) => {
     if (record.isVirtual) return;
-    try {
-      const data = await fetchPermissionDetail(record.permissionId);
-      callRef(updateFormRef, (t) => t.show('修改权限描述', data));
-    } catch (error) {
-      logger.error(error);
-    }
+    callRef(updateFormRef, (t) => t.show('修改权限描述', record));
   };
 
   const handleOk = () => {

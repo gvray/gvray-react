@@ -80,6 +80,7 @@ export function queryDictionaryItemList(
   >('/system/dictionaries/items', {
     method: 'GET',
     params,
+    skipErrorHandler: true,
   });
 }
 

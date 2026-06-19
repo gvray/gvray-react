@@ -1,0 +1,28 @@
+.formLoading {
+  position: relative;
+
+  :global {
+    .ant-spin-nested-loading {
+      > div > .ant-spin {
+        background: rgba(255, 255, 255, 0.75);
+        backdrop-filter: blur(1px);
+        max-height: unset;
+        transition: opacity 0.2s ease;
+
+        .ant-spin-dot {
+          font-size: 24px;
+        }
+
+        .ant-spin-text {
+          font-size: 13px;
+          color: #888;
+          margin-top: 10px;
+        }
+      }
+    }
+
+    .ant-spin-container::after {
+      background: transparent;
+    }
+  }
+}

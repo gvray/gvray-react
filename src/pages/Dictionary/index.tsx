@@ -36,11 +36,7 @@ const DictionaryPage = () => {
   const navigate = useNavigate();
   const updateFormRef = useRef<UpdateFormRef>(null);
   const tableProRef = useRef<TableProRef>(null);
-  const {
-    fetchDictionaryTypeList,
-    fetchDictionaryTypeDetail,
-    removeDictionaryType,
-  } = useDictionary();
+  const { fetchDictionaryTypeList, removeDictionaryType } = useDictionary();
 
   const dict = useDict<DictionaryDict>(['common_status']);
   const { message } = useFeedback();
@@ -82,14 +78,8 @@ const DictionaryPage = () => {
     });
   };
 
-  const handleUpdate = async (record: API.DictionaryTypeResponseDto) => {
-    const typeId = record.typeId;
-    try {
-      const msg: any = await fetchDictionaryTypeDetail(typeId);
-      callRef(updateFormRef, (t) => t.show('修改字典类型', { ...msg }));
-    } catch (error) {
-      logger.error(error);
-    }
+  const handleUpdate = (record: API.DictionaryTypeResponseDto) => {
+    callRef(updateFormRef, (t) => t.show('修改字典类型', record.typeId));
   };
 
   const handleManageItems = (record: API.DictionaryTypeResponseDto) => {

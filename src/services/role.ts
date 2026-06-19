@@ -129,3 +129,11 @@ export function assignRoleDataScopes(
     },
   );
 }
+
+/** 获取角色选项列表 */
+export function queryRoleOptions() {
+  return request<API.Response<API.RoleResponseDto[]>>('/system/roles/options', {
+    method: 'GET',
+    skipErrorHandler: true,
+  });
+}

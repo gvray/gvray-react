@@ -1,5 +1,6 @@
 import { Spin } from 'antd';
 import React from 'react';
+import styles from './index.less';
 
 export interface FormLoadingProps {
   loading?: boolean;
@@ -9,16 +10,21 @@ export interface FormLoadingProps {
 
 /**
  * 表单加载容器
- * - 用于弹窗表单的数据加载状态
- * - 统一 loading tip 文案，全局一处修改
+ * - 半透明遮罩 + 居中旋转图标
+ * - 延迟 150ms 显示，避免快速请求闪烁
  */
 const FormLoading: React.FC<FormLoadingProps> = ({
   loading,
-  tip = '加载中...',
+  tip,
   children,
 }) => {
   return (
-    <Spin spinning={loading} tip={tip}>
+    <Spin
+      spinning={loading}
+      tip={tip}
+      delay={150}
+      wrapperClassName={styles.formLoading}
+    >
       {children}
     </Spin>
   );

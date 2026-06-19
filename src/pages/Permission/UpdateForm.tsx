@@ -25,10 +25,12 @@ const UpdateFormFunction: React.ForwardRefRenderFunction<
   const [title, setTitle] = useState(DEFAULT_MODAL_TITLE);
   const [visible, setVisible] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
+  const [record, setRecord] = useState<Record<string, unknown> | null>(null);
   const [form] = Form.useForm();
 
   const reset = () => {
     form.resetFields();
+    setRecord(null);
     setConfirmLoading(false);
   };
 
@@ -36,7 +38,7 @@ const UpdateFormFunction: React.ForwardRefRenderFunction<
     try {
       setConfirmLoading(true);
       const values = await form.validateFields();
-      const permissionId = form.getFieldValue('permissionId');
+      const permissionId = record?.permissionId as string;
       await updatePermission(permissionId, { description: values.description });
       message.success('修改成功');
       setVisible(false);
@@ -61,8 +63,8 @@ const UpdateFormFunction: React.ForwardRefRenderFunction<
       return {
         show: (title, data) => {
           setTitle(title);
+          setRecord(data ?? null);
           setVisible(true);
-          reset();
           if (data) {
             form.setFieldsValue({
               permissionId: data.permissionId,
@@ -106,12 +108,12 @@ const UpdateFormFunction: React.ForwardRefRenderFunction<
         </Form.Item>
         <Form.Item label="权限名称">
           <span style={{ color: 'var(--ant-color-text-secondary)' }}>
-            {form.getFieldValue('name') || '-'}
+            {(record?.name as string) || '-'}
           </span>
         </Form.Item>
         <Form.Item label="权限代码">
           <code style={{ color: 'var(--ant-color-text-secondary)' }}>
-            {form.getFieldValue('code') || '-'}
+            {(record?.code as string) || '-'}
           </code>
         </Form.Item>
         <Form.Item

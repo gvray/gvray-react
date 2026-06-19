@@ -41,7 +41,7 @@ const RolePage = () => {
   const dict = useDict<RoleDict>(['common_status']);
   const { message } = useFeedback();
   const { permissions } = useAuth();
-  const { fetchRoleList, fetchRoleDetail, removeRole } = useRoleModel();
+  const { fetchRoleList, removeRole } = useRoleModel();
 
   // 权限检查辅助函数
   const hasPermission = (requiredPerms: string[]) => {
@@ -85,14 +85,8 @@ const RolePage = () => {
     });
   };
 
-  const handleUpdate = async (record: API.RoleResponseDto) => {
-    const roleId = record.roleId;
-    try {
-      const data = await fetchRoleDetail(roleId);
-      callRef(updateFormRef, (t) => t.show('修改角色', data));
-    } catch (error) {
-      logger.error(error);
-    }
+  const handleUpdate = (record: API.RoleResponseDto) => {
+    callRef(updateFormRef, (t) => t.show('修改角色', record.roleId));
   };
 
   const handleOk = () => {

@@ -69,13 +69,8 @@ const ConfigPage = () => {
     });
   };
 
-  const handleUpdate = async (record: API.ConfigResponseDto) => {
-    try {
-      const data: any = await fetchConfigDetail(record.configId);
-      callRef(updateFormRef, (f) => f.show('修改配置', data));
-    } catch (error) {
-      logger.error(error);
-    }
+  const handleUpdate = (record: API.ConfigResponseDto) => {
+    callRef(updateFormRef, (f) => f.show('修改配置', record.configId));
   };
 
   const handleView = async (record: API.ConfigResponseDto) => {

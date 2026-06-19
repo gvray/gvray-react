@@ -34,7 +34,7 @@ const UserPage = () => {
   const updateFormRef = useRef<UpdateFormRef>(null);
   const tableProRef = useRef<TableProRef>(null);
   const dict = useDict<UserDict>(['user_status', 'user_gender']);
-  const { fetchUserList, fetchUserDetail, removeUser } = useUserModel();
+  const { fetchUserList, removeUser } = useUserModel();
 
   const tableReload = () => {
     callRef(tableProRef, (t) => t.reload());
@@ -64,23 +64,8 @@ const UserPage = () => {
     });
   };
 
-  const handleUpdate = async (record: API.UpdateUserDto) => {
-    const userId = record.userId;
-    if (!userId) {
-      return;
-    }
-    try {
-      const res: any = await fetchUserDetail(userId);
-      const data = {
-        ...res,
-        positionIds: res.positions?.map((item: any) => item.positionId),
-        roleIds: res.roles?.map((item: any) => item.roleId),
-        departmentId: res.department?.departmentId,
-      };
-      callRef(updateFormRef, (t) => t.show('修改用户', data));
-    } catch (error) {
-      logger.error(error);
-    }
+  const handleUpdate = (record: API.UserResponseDto) => {
+    callRef(updateFormRef, (t) => t.show('修改用户', record.userId));
   };
 
   const handleOk = () => {

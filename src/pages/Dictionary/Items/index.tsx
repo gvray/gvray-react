@@ -39,7 +39,6 @@ const DictionaryItemsPage = () => {
     fetchDictionaryTypeDetail,
     fetchDictionaryItemList,
     removeDictionaryItem,
-    fetchDictionaryItemDetail,
   } = useDictionaryItems();
   const updateFormRef = useRef<UpdateFormRef>(null);
   const tableProRef = useRef<TableProRef>(null);
@@ -57,12 +56,8 @@ const DictionaryItemsPage = () => {
     callRef(tableProRef, (t) => t.reload());
   };
 
-  const handleAdd = async () => {
-    callRef(updateFormRef, (t) =>
-      t.show('添加字典项', {
-        typeCode: typeDetail?.code,
-      }),
-    );
+  const handleAdd = () => {
+    callRef(updateFormRef, (t) => t.show('添加字典项'));
   };
 
   const handleDelete = async (record: API.DictionaryItemResponseDto) => {
@@ -91,19 +86,8 @@ const DictionaryItemsPage = () => {
     });
   };
 
-  const handleUpdate = async (record: API.DictionaryItemResponseDto) => {
-    const itemId = record.itemId;
-    try {
-      const msg: any = await fetchDictionaryItemDetail(itemId);
-      callRef(updateFormRef, (t) =>
-        t.show('修改字典项', {
-          ...msg,
-          typeId,
-        }),
-      );
-    } catch (error) {
-      logger.error(error);
-    }
+  const handleUpdate = (record: API.DictionaryItemResponseDto) => {
+    callRef(updateFormRef, (t) => t.show('修改字典项', record.itemId));
   };
 
   const handleOk = () => {
