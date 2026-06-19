@@ -56,20 +56,22 @@ export async function getInitialState() {
     useAuthStore.getState().setAuth(profile, menus);
   }
 
-  // 预加载常用字典到全局缓存
-  try {
-    if (!useDictStore.getState().getDict('common_status')) {
-      const dictRes = await getDictionaryItemsByTypeCodes({
-        typeCodes: 'common_status',
-      });
-      if (dictRes.data?.common_status) {
-        useDictStore
-          .getState()
-          .setDict('common_status', dictRes.data.common_status);
+  // 已登录时预加载常用字典到全局缓存
+  if (tokenManager.isAuthenticated()) {
+    try {
+      if (!useDictStore.getState().getDict('common_status')) {
+        const dictRes = await getDictionaryItemsByTypeCodes({
+          typeCodes: 'common_status',
+        });
+        if (dictRes.data?.common_status) {
+          useDictStore
+            .getState()
+            .setDict('common_status', dictRes.data.common_status);
+        }
       }
+    } catch (error) {
+      logger.error('预加载 common_status 字典失败', error);
     }
-  } catch (error) {
-    logger.error('预加载 common_status 字典失败', error);
   }
 
   logger.info('App 初始化完成');

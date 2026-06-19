@@ -1,6 +1,7 @@
 import AntIcon from '@/components/AntIcon';
 import { useAppStore, useAuthStore } from '@/stores';
 import type { SiderTheme } from '@/stores/useAppStore';
+import { AppstoreOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { ConfigProvider, Layout, Menu, Skeleton } from 'antd';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -36,7 +37,9 @@ interface SideNavProps {
 /**
  * 菜单转换
  */
-const transformMenuItems = (menuData: any[]): MenuProps['items'] => {
+const transformMenuItems = (
+  menuData: any[],
+): NonNullable<MenuProps['items']> => {
   return (menuData || []).map((item: any) => ({
     key: item.path || item.key,
     icon: item.icon ? <AntIcon icon={item.icon} /> : undefined,
@@ -134,16 +137,64 @@ const SideNav: React.FC<SideNavProps> = ({
       )}
 
       <Skeleton loading={loading} active round style={{ padding: 15 }}>
-        <Menu
-          mode="inline"
-          theme={theme}
-          inlineIndent={10}
-          items={items}
-          openKeys={openKeys}
-          selectedKeys={selectedKeys}
-          onOpenChange={(keys) => setOpenKeys(keys as string[])}
-          onClick={handleMenuClick}
-        />
+        {!loading && items.length === 0 ? (
+          collapsed ? (
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                paddingTop: 24,
+              }}
+            >
+              <AppstoreOutlined
+                style={{
+                  fontSize: 20,
+                  color: isDark ? 'rgba(255,255,255,0.25)' : '#d9d9d9',
+                }}
+              />
+            </div>
+          ) : (
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '48px 16px',
+                color: isDark ? 'rgba(255,255,255,0.45)' : '#999',
+                textAlign: 'center',
+              }}
+            >
+              <AppstoreOutlined
+                style={{
+                  fontSize: 40,
+                  color: isDark ? 'rgba(255,255,255,0.2)' : '#d9d9d9',
+                  marginBottom: 12,
+                }}
+              />
+              <div style={{ fontSize: 14, marginBottom: 4 }}>暂无可用菜单</div>
+              <div
+                style={{
+                  fontSize: 12,
+                  color: isDark ? 'rgba(255,255,255,0.3)' : '#bfbfbf',
+                }}
+              >
+                当前账号暂无菜单权限
+              </div>
+            </div>
+          )
+        ) : (
+          <Menu
+            mode="inline"
+            theme={theme}
+            inlineIndent={10}
+            items={items}
+            openKeys={openKeys}
+            selectedKeys={selectedKeys}
+            onOpenChange={(keys) => setOpenKeys(keys as string[])}
+            onClick={handleMenuClick}
+          />
+        )}
       </Skeleton>
     </Sider>
   );

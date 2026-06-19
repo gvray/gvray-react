@@ -13,6 +13,7 @@ import { Space, Tag, Tooltip, Typography } from 'antd';
 import { useRef, useState } from 'react';
 import UpdateForm, { UpdateFormRef } from './UpdateForm';
 import { getPermissionColumns } from './columns';
+import './index.less';
 import {
   getDefaultExpandedKeys,
   type PermissionTreeNode,
@@ -67,7 +68,7 @@ const PermissionPage = () => {
         render: (_: string, record: PermissionTreeNode) => {
           if (record.nodeType === 'DOMAIN') {
             return (
-              <Typography.Text strong style={{ fontSize: 14 }}>
+              <Typography.Text strong className="domain-name">
                 {record.name}
               </Typography.Text>
             );
@@ -91,13 +92,16 @@ const PermissionPage = () => {
       return {
         ...column,
         render: (code: string, record: PermissionTreeNode) => {
-          if (record.isVirtual) return '-';
           if (!code) return '-';
           return (
             <Tooltip title={code} placement="topLeft">
               <Typography.Text
                 code
-                copyable={{ text: code, tooltips: ['复制', '已复制'] }}
+                copyable={
+                  record.isVirtual
+                    ? false
+                    : { text: code, tooltips: ['复制', '已复制'] }
+                }
               >
                 {code}
               </Typography.Text>
@@ -110,7 +114,9 @@ const PermissionPage = () => {
       return {
         ...column,
         render: (origin: string, record: PermissionTreeNode) => {
-          if (record.isVirtual) return '-';
+          if (record.isVirtual) {
+            return <Tag color="default">分组</Tag>;
+          }
           return (
             <Tag color={origin === 'SYSTEM' ? 'blue' : 'green'}>
               {origin === 'SYSTEM' ? '系统' : '用户'}
@@ -132,7 +138,15 @@ const PermissionPage = () => {
       return {
         ...column,
         render: (desc: string, record: PermissionTreeNode) => {
-          if (record.isVirtual) return '-';
+          if (record.isVirtual) {
+            const defaultDesc =
+              record.nodeType === 'DOMAIN'
+                ? '权限域分组节点'
+                : '资源级权限分组节点';
+            return (
+              <Typography.Text type="secondary">{defaultDesc}</Typography.Text>
+            );
+          }
           if (!desc)
             return <Typography.Text type="secondary">-</Typography.Text>;
           return (

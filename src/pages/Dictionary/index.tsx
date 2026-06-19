@@ -1,5 +1,7 @@
 import {
   AuthButton,
+  CellName,
+  CopyId,
   DateTimeFormat,
   PageContainer,
   StatusTag,
@@ -18,14 +20,13 @@ import {
   PlusOutlined,
   SettingOutlined,
 } from '@ant-design/icons';
-import { Modal, Space, Tag, Typography } from 'antd';
+import { Modal, Space, Tag } from 'antd';
 import { useRef } from 'react';
 import { useNavigate } from 'umi';
 import UpdateForm, { UpdateFormRef } from './UpdateForm';
 import { getDictionaryColumns } from './columns';
+import './index.less';
 import { useDictionary } from './model';
-
-const { Text, Paragraph } = Typography;
 
 type DictionaryDict = {
   common_status: DictOption[];
@@ -103,42 +104,21 @@ const DictionaryPage = () => {
     if (column.dataIndex === 'typeId') {
       return {
         ...column,
-        render: (typeId: string) => (
-          <Paragraph ellipsis copyable style={{ width: '80px' }}>
-            {typeId}
-          </Paragraph>
-        ),
+        render: (typeId: string) => <CopyId id={typeId} $width={80} />,
       };
     }
     if (column.dataIndex === 'name') {
       return {
         ...column,
         render: (name: string, record: API.DictionaryTypeResponseDto) => (
-          <div>
-            <Text strong>{name}</Text>
-            {record.description && (
-              <div
-                style={{
-                  fontSize: 12,
-                  color: '#999',
-                  marginTop: 2,
-                }}
-              >
-                {record.description}
-              </div>
-            )}
-          </div>
+          <CellName name={name} description={record.description} />
         ),
       };
     }
     if (column.dataIndex === 'code') {
       return {
         ...column,
-        render: (code: string) => (
-          <Tag color="blue" style={{ fontFamily: 'monospace' }}>
-            {code}
-          </Tag>
-        ),
+        render: (code: string) => <Tag color="blue">{code}</Tag>,
       };
     }
     if (column.dataIndex === 'status') {

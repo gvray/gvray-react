@@ -1,0 +1,142 @@
+.pageWrapper {
+  padding: 0 8px 24px;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.overviewCard {
+  .cardHeader {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  .cardIcon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    background: var(--ant-color-primary-bg, #e6f4ff);
+    color: var(--ant-color-primary, #1677ff);
+    font-size: 14px;
+  }
+
+  .cardTitle {
+    font-size: 13px;
+    color: #666;
+  }
+
+  .cardTextWrap {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 160px;
+    padding: 8px 0;
+  }
+
+  .cardTextValue {
+    font-size: 22px;
+    font-weight: 600;
+    color: #1f2937;
+    line-height: 1.3;
+  }
+
+  .cardTextSub {
+    font-size: 12px;
+    color: #999;
+    margin-top: 4px;
+  }
+}
+
+.detailCard {
+  :global(.ant-card-head) {
+    min-height: 44px;
+    padding: 0 16px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  :global(.ant-card-body) {
+    padding: 16px;
+  }
+}
+
+.loadItem {
+  text-align: center;
+  padding: 8px;
+  background: #f8fafc;
+  border-radius: 8px;
+
+  .loadLabel {
+    font-size: 12px;
+    color: #94a3b8;
+    margin-bottom: 4px;
+  }
+
+  .loadValue {
+    font-size: 20px;
+    font-weight: 600;
+    color: #1f2937;
+  }
+}
+
+.coreInfo {
+  margin-bottom: 12px;
+  font-size: 12px;
+}
+
+.memoryLegend {
+  margin-top: 12px;
+
+  .memoryItem {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #64748b;
+    margin-bottom: 6px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .memoryDot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+}
+
+.processItem {
+  padding: 12px 16px;
+  background: #f8fafc;
+  border-radius: 8px;
+
+  .processLabel {
+    font-size: 12px;
+    color: #94a3b8;
+    margin-bottom: 4px;
+  }
+
+  .processValue {
+    font-size: 16px;
+    font-weight: 500;
+    color: #1f2937;
+  }
+
+  .processSub {
+    font-size: 11px;
+    color: #999;
+    margin-top: 4px;
+  }
+}

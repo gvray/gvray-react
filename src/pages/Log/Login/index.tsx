@@ -1,5 +1,6 @@
 import {
   AuthButton,
+  CopyId,
   DateTimeFormat,
   PageContainer,
   StatusTag,
@@ -12,12 +13,10 @@ import useDict from '@/hooks/useDict';
 import type { DictOption } from '@/types/dict';
 import { callRef, logger } from '@/utils';
 import { DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
-import { Modal, Space, Typography } from 'antd';
+import { Modal, Space } from 'antd';
 import React, { useRef } from 'react';
 import { getLoginLogColumns } from './columns';
 import { useLoginLog } from './model';
-
-const { Paragraph } = Typography;
 
 const LoginLog: React.FC = () => {
   const tableProRef = useRef<TableProRef>(null);
@@ -48,13 +47,7 @@ const LoginLog: React.FC = () => {
     if (column.dataIndex === 'userId') {
       return {
         ...column,
-        render: (userId: string) => {
-          return (
-            <Paragraph ellipsis copyable style={{ width: '100px' }}>
-              {userId}
-            </Paragraph>
-          );
-        },
+        render: (userId: string) => <CopyId id={userId} />,
       };
     }
     if (column.dataIndex === 'status') {

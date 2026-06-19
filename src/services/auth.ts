@@ -1,5 +1,22 @@
 import { request } from '@gvray/request';
 
+/** 用户注册 */
+export function register(data: API.RegisterDto) {
+  return request<
+    API.Response<{
+      access_token: string;
+      refresh_token: string;
+      access_token_expires_in: number;
+      refresh_token_expires_in: number;
+    }>
+  >('/auth/register', {
+    method: 'POST',
+    data,
+    skipAuth: true,
+    skipErrorHandler: true, // 跳过全局错误处理，避免在注册失败时弹出错误提示
+  });
+}
+
 /** 用户登录 */
 export function login(data: API.LoginDto) {
   return request<

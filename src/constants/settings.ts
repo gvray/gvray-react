@@ -38,6 +38,7 @@ export interface SecurityPolicy {
 }
 
 export interface Features {
+  register: boolean;
   fileUploadMaxSize: number;
   fileUploadAllowedTypes: string;
   ossEnabled: boolean;
@@ -58,7 +59,7 @@ export interface ServerConfig {
   env: EnvInfo;
   uiDefaults: UiDefaults;
   securityPolicy: SecurityPolicy;
-  features: Features;
+  feature: Features;
   capabilities: Capabilities;
 }
 
@@ -91,7 +92,8 @@ export const DEFAULT_SERVER_CONFIG: ServerConfig = {
     passwordRequireComplexity: true,
     loginFailureLockCount: 5,
   },
-  features: {
+  feature: {
+    register: false,
     fileUploadMaxSize: 10485760,
     fileUploadAllowedTypes: 'jpg,jpeg,png,gif,pdf,doc,docx,xls,xlsx',
     ossEnabled: false,
@@ -125,7 +127,7 @@ export function resolveServerConfig(raw?: Record<string, any>): ServerConfig {
   const env = raw.env ?? {};
   const uiDefaults = raw.uiDefaults ?? {};
   const securityPolicy = raw.securityPolicy ?? {};
-  const features = raw.features ?? {};
+  const feature = raw.feature ?? {};
   const capabilities = raw.capabilities ?? {};
 
   return {
@@ -176,20 +178,21 @@ export function resolveServerConfig(raw?: Record<string, any>): ServerConfig {
         defaults.securityPolicy.loginFailureLockCount,
       ),
     },
-    features: {
+    feature: {
+      register: bool(feature.register, defaults.feature.register),
       fileUploadMaxSize: num(
-        features.fileUploadMaxSize,
-        defaults.features.fileUploadMaxSize,
+        feature.fileUploadMaxSize,
+        defaults.feature.fileUploadMaxSize,
       ),
       fileUploadAllowedTypes: str(
-        features.fileUploadAllowedTypes,
-        defaults.features.fileUploadAllowedTypes,
+        feature.fileUploadAllowedTypes,
+        defaults.feature.fileUploadAllowedTypes,
       ),
-      ossEnabled: bool(features.ossEnabled, defaults.features.ossEnabled),
-      emailEnabled: bool(features.emailEnabled, defaults.features.emailEnabled),
+      ossEnabled: bool(feature.ossEnabled, defaults.feature.ossEnabled),
+      emailEnabled: bool(feature.emailEnabled, defaults.feature.emailEnabled),
       oauthGithubEnabled: bool(
-        features.oauthGithubEnabled,
-        defaults.features.oauthGithubEnabled,
+        feature.oauthGithubEnabled,
+        defaults.feature.oauthGithubEnabled,
       ),
     },
     capabilities: {

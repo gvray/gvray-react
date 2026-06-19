@@ -1,6 +1,6 @@
 /**
  * 此文件由 scripts/gen-api-types.ts 自动生成
- * 生成时间: 2026-06-16T13:47:02.777Z
+ * 生成时间: 2026-06-18T14:42:26.232Z
  * 数据来源: http://localhost:8001/api-json
  * 请勿手动修改此文件
  */
@@ -122,6 +122,7 @@ declare namespace API {
   }
 
   interface RoleResponseDto {
+    id: number;
     /**
      * 角色唯一标识符（UUID）
      * @example a3d7d76e-5a4e-4f0a-93c3-d0b2b27d471e
@@ -150,6 +151,7 @@ declare namespace API {
   }
 
   interface DepartmentResponseDto {
+    id: number;
     /**
      * 部门唯一标识符（UUID）
      * @example a3d7d76e-5a4e-4f0a-93c3-d0b2b27d471e
@@ -181,6 +183,7 @@ declare namespace API {
   }
 
   interface PositionResponseDto {
+    id: number;
     /**
      * 岗位唯一标识符（UUID）
      * @example a3d7d76e-5a4e-4f0a-93c3-d0b2b27d471e
@@ -368,6 +371,7 @@ declare namespace API {
   }
 
   interface RolePermissionResponseDto {
+    id: number;
     /**
      * 权限唯一标识符（UUID）
      * @example a3d7d76e-5a4e-4f0a-93c3-d0b2b27d471e
@@ -461,20 +465,8 @@ declare namespace API {
     ids: string[];
   }
 
-  interface CreatePermissionDto {
-    /** 权限名称 */
-    name: string;
-    /** 权限代码（唯一） */
-    code: string;
-    /** 操作类型 */
-    action: string;
-    /** HTTP 方法 */
-    httpMethod?: string;
-    /** 权限描述 */
-    description?: string;
-  }
-
   interface PermissionResponseDto {
+    id: number;
     /**
      * 权限唯一标识符（UUID）
      * @example a3d7d76e-5a4e-4f0a-93c3-d0b2b27d471e
@@ -484,8 +476,6 @@ declare namespace API {
     name: string;
     /** 权限代码 */
     code: string;
-    /** 操作类型 */
-    action: string;
     /** HTTP 方法 */
     httpMethod: string;
     /** 权限来源 */
@@ -511,11 +501,6 @@ declare namespace API {
     description?: string;
   }
 
-  interface BatchDeletePermissionsDto {
-    /** 待删除权限ID列表 */
-    ids: string[];
-  }
-
   interface CreateMenuDto {
     /** 菜单名称 */
     name: string;
@@ -538,6 +523,7 @@ declare namespace API {
   }
 
   interface MenuResponseDto {
+    id: number;
     /** 菜单唯一标识符（UUID） */
     menuId: string;
     /** 菜单名称 */
@@ -565,6 +551,7 @@ declare namespace API {
   }
 
   interface MenuTreeNodeDto {
+    id: number;
     /** 菜单唯一标识符（UUID） */
     menuId: string;
     /** 菜单名称 */
@@ -686,6 +673,7 @@ declare namespace API {
   }
 
   interface PositionUserResponseDto {
+    id: number;
     /**
      * 用户唯一标识符（UUID）
      * @example a3d7d76e-5a4e-4f0a-93c3-d0b2b27d471e
@@ -978,29 +966,39 @@ declare namespace API {
   interface RuntimeSystemDto {
     /**
      * 系统名称
-     * @example G-ADMIN
+     * @example GVRAY Admin
      */
     name: string;
     /**
-     * 系统描述
-     * @example 基于 React + NestJS 的企业级 RBAC 权限管理系统
-     */
-    description: string;
-    /**
-     * 系统Logo
+     * 系统 Logo
      * @example /logo.svg
      */
     logo: string;
     /**
-     * 系统Favicon
+     * 浏览器图标
      * @example /favicon.ico
      */
     favicon: string;
     /**
-     * 默认头像
-     * @example https://api.dicebear.com/9.x/bottts/svg?seed=GavinRay
+     * 系统欢迎语
+     * @example 欢迎使用 GVRAY Admin
      */
-    defaultAvatar: string;
+    welcomeMessage: string;
+    /**
+     * 版权信息
+     * @example © 2025 GVRAY Admin. All rights reserved.
+     */
+    copyright: string;
+    /**
+     * ICP 备案号
+     * @example 京ICP备XXXXXXXX号
+     */
+    icp: string;
+    /**
+     * 默认时区
+     * @example Asia/Shanghai
+     */
+    timezone: string;
   }
 
   interface RuntimeEnvDto {
@@ -1016,7 +1014,7 @@ declare namespace API {
     apiPrefix: string;
   }
 
-  interface RuntimeUiDefaultsDto {
+  interface RuntimeUiDto {
     /**
      * 默认主题
      * @example light
@@ -1028,81 +1026,206 @@ declare namespace API {
      */
     language: string;
     /**
-     * 默认时区
-     * @example Asia/Shanghai
+     * 表格默认分页大小
+     * @example 10
      */
-    timezone: string;
+    pageSize: number;
+    /**
+     * 是否显示面包屑
+     * @example true
+     */
+    showBreadcrumb: boolean;
     /**
      * 侧边栏默认折叠
      * @example false
      */
     sidebarCollapsed: boolean;
     /**
-     * 表格默认分页大小
-     * @example 10
+     * 日期格式
+     * @example YYYY-MM-DD
      */
-    pageSize: number;
+    dateFormat: string;
     /**
-     * 系统欢迎语
-     * @example 这是你的系统运行概览，祝你工作愉快
+     * 时间格式
+     * @example HH:mm:ss
      */
-    welcomeMessage: string;
-    /**
-     * 是否显示面包屑
-     * @example true
-     */
-    showBreadcrumb: boolean;
+    timeFormat: string;
   }
 
-  interface RuntimeSecurityPolicyDto {
+  interface RuntimeSecurityDto {
     /**
-     * 水印开关
+     * 全局水印开关
      * @example true
      */
     watermarkEnabled: boolean;
     /**
      * 密码最小长度
-     * @example 6
+     * @example 8
      */
     passwordMinLength: number;
+    /**
+     * 密码最大长度
+     * @example 32
+     */
+    passwordMaxLength: number;
     /**
      * 密码复杂度要求
      * @example true
      */
     passwordRequireComplexity: boolean;
     /**
+     * 密码有效期(天)，0 表示永不过期
+     * @example 0
+     */
+    passwordExpiryDays: number;
+    /**
+     * 首次登录强制修改密码
+     * @example true
+     */
+    mustChangePassword: boolean;
+    /**
      * 登录失败锁定次数
      * @example 5
      */
     loginFailureLockCount: number;
+    /**
+     * 账号锁定时长(分钟)
+     * @example 30
+     */
+    loginFailureLockDuration: number;
+    /**
+     * 单用户最大会话数
+     * @example 3
+     */
+    sessionConcurrentLimit: number;
   }
 
-  interface RuntimeFeaturesDto {
+  interface RuntimeUserDto {
     /**
-     * 文件上传最大大小（字节）
+     * 默认角色编码
+     * @example user
+     */
+    defaultRole: string;
+    /**
+     * 默认头像地址
+     * @example https://api.dicebear.com/9.x/bottts/svg?seed=GVRAY
+     */
+    defaultAvatar: string;
+  }
+
+  interface RuntimeFeatureDto {
+    /**
+     * 开放注册
+     * @example true
+     */
+    register: boolean;
+    /**
+     * 操作审计日志
+     * @example true
+     */
+    auditLog: boolean;
+    /**
+     * 邮件通知
+     * @example true
+     */
+    emailNotification: boolean;
+    /**
+     * 短信通知
+     * @example false
+     */
+    smsNotification: boolean;
+    /**
+     * 双因子认证(MFA)
+     * @example false
+     */
+    mfa: boolean;
+  }
+
+  interface RuntimeStorageDto {
+    /**
+     * 存储驱动
+     * @example local
+     */
+    provider: string;
+    /**
+     * 最大上传大小(字节)
      * @example 10485760
      */
-    fileUploadMaxSize: number;
+    maxFileSize: number;
     /**
      * 允许上传的文件类型
      * @example jpg,jpeg,png,gif,pdf,doc,docx,xls,xlsx
      */
-    fileUploadAllowedTypes: string;
+    allowedTypes: string;
     /**
-     * OSS 上传启用
+     * 文件访问基础 URL
+     * @example
+     */
+    baseUrl: string;
+  }
+
+  interface RuntimeOauthDto {
+    /**
+     * GitHub 登录
      * @example false
      */
-    ossEnabled: boolean;
+    githubEnabled: boolean;
     /**
-     * 邮件功能启用
+     * Google 登录
      * @example false
      */
-    emailEnabled: boolean;
+    googleEnabled: boolean;
     /**
-     * GitHub OAuth 登录
+     * 微信登录
      * @example false
      */
-    oauthGithubEnabled: boolean;
+    wechatEnabled: boolean;
+  }
+
+  interface RuntimeMailDto {
+    /**
+     * 邮件功能开关
+     * @example false
+     */
+    enabled: boolean;
+    /**
+     * SMTP 主机
+     * @example smtp.qq.com
+     */
+    host: string;
+    /**
+     * SMTP 端口
+     * @example 465
+     */
+    port: number;
+    /**
+     * 发件人地址
+     * @example noreply@gvray.com
+     */
+    from: string;
+    /**
+     * SSL/TLS 加密
+     * @example true
+     */
+    ssl: boolean;
+  }
+
+  interface RuntimeSmsDto {
+    /**
+     * 短信功能开关
+     * @example false
+     */
+    enabled: boolean;
+    /**
+     * 短信服务商
+     * @example aliyun
+     */
+    provider: string;
+    /**
+     * 短信签名
+     * @example 【GVRAY】
+     */
+    signature: string;
   }
 
   interface RuntimeCapabilitiesDto {
@@ -1124,16 +1247,26 @@ declare namespace API {
   }
 
   interface RuntimeConfigResponseDto {
-    /** 系统基础信息（写死/env） */
+    /** 系统基础信息 */
     system: RuntimeSystemDto;
-    /** 环境信息（写死/env） */
+    /** 环境信息 */
     env: RuntimeEnvDto;
-    /** UI 默认偏好（管理员可改，key 与 preferences 一致，可被用户偏好覆盖） */
-    uiDefaults: RuntimeUiDefaultsDto;
-    /** 安全策略（管理员可改） */
-    securityPolicy: RuntimeSecurityPolicyDto;
-    /** 功能开关（管理员可改） */
-    features: RuntimeFeaturesDto;
+    /** 界面配置 */
+    ui: RuntimeUiDto;
+    /** 安全配置 */
+    security: RuntimeSecurityDto;
+    /** 用户配置 */
+    user: RuntimeUserDto;
+    /** 功能开关 */
+    feature: RuntimeFeatureDto;
+    /** 存储配置 */
+    storage: RuntimeStorageDto;
+    /** 第三方登录 */
+    oauth: RuntimeOauthDto;
+    /** 邮件配置 */
+    mail: RuntimeMailDto;
+    /** 短信配置 */
+    sms: RuntimeSmsDto;
     /** 系统能力（动态计算） */
     capabilities: RuntimeCapabilitiesDto;
   }
@@ -1210,6 +1343,117 @@ declare namespace API {
   interface BatchDeleteConfigsDto {
     /** 待删除配置ID列表 */
     ids: string[];
+  }
+
+  interface OsInfoDto {
+    /** 操作系统平台 */
+    platform: string;
+    /** 主机名 */
+    hostname: string;
+    /** 系统运行时间（秒） */
+    uptime: number;
+    /** 操作系统发行版 */
+    release: string;
+    /** CPU 架构 */
+    arch: string;
+    /** Node.js 版本 */
+    nodeVersion: string;
+    /** 运行环境 */
+    env: string;
+  }
+
+  interface CpuMetricsDto {
+    /** CPU 使用率（%） */
+    usagePercent: number;
+    /** 1 分钟负载 */
+    loadAverage1m: number;
+    /** 5 分钟负载 */
+    loadAverage5m: number;
+    /** 15 分钟负载 */
+    loadAverage15m: number;
+    /** 逻辑核心数 */
+    cores: number;
+    /** 物理核心数 */
+    physicalCores: number;
+    /** 每核心使用率（%） */
+    perCoreUsage: number[];
+  }
+
+  interface MemoryMetricsDto {
+    /** 总内存（字节） */
+    total: number;
+    /** 已用内存（字节） */
+    used: number;
+    /** 空闲内存（字节） */
+    free: number;
+    /** 内存使用率（%） */
+    usagePercent: number;
+  }
+
+  interface DiskMountDto {
+    /** 挂载点 */
+    mount: string;
+    /** 文件系统类型 */
+    fsType: string;
+    /** 总容量（字节） */
+    total: number;
+    /** 已用容量（字节） */
+    used: number;
+    /** 空闲容量（字节） */
+    free: number;
+    /** 使用率（%） */
+    usagePercent: number;
+  }
+
+  interface NetworkInterfaceDto {
+    /** 接口名称 */
+    iface: string;
+    /** IPv4 地址 */
+    ip4: string;
+    /** MAC 地址 */
+    mac: string;
+    /** 运行状态 */
+    operstate: string;
+    /** 接收字节数 */
+    rxBytes: number;
+    /** 发送字节数 */
+    txBytes: number;
+  }
+
+  interface ProcessMetricsDto {
+    /** 进程 ID */
+    pid: number;
+    /** 进程运行时间（秒） */
+    uptime: number;
+    /** RSS 内存（字节） */
+    rss: number;
+    /** 堆内存总量（字节） */
+    heapTotal: number;
+    /** 已用堆内存（字节） */
+    heapUsed: number;
+    /** 外部内存（字节） */
+    external: number;
+    /** 进程 CPU 使用率（%） */
+    cpuPercent: number;
+    /** Node.js 版本 */
+    nodeVersion: string;
+  }
+
+  interface ServerMetricsResponseDto {
+    /** 数据采集时间戳 */
+    timestamp: string;
+    /** 操作系统信息 */
+    os: OsInfoDto;
+    /** CPU 指标 */
+    cpu: CpuMetricsDto;
+    /** 内存指标 */
+    memory: MemoryMetricsDto;
+    /** 磁盘指标 */
+    disk: DiskMountDto[];
+    /** 网络接口指标 */
+    network: NetworkInterfaceDto[];
+    /** 当前进程指标 */
+    process: ProcessMetricsDto;
   }
 
   interface CurrentUserRoleResponseDto {
@@ -1317,10 +1561,6 @@ declare namespace API {
     name: string;
     /** 权限代码 */
     code: string;
-    /** 操作动作 */
-    action: string;
-    /** HTTP 方法 */
-    httpMethod: string;
     /** 权限描述 */
     description?: Record<string, unknown>;
   }
@@ -1358,9 +1598,14 @@ declare namespace API {
     newPassword: string;
   }
 
+  interface UpdateSettingsDto {
+    /** 用户偏好设置 */
+    settings: Record<string, unknown>;
+  }
+
   interface BatchDeleteOperationLogsDto {
     /** 待删除操作日志ID列表 */
-    ids: string[];
+    ids: number[];
   }
 
   interface CleanOperationLogsDto {
@@ -1405,8 +1650,8 @@ declare namespace API {
     account?: string;
     /** 登录IP地址 */
     ipAddress?: string;
-    /** 登录状态：success-成功, failure-失败 */
-    status?: string;
+    /** 登录结果：success-成功, failure-失败 */
+    result?: string;
     /** 创建时间开始（YYYY-MM-DD） */
     createdAtStart?: string;
     /** 创建时间结束（YYYY-MM-DD） */
@@ -1459,8 +1704,6 @@ declare namespace API {
     name?: string;
     /** 权限代码 */
     code?: string;
-    /** 操作类型 */
-    action?: string;
     /** 创建时间开始（YYYY-MM-DD） */
     createdAtStart?: string;
     /** 创建时间结束（YYYY-MM-DD） */
@@ -1644,8 +1887,8 @@ declare namespace API {
     module?: string;
     /** 动作 create/update/delete 等 */
     action?: string;
-    /** 操作状态：success-成功, failure-失败 */
-    status?: string;
+    /** 操作结果：success-成功, failure-失败 */
+    result?: string;
     /** 路径 模糊匹配 */
     path?: string;
     /** 关键字：匹配 message/path/resource */

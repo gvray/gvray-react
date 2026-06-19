@@ -1,5 +1,6 @@
 import {
   AuthButton,
+  CopyId,
   DateTimeFormat,
   PageContainer,
   StatusTag,
@@ -25,7 +26,7 @@ import UpdateForm, { UpdateFormRef } from './UpdateForm';
 import { getDictionaryItemColumns } from './columns';
 import { useDictionaryItems } from './model';
 
-const { Title, Text, Paragraph } = Typography;
+const { Title, Text } = Typography;
 
 type DictionaryDict = {
   common_status: DictOption[];
@@ -113,29 +114,19 @@ const DictionaryItemsPage = () => {
     if (column.dataIndex === 'itemId') {
       return {
         ...column,
-        render: (itemId: string) => (
-          <Paragraph ellipsis copyable style={{ width: '100px' }}>
-            {itemId}
-          </Paragraph>
-        ),
+        render: (itemId: string) => <CopyId id={itemId} />,
       };
     }
     if (column.dataIndex === 'label') {
       return {
         ...column,
-        render: (label: string) => (
-          <Text style={{ fontSize: '13px' }}>{label}</Text>
-        ),
+        render: (label: string) => <Text>{label}</Text>,
       };
     }
     if (column.dataIndex === 'value') {
       return {
         ...column,
-        render: (value: string) => (
-          <Tag color="purple" style={{ fontFamily: 'monospace' }}>
-            {value}
-          </Tag>
-        ),
+        render: (value: string) => <Tag color="purple">{value}</Tag>,
       };
     }
     if (column.dataIndex === 'sort') {

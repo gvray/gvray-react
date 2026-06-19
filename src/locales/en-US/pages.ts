@@ -5,6 +5,7 @@ export default {
 
   'permission.domain.system': 'System',
   'permission.domain.monitor': 'Monitor',
+  'permission.resource.monitor:server': 'Server Monitor',
   'permission.domain.dashboard': 'Dashboard',
   'permission.domain.profile': 'Profile',
   'permission.domain.auth': 'Auth',

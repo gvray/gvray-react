@@ -1,0 +1,57 @@
+@keyframes waveFlow {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.bgWrap {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(180deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+  overflow: hidden;
+}
+
+.gradientOverlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+      ellipse at 20% 20%,
+      rgba(49, 46, 129, 0.4) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse at 80% 80%,
+      rgba(8, 145, 178, 0.2) 0%,
+      transparent 50%
+    );
+  pointer-events: none;
+}
+
+.waveLayer {
+  position: absolute;
+  left: 0;
+  width: 200%;
+  height: 320px;
+  animation-name: waveFlow;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.waveSvg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.content {
+  position: relative;
+  z-index: 10;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}

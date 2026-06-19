@@ -1,6 +1,12 @@
 const routes = [
   { path: '/login', component: 'Login', layout: false, meta: { auth: false } },
   {
+    path: '/register',
+    component: 'Register',
+    layout: false,
+    meta: { auth: false },
+  },
+  {
     path: '/',
     component: '@/wrappers/RouteGuard',
     routes: [
@@ -159,6 +165,20 @@ const routes = [
         meta: {
           title: '角色分配用户',
           permissions: ['system:role:update-users'],
+        },
+      },
+    ],
+  },
+  {
+    path: '/monitor',
+    component: '@/wrappers/RouteGuard',
+    routes: [
+      {
+        path: '/monitor/server',
+        component: 'Monitor/Server',
+        meta: {
+          title: '服务监控',
+          permissions: ['monitor:server:list'],
         },
       },
     ],

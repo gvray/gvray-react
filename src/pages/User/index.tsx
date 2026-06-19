@@ -1,5 +1,6 @@
 import {
   AuthButton,
+  CopyId,
   DateTimeFormat,
   PageContainer,
   TablePro,
@@ -16,14 +17,12 @@ import {
   ExclamationCircleOutlined,
   UserOutlined,
 } from '@ant-design/icons';
-import { Modal, Space, Typography, message } from 'antd';
+import { Modal, Space, message } from 'antd';
 import { useRef } from 'react';
 import { useNavigate } from 'umi';
 import UpdateForm, { UpdateFormRef } from './UpdateForm';
 import { getUserColumns } from './columns';
 import { useUserModel } from './model';
-
-const { Paragraph } = Typography;
 
 type UserDict = {
   common_status: DictOption[];
@@ -96,11 +95,7 @@ const UserPage = () => {
     if (column.dataIndex === 'userId') {
       return {
         ...column,
-        render: (userId: string) => (
-          <Paragraph ellipsis copyable style={{ width: '100px' }}>
-            {userId}
-          </Paragraph>
-        ),
+        render: (userId: string) => <CopyId id={userId} />,
       };
     }
     if (column.dataIndex === 'status') {

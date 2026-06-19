@@ -147,6 +147,7 @@ export function getDictionaryItemsByTypeCodes(
     {
       method: 'GET',
       params,
+      skipErrorHandler: true, // 跳过全局错误处理，避免在字典项获取失败时弹出错误提示
     },
   );
 }

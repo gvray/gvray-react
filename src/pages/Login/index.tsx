@@ -1,8 +1,9 @@
 import { resolveServerConfig } from '@/constants/settings';
 import { login, queryMenus } from '@/services/auth';
 import { getRuntimeConfig } from '@/services/config';
+import { getDictionaryItemsByTypeCodes } from '@/services/dictionary';
 import { queryProfile } from '@/services/profile';
-import { useAppStore, useAuthStore } from '@/stores';
+import { useAppStore, useAuthStore, useDictStore } from '@/stores';
 import { decrypt, encrypt, logger, tokenManager } from '@/utils';
 import {
   AlipayCircleFilled,
@@ -29,6 +30,7 @@ const formItemLayout = {
 
 const LoginPage: React.FC = () => {
   const siteName = useAppStore((s) => s.serverConfig.system.name);
+  const registerEnabled = useAppStore((s) => s.serverConfig.feature.register);
   const [isLogging, setLogging] = useState(false);
 
   const [form] = Form.useForm();
@@ -81,6 +83,23 @@ const LoginPage: React.FC = () => {
         res.data.refresh_token_expires_in,
       );
       await loadInitData();
+
+      // 预加载常用字典到全局缓存
+      try {
+        if (!useDictStore.getState().getDict('common_status')) {
+          const dictRes = await getDictionaryItemsByTypeCodes({
+            typeCodes: 'common_status',
+          });
+          if (dictRes.data?.common_status) {
+            useDictStore
+              .getState()
+              .setDict('common_status', dictRes.data.common_status);
+          }
+        }
+      } catch (error) {
+        logger.error('预加载 common_status 字典失败', error);
+      }
+
       message.success(res.message);
 
       // 获取 redirect 参数，登录后跳转回原页面
@@ -174,6 +193,15 @@ const LoginPage: React.FC = () => {
                 )}
               </Button>
             </Form.Item>
+
+            {registerEnabled && (
+              <div
+                style={{ textAlign: 'center', marginBottom: 16, fontSize: 14 }}
+              >
+                还没有账号？
+                <a onClick={() => navigate('/register')}>立即注册</a>
+              </div>
+            )}
           </Form>
           <Space size={20} style={{ fontSize: '28px', color: '#888' }}>
             <span style={{ fontSize: '14px' }}>第三方账号登录</span>

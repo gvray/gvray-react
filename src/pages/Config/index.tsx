@@ -1,5 +1,6 @@
 import {
   AuthButton,
+  CellName,
   DateTimeFormat,
   PageContainer,
   StatusTag,
@@ -17,14 +18,13 @@ import {
   ExclamationCircleOutlined,
   EyeOutlined,
 } from '@ant-design/icons';
-import { Modal, Space, Tag, Tooltip, Typography } from 'antd';
+import { Modal, Space, Tag, Tooltip } from 'antd';
 import { useRef, useState } from 'react';
 import { getConfigColumns } from './columns';
 import ConfigValueViewer from './components/ConfigValueViewer';
+import './index.less';
 import { useConfigModel } from './model';
 import UpdateForm, { UpdateFormRef } from './UpdateForm';
-
-const { Text } = Typography;
 
 const ConfigPage = () => {
   const updateFormRef = useRef<UpdateFormRef>(null);
@@ -98,35 +98,14 @@ const ConfigPage = () => {
       return {
         ...column,
         render: (name: string, record: API.ConfigResponseDto) => (
-          <div>
-            <Text strong>{name}</Text>
-            {record.description && (
-              <div
-                style={{
-                  fontSize: 12,
-                  color: '#999',
-                  marginTop: 2,
-                  display: '-webkit-box',
-                  WebkitLineClamp: 1,
-                  WebkitBoxOrient: 'vertical' as const,
-                  overflow: 'hidden',
-                }}
-              >
-                {record.description}
-              </div>
-            )}
-          </div>
+          <CellName name={name} description={record.description} />
         ),
       };
     }
     if (column.dataIndex === 'key') {
       return {
         ...column,
-        render: (key: string) => (
-          <Tag color="blue" style={{ fontFamily: 'monospace', fontSize: 12 }}>
-            {key}
-          </Tag>
-        ),
+        render: (key: string) => <Tag color="blue">{key}</Tag>,
       };
     }
     if (column.dataIndex === 'type') {
@@ -188,7 +167,7 @@ const ConfigPage = () => {
         return (
           <Tag
             color="purple"
-            style={{ cursor: 'pointer' }}
+            className="value-json-tag"
             onClick={() => handleView(record)}
           >
             JSON 数据
@@ -204,9 +183,7 @@ const ConfigPage = () => {
       }
       return (
         <Tooltip title={record.value}>
-          <Text ellipsis style={{ fontFamily: 'monospace', fontSize: 13 }}>
-            {record.value}
-          </Text>
+          <Tag>{record.value}</Tag>
         </Tooltip>
       );
     },

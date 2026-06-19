@@ -1,5 +1,6 @@
 import {
   AuthButton,
+  CopyId,
   DateTimeFormat,
   PageContainer,
   StatusTag,
@@ -17,13 +18,11 @@ import {
   ExclamationCircleOutlined,
   PlusOutlined,
 } from '@ant-design/icons';
-import { Modal, Space, Typography } from 'antd';
+import { Modal, Space } from 'antd';
 import { useRef } from 'react';
 import UpdateForm, { UpdateFormRef } from './UpdateForm';
 import { getPositionColumns } from './columns';
 import { usePosition } from './model';
-
-const { Paragraph } = Typography;
 
 type PositionDict = {
   common_status: DictOption[];
@@ -83,11 +82,7 @@ const PositionPage = () => {
     if (column.dataIndex === 'positionId') {
       return {
         ...column,
-        render: (positionId: string) => (
-          <Paragraph ellipsis copyable style={{ width: '100px' }}>
-            {positionId}
-          </Paragraph>
-        ),
+        render: (positionId: string) => <CopyId id={positionId} />,
       };
     }
     if (column.dataIndex === 'status') {

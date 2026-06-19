@@ -3,7 +3,9 @@ import AntIcon from './AntIcon';
 import AppBreadcrumb from './AppBreadcrumb';
 import AppWatermark from './AppWatermark';
 import AuthButton from './AuthButton';
+import CellName from './CellName';
 import Charts from './Charts';
+import CopyId from './CopyId';
 import DateTimeFormat from './DateTimeFormat';
 import DictionaryLabel from './DictionaryLabel';
 import DictionarySelect from './DictionarySelect';
@@ -24,7 +26,9 @@ export {
   AppBreadcrumb,
   AppWatermark,
   AuthButton,
+  CellName,
   Charts,
+  CopyId,
   DateTimeFormat,
   DictionaryLabel,
   DictionarySelect,

@@ -1,5 +1,6 @@
 import {
   AuthButton,
+  CopyId,
   DateTimeFormat,
   PageContainer,
   TablePro,
@@ -21,15 +22,13 @@ import {
   UserOutlined,
 } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
-import { Button, Dropdown, Modal, Space, Typography } from 'antd';
+import { Button, Dropdown, Modal, Space } from 'antd';
 import { useRef, useState } from 'react';
 import { useNavigate } from 'umi';
 import { getRoleColumns } from './columns';
 import AuthDataScopeModal from './components/AuthDataScopeModal';
 import { useRoleModel } from './model';
 import UpdateForm, { UpdateFormRef } from './UpdateForm';
-
-const { Paragraph } = Typography;
 
 type RoleDict = {
   common_status: DictOption[];
@@ -160,11 +159,7 @@ const RolePage = () => {
     if (column.dataIndex === 'roleId') {
       return {
         ...column,
-        render: (roleId: string) => (
-          <Paragraph ellipsis copyable style={{ width: '100px' }}>
-            {roleId}
-          </Paragraph>
-        ),
+        render: (roleId: string) => <CopyId id={roleId} />,
       };
     }
     if (column.dataIndex === 'status') {

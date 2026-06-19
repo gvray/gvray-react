@@ -5,6 +5,7 @@ export default {
 
   'permission.domain.system': '系统管理',
   'permission.domain.monitor': '监控中心',
+  'permission.resource.monitor:server': '服务监控',
   'permission.domain.dashboard': '仪表盘',
   'permission.domain.profile': '个人信息',
   'permission.domain.auth': '认证中心',
