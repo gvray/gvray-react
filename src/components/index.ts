@@ -11,6 +11,7 @@ import DictionaryLabel from './DictionaryLabel';
 import DictionarySelect from './DictionarySelect';
 import ErrorBoundary from './ErrorBoundary';
 import FormGrid from './FormGrid';
+import FormLoading from './FormLoading';
 import IconSelector from './IconSelector';
 import NavigationProgress from './NavigationProgress';
 import PageContainer from './PageContainer';
@@ -34,6 +35,7 @@ export {
   DictionarySelect,
   ErrorBoundary,
   FormGrid,
+  FormLoading,
   IconSelector,
   NavigationProgress,
   PageContainer,

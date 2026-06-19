@@ -22,7 +22,7 @@ export const useUpdataFormModel = (open: boolean) => {
   }, [open]);
   return {
     data,
-    reload: fetchPermissionTree,
+    fetchPermissions: fetchPermissionTree,
   };
 };
 

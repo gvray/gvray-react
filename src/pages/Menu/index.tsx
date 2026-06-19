@@ -33,7 +33,7 @@ const MenuPage = () => {
   const tableProRef = useRef<TableProRef>(null);
   const dict = useDict<MenuDict>(['common_status']);
   const { message } = useFeedback();
-  const { fetchMenuTree, fetchMenuDetail, removeMenu } = useMenuModel();
+  const { fetchMenuTree, removeMenu } = useMenuModel();
   const [expandedRowKeys, setExpandedRowKeys] = useState<React.Key[]>([]);
 
   const tableReload = () => {
@@ -63,7 +63,7 @@ const MenuPage = () => {
     callRef(updateFormRef, (t) => t.show('添加菜单'));
   };
 
-  const handleDelete = async (record: API.MenuTreeNodeDto) => {
+  const handleDelete = (record: API.MenuTreeNodeDto) => {
     Modal.confirm({
       title: '系统提示',
       icon: <ExclamationCircleOutlined />,
@@ -83,14 +83,8 @@ const MenuPage = () => {
     });
   };
 
-  const handleUpdate = async (record: API.MenuTreeNodeDto) => {
-    const menuId = record.menuId;
-    try {
-      const data: any = await fetchMenuDetail(menuId);
-      callRef(updateFormRef, (t) => t.show('修改菜单', data));
-    } catch (error) {
-      logger.error(error);
-    }
+  const handleUpdate = (record: API.MenuTreeNodeDto) => {
+    callRef(updateFormRef, (t) => t.show('修改菜单', record.menuId));
   };
 
   const handleOk = () => {

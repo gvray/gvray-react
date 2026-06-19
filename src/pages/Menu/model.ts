@@ -1,11 +1,5 @@
-import {
-  deleteMenu,
-  getMenuById,
-  queryMenuOptions,
-  queryMenuTree,
-} from '@/services/menu';
-import { logger } from '@/utils';
-import { useCallback, useEffect, useState } from 'react';
+import { deleteMenu, getMenuById, queryMenuTree } from '@/services/menu';
+import { useCallback } from 'react';
 
 export const useMenuModel = () => {
   const fetchMenuTree = useCallback(async (params?: API.MenuGetTreeParams) => {
@@ -23,28 +17,5 @@ export const useMenuModel = () => {
     fetchMenuTree,
     fetchMenuDetail,
     removeMenu,
-  };
-};
-
-export const useUpdataFormModel = (open: boolean) => {
-  const [data, setData] = useState<API.MenuTreeNodeDto[]>([]);
-  const fetchMenuTree = async () => {
-    try {
-      const res = await queryMenuOptions();
-      if (res.data) {
-        setData(res.data);
-      }
-    } catch (error) {
-      logger.error(error);
-    }
-  };
-  useEffect(() => {
-    if (open) {
-      fetchMenuTree();
-    }
-  }, [open]);
-  return {
-    data,
-    reload: fetchMenuTree,
   };
 };

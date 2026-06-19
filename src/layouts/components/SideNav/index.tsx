@@ -40,14 +40,16 @@ interface SideNavProps {
 const transformMenuItems = (
   menuData: any[],
 ): NonNullable<MenuProps['items']> => {
-  return (menuData || []).map((item: any) => ({
-    key: item.path || item.key,
-    icon: item.icon ? <AntIcon icon={item.icon} /> : undefined,
-    label: item.name || item.label,
-    children: item.children?.length
-      ? transformMenuItems(item.children)
-      : undefined,
-  }));
+  return (menuData || [])
+    .filter((item: any) => item.hidden !== true)
+    .map((item: any) => ({
+      key: item.path || item.key,
+      icon: item.icon ? <AntIcon icon={item.icon} /> : undefined,
+      label: item.name || item.label,
+      children: item.children?.length
+        ? transformMenuItems(item.children)
+        : undefined,
+    }));
 };
 
 const SideNav: React.FC<SideNavProps> = ({

@@ -51,6 +51,6 @@ export const useUpdataFormModel = (open: boolean) => {
   }, [open]);
   return {
     data,
-    reload: fetchDepartmentList,
+    fetchDepartments: fetchDepartmentList,
   };
 };

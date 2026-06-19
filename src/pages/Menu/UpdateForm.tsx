@@ -1,7 +1,12 @@
-import { FormGrid, IconSelector } from '@/components';
+import { FormGrid, FormLoading, IconSelector } from '@/components';
 import { DEFAULT_MODAL_TITLE } from '@/constants';
 import { useFeedback } from '@/hooks';
-import { createMenu, updateMenu } from '@/services/menu';
+import {
+  createMenu,
+  getMenuById,
+  queryMenuOptions,
+  updateMenu,
+} from '@/services/menu';
 import type { DictOption } from '@/types/dict';
 import { logger } from '@/utils';
 import { createFormLayout, VIRTUAL_ROOT_ID } from '@gvray/adminkit';
@@ -22,7 +27,6 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import { useUpdataFormModel } from './model';
 import { normalizeToBackend, withVirtualRoot } from './util';
 
 interface UpdateFormProps {
@@ -32,7 +36,7 @@ interface UpdateFormProps {
 }
 
 export interface UpdateFormRef {
-  show: (title: string, data?: Record<string, unknown>) => void;
+  show: (title: string, menuId?: string) => void;
   hide: () => void;
   form: FormInstance;
 }
@@ -45,48 +49,75 @@ const UpdateFormFunction: React.ForwardRefRenderFunction<
   const [title, setTitle] = useState(DEFAULT_MODAL_TITLE);
   const [visible, setVisible] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
+  const [formLoading, setFormLoading] = useState(false);
+  const [editingId, setEditingId] = useState<string | undefined>();
+  const [parentOptions, setParentOptions] = useState<API.MenuTreeNodeDto[]>([]);
   const [form] = Form.useForm();
-  const { data: menuParentList } = useUpdataFormModel(visible);
-  const typeValue = Form.useWatch('type', form);
   const menuId = Form.useWatch('menuId', form);
+  const typeValue = Form.useWatch('type', form);
 
-  // 处理父级菜单列表：添加虚拟根节点 + 根据类型过滤
-  const processedParentList = useMemo(() => {
-    if (!menuParentList?.length) return [];
-
-    let list = withVirtualRoot(menuParentList);
-
-    if (typeValue === 'MENU') {
-      // 菜单只能放在目录下；虚拟根节点保留但禁用，防止 TreeSelect 显示 raw UUID
-      list = list.map((item) => ({
-        ...item,
-        disabled:
-          item.menuId === VIRTUAL_ROOT_ID ? true : item.type !== 'CATALOG',
-      }));
-    }
-
-    return list;
-  }, [menuParentList, typeValue]);
-
-  // 当类型切换时，检查当前选中的父级是否仍然有效
+  // 弹窗打开时拉数据
   useEffect(() => {
-    const currentParentId = form.getFieldValue('parentMenuId');
+    if (!visible) return;
 
-    const isValid = processedParentList.some(
-      (item) => item.menuId === currentParentId && !item.disabled,
-    );
+    const load = async () => {
+      setFormLoading(true);
+      try {
+        // 并行拉 options + detail（如果是编辑）
+        const optionsPromise = queryMenuOptions();
+        const detailPromise = editingId ? getMenuById(editingId) : undefined;
 
-    if (!isValid) {
-      // 目录默认顶级，菜单留空让用户重选
-      const defaultValue =
-        typeValue === 'CATALOG' ? VIRTUAL_ROOT_ID : undefined;
-      form.setFieldsValue({ parentMenuId: defaultValue });
-    }
-  }, [typeValue, processedParentList, form]);
+        const [optionsRes, detailRes] = await Promise.all([
+          optionsPromise,
+          detailPromise,
+        ]);
+
+        if (optionsRes.data) {
+          // 上级只能是目录，直接过滤掉 MENU 类型
+          setParentOptions(
+            withVirtualRoot(
+              optionsRes.data.filter((item) => item.type !== 'MENU'),
+            ),
+          );
+        }
+
+        if (detailRes?.data) {
+          const data = detailRes.data;
+          form.setFieldsValue({
+            ...data,
+            parentMenuId: data.parentMenuId ?? VIRTUAL_ROOT_ID,
+            type: data.type ?? 'CATALOG',
+          });
+        } else {
+          form.setFieldsValue({
+            parentMenuId: VIRTUAL_ROOT_ID,
+            type: 'CATALOG',
+            hidden: false,
+            sort: 0,
+            status: 'enabled',
+          });
+        }
+      } catch (error) {
+        logger.error(error);
+      } finally {
+        setFormLoading(false);
+      }
+    };
+
+    load();
+  }, [visible, editingId, form, message]);
+
+  // 过滤自身：父级选项里不能选自己（防止循环引用）
+  const processedParentList = useMemo(() => {
+    if (!parentOptions?.length) return [];
+    return parentOptions.filter((item) => item.menuId !== menuId);
+  }, [parentOptions, menuId]);
 
   const reset = () => {
     form.resetFields();
     setConfirmLoading(false);
+    setEditingId(undefined);
+    setParentOptions([]);
   };
 
   const handleOk = async () => {
@@ -95,7 +126,7 @@ const UpdateFormFunction: React.ForwardRefRenderFunction<
       const values = await form.validateFields();
       const normalizedValues = normalizeToBackend(values);
 
-      if (!form.getFieldValue('menuId')) {
+      if (!editingId) {
         await createMenu(normalizedValues);
         message.success('新增成功');
       } else {
@@ -123,25 +154,10 @@ const UpdateFormFunction: React.ForwardRefRenderFunction<
     ref,
     () => {
       return {
-        show: (title, data) => {
+        show: (title, menuId) => {
           setTitle(title);
+          setEditingId(menuId);
           setVisible(true);
-          reset();
-          if (data) {
-            form.setFieldsValue({
-              ...data,
-              parentMenuId: data.parentMenuId ?? VIRTUAL_ROOT_ID,
-              type: data.type ?? 'CATALOG',
-            });
-          } else {
-            form.setFieldsValue({
-              parentMenuId: VIRTUAL_ROOT_ID,
-              type: 'CATALOG',
-              hidden: false,
-              sort: 0,
-              status: 'enabled',
-            });
-          }
         },
         hide: () => {
           setVisible(false);
@@ -152,6 +168,9 @@ const UpdateFormFunction: React.ForwardRefRenderFunction<
     },
     [],
   );
+
+  const nameLabel = typeValue === 'CATALOG' ? '目录名称' : '菜单名称';
+  const pathLabel = typeValue === 'CATALOG' ? '目录路径' : '菜单路径';
 
   return (
     <Modal
@@ -166,126 +185,142 @@ const UpdateFormFunction: React.ForwardRefRenderFunction<
       okText="确认"
       cancelText="取消"
     >
-      <Form
-        {...createFormLayout()}
-        form={form}
-        layout="horizontal"
-        name="form_in_modal"
-        initialValues={{
-          type: 'CATALOG',
-          hidden: false,
-          sort: 0,
-          status: 'enabled',
-        }}
-      >
-        <Form.Item name="menuId" label="菜单Id" hidden>
-          <Input />
-        </Form.Item>
-        <FormGrid>
-          <FormGrid.Item span={24}>
-            <Form.Item
-              name="parentMenuId"
-              label="上级菜单"
-              {...createFormLayout(3)}
-              rules={[{ required: true, message: '请选择上级菜单' }]}
-            >
-              <TreeSelect
-                treeDefaultExpandAll
-                fieldNames={{ value: 'menuId', label: 'name' }}
-                treeDataSimpleMode={{
-                  id: 'menuId',
-                  pId: 'parentMenuId',
-                }}
-                treeData={processedParentList}
-                treeNodeFilterProp="name"
-                placeholder="请选择上级菜单"
-              />
-            </Form.Item>
-          </FormGrid.Item>
-          <FormGrid.Item span={12}>
-            <Form.Item
-              name="name"
-              label={typeValue === 'CATALOG' ? '目录名称' : '菜单名称'}
-              rules={[
-                {
-                  required: true,
-                  message: `${
-                    typeValue === 'CATALOG' ? '目录名称' : '菜单名称'
-                  }不能为空`,
-                },
-              ]}
-            >
-              <Input
-                placeholder={`请输入${
-                  typeValue === 'CATALOG' ? '目录名称' : '菜单名称'
-                }`}
-              />
-            </Form.Item>
-          </FormGrid.Item>
-          <FormGrid.Item span={12}>
-            <Form.Item
-              name="type"
-              label="菜单类型"
-              rules={[{ required: true, message: '菜单类型不能为空' }]}
-            >
-              <Segmented
-                disabled={Boolean(menuId)}
-                block
-                options={[
-                  { label: '目录', value: 'CATALOG' },
-                  { label: '菜单', value: 'MENU' },
+      <FormLoading loading={formLoading}>
+        <Form
+          {...createFormLayout()}
+          form={form}
+          layout="horizontal"
+          name="form_in_modal"
+          initialValues={{
+            type: 'CATALOG',
+            hidden: false,
+            sort: 0,
+            status: 'enabled',
+          }}
+        >
+          <Form.Item name="menuId" label="菜单Id" hidden>
+            <Input />
+          </Form.Item>
+          <FormGrid>
+            <FormGrid.Item span={24}>
+              <Form.Item
+                name="parentMenuId"
+                label="上级目录"
+                {...createFormLayout(3)}
+                rules={[{ required: true, message: '请选择上级目录' }]}
+              >
+                <TreeSelect
+                  treeDefaultExpandAll
+                  disabled={formLoading}
+                  fieldNames={{ value: 'menuId', label: 'name' }}
+                  treeDataSimpleMode={{
+                    id: 'menuId',
+                    pId: 'parentMenuId',
+                  }}
+                  treeData={processedParentList as any}
+                  treeNodeFilterProp="name"
+                  placeholder="请选择上级目录"
+                />
+              </Form.Item>
+            </FormGrid.Item>
+            <FormGrid.Item span={12}>
+              <Form.Item
+                name="name"
+                label={nameLabel}
+                rules={[
+                  {
+                    required: true,
+                    message: `${nameLabel}不能为空`,
+                  },
                 ]}
-              />
-            </Form.Item>
-          </FormGrid.Item>
-          <FormGrid.Item span={12}>
-            <Form.Item
-              name="path"
-              label="菜单路径"
-              rules={[{ required: true, message: '菜单路径不能为空' }]}
-            >
-              <Input placeholder="请输入菜单路径，如 /system/user" />
-            </Form.Item>
-          </FormGrid.Item>
-          <FormGrid.Item span={12}>
-            <Form.Item name="icon" label="菜单图标">
-              <IconSelector placeholder="请选择图标" />
-            </Form.Item>
-          </FormGrid.Item>
-          <FormGrid.Item span={12}>
-            <Form.Item
-              name="sort"
-              label="排序权重"
-              rules={[{ required: true, message: '排序权重不能为空' }]}
-            >
-              <InputNumber
-                min={0}
-                style={{ width: '100%' }}
-                placeholder="请输入排序权重"
-              />
-            </Form.Item>
-          </FormGrid.Item>
-          <FormGrid.Item span={12}>
-            <Form.Item name="permissionCode" label="权限代码">
-              <Input placeholder="请输入绑定的权限代码" />
-            </Form.Item>
-          </FormGrid.Item>
-          <FormGrid.Item span={12}>
-            <Form.Item
-              name="status"
-              label="状态"
-              rules={[{ required: true, message: '状态不能为空' }]}
-            >
-              <Radio.Group options={dict.common_status} />
-            </Form.Item>
-          </FormGrid.Item>
-          <FormGrid.Item span={12}>
-            <Form.Item name="hidden" label="是否隐藏" valuePropName="checked">
-              <Switch checkedChildren="是" unCheckedChildren="否" />
-            </Form.Item>
-          </FormGrid.Item>
-        </FormGrid>
-      </Form>
+              >
+                <Input
+                  placeholder={`请输入${nameLabel}`}
+                  disabled={formLoading}
+                />
+              </Form.Item>
+            </FormGrid.Item>
+            <FormGrid.Item span={12}>
+              <Form.Item
+                name="type"
+                label="类型"
+                rules={[{ required: true, message: '类型不能为空' }]}
+              >
+                <Segmented
+                  disabled={Boolean(menuId) || formLoading}
+                  block
+                  options={[
+                    { label: '目录', value: 'CATALOG' },
+                    { label: '菜单', value: 'MENU' },
+                  ]}
+                />
+              </Form.Item>
+            </FormGrid.Item>
+            <FormGrid.Item span={12}>
+              <Form.Item
+                name="path"
+                label={pathLabel}
+                rules={[{ required: true, message: `${pathLabel}不能为空` }]}
+              >
+                <Input
+                  placeholder={`请输入${pathLabel}，如 /system/user`}
+                  disabled={formLoading}
+                />
+              </Form.Item>
+            </FormGrid.Item>
+            <FormGrid.Item span={12}>
+              <Form.Item name="icon" label="菜单图标">
+                <IconSelector />
+              </Form.Item>
+            </FormGrid.Item>
+            <FormGrid.Item span={12}>
+              <Form.Item
+                name="sort"
+                label="排序权重"
+                rules={[{ required: true, message: '排序权重不能为空' }]}
+              >
+                <InputNumber
+                  min={0}
+                  style={{ width: '100%' }}
+                  placeholder="请输入排序权重"
+                  disabled={formLoading}
+                />
+              </Form.Item>
+            </FormGrid.Item>
+            {typeValue !== 'CATALOG' && (
+              <FormGrid.Item span={12}>
+                <Form.Item name="permissionCode" label="权限代码">
+                  <Input
+                    placeholder="请输入绑定的权限代码"
+                    disabled={formLoading}
+                  />
+                </Form.Item>
+              </FormGrid.Item>
+            )}
+            <FormGrid.Item span={12}>
+              <Form.Item
+                name="status"
+                label="状态"
+                rules={[{ required: true, message: '状态不能为空' }]}
+              >
+                <Radio.Group
+                  options={dict.common_status}
+                  disabled={formLoading}
+                />
+              </Form.Item>
+            </FormGrid.Item>
+            <FormGrid.Item span={12}>
+              <Form.Item name="hidden" label="是否隐藏" valuePropName="checked">
+                <Switch
+                  checkedChildren="是"
+                  unCheckedChildren="否"
+                  disabled={formLoading}
+                />
+              </Form.Item>
+            </FormGrid.Item>
+          </FormGrid>
+        </Form>
+      </FormLoading>
     </Modal>
   );
 };
