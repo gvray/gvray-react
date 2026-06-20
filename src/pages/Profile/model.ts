@@ -3,13 +3,15 @@ import { queryLoginLogList } from '@/services/loginLog';
 import { changePassword, queryProfilePermissions } from '@/services/profile';
 import { useAuthStore, usePreferences } from '@/stores';
 import { logger, tokenManager } from '@/utils';
-import { listToTree } from '@gvray/eskit';
 import { FormInstance, message } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { history } from 'umi';
+import { history, useIntl } from 'umi';
+import {
+  buildPermissionTree,
+  type PermissionTreeNode,
+} from '../Permission/model';
 
-export type PermNode = API.UserPermissionSimpleDto & { children?: PermNode[] };
 export type LoginLogDateRange = [Dayjs | null, Dayjs | null] | null;
 
 const DEFAULT_AVATAR = 'https://api.dicebear.com/9.x/bottts/svg?seed=GavinRay';
@@ -30,7 +32,7 @@ export function getAccountStatusMeta(
   return status ? STATUS_MAP[status] : { label: '未知', color: 'default' };
 }
 
-export function collectPermissionKeys(nodes: PermNode[]): string[] {
+export function collectPermissionKeys(nodes: PermissionTreeNode[]): string[] {
   const keys: string[] = [];
   for (const node of nodes) {
     keys.push(node.permissionId);
@@ -106,7 +108,8 @@ export function useProfileSecurityModel(passwordForm: FormInstance) {
 }
 
 export function useProfilePermissionsModel() {
-  const [typeFilter, setTypeFilter] = useState<string[]>([]);
+  const intl = useIntl();
+  const [keyword, setKeyword] = useState('');
   const [expandedKeys, setExpandedKeys] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [permData, setPermData] =
@@ -120,28 +123,40 @@ export function useProfilePermissionsModel() {
       .finally(() => setLoading(false));
   }, []);
 
-  const tree = useMemo<PermNode[]>(() => {
-    if (!permData?.permissions) return [];
-    const list: PermNode[] = typeFilter.length
-      ? permData.permissions.filter((permission: API.UserPermissionSimpleDto) =>
-          typeFilter.includes(permission.type),
-        )
-      : (permData.permissions as PermNode[]);
+  const getLabel = useCallback(
+    (id: string, fallback: string) => {
+      const msg = intl.formatMessage({ id });
+      return msg === id ? fallback : msg;
+    },
+    [intl],
+  );
 
-    return listToTree(list, {
-      idKey: 'permissionId',
-      parentKey: 'parentPermissionId',
-      keepEmptyChildren: false,
-    });
-  }, [permData, typeFilter]);
+  const tree = useMemo<PermissionTreeNode[]>(() => {
+    if (!permData?.permissions) return [];
+    const kw = keyword.trim().toLowerCase();
+    const filtered = kw
+      ? permData.permissions.filter(
+          (p) =>
+            p.code?.toLowerCase().includes(kw) ||
+            p.name?.toLowerCase().includes(kw),
+        )
+      : permData.permissions;
+    // buildPermissionTree expects PermissionResponseDto[]; UserPermissionSimpleDto
+    // is a structural subset that buildPermissionTree only reads `code`/`name`/
+    // `permissionId` from, so the cast is safe.
+    return buildPermissionTree(
+      filtered as unknown as API.PermissionResponseDto[],
+      getLabel,
+    );
+  }, [permData, keyword, getLabel]);
 
   useEffect(() => {
     setExpandedKeys(collectPermissionKeys(tree));
   }, [tree]);
 
   return {
-    typeFilter,
-    setTypeFilter,
+    keyword,
+    setKeyword,
     expandedKeys,
     setExpandedKeys,
     loading,

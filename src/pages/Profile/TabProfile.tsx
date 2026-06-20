@@ -4,14 +4,11 @@ import {
   ExclamationCircleFilled,
   IdcardOutlined,
   LockOutlined,
-  MailOutlined,
-  MobileOutlined,
 } from '@ant-design/icons';
 import {
   Alert,
   Card,
   Descriptions,
-  Divider,
   Space,
   Tag,
   Tooltip,
@@ -32,6 +29,9 @@ const TabProfile: React.FC<TabProfileProps> = ({ profile }) => {
   const statusMeta = getAccountStatusMeta(currentProfile?.status);
   const emailBound = !!currentProfile?.email;
   const phoneBound = !!currentProfile?.phone;
+  const maskedPhone = currentProfile?.phone
+    ? currentProfile.phone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2')
+    : '';
 
   return (
     <>
@@ -67,6 +67,30 @@ const TabProfile: React.FC<TabProfileProps> = ({ profile }) => {
             <Text copyable type="secondary">
               {currentProfile?.userId || '-'}
             </Text>
+          </Descriptions.Item>
+          <Descriptions.Item label="邮箱">
+            <Space size={6}>
+              <span>{currentProfile?.email || '未绑定'}</span>
+              <Tooltip title={emailBound ? '已绑定' : '未绑定'}>
+                {emailBound ? (
+                  <CheckCircleFilled className={styles.verifiedIcon} />
+                ) : (
+                  <ExclamationCircleFilled className={styles.unverifiedIcon} />
+                )}
+              </Tooltip>
+            </Space>
+          </Descriptions.Item>
+          <Descriptions.Item label="手机号">
+            <Space size={6}>
+              <span>{maskedPhone || '未绑定'}</span>
+              <Tooltip title={phoneBound ? '已绑定' : '未绑定'}>
+                {phoneBound ? (
+                  <CheckCircleFilled className={styles.verifiedIcon} />
+                ) : (
+                  <ExclamationCircleFilled className={styles.unverifiedIcon} />
+                )}
+              </Tooltip>
+            </Space>
           </Descriptions.Item>
           <Descriptions.Item label="部门">
             <span className={styles.readonlyField}>
@@ -115,62 +139,6 @@ const TabProfile: React.FC<TabProfileProps> = ({ profile }) => {
             </span>
           </Descriptions.Item>
         </Descriptions>
-      </Card>
-
-      <Card
-        className={styles.moduleCard}
-        title={
-          <>
-            <MailOutlined /> 联系方式
-          </>
-        }
-      >
-        <div className={styles.contactRow}>
-          <MailOutlined className={styles.contactLargeIcon} />
-          <div className={styles.contactContent}>
-            <div className={styles.contactTitle}>邮箱</div>
-            <Text type="secondary" className={styles.contactDesc}>
-              <span className={styles.contactText}>
-                {currentProfile?.email || '未绑定'}
-              </span>
-              {emailBound ? (
-                <CheckCircleFilled className={styles.verifiedIcon} />
-              ) : (
-                <ExclamationCircleFilled className={styles.unverifiedIcon} />
-              )}
-            </Text>
-          </div>
-          <Tag color={emailBound ? 'green' : 'default'}>
-            {emailBound ? '已绑定' : '未绑定'}
-          </Tag>
-        </div>
-
-        <Divider className={styles.contactDivider} />
-
-        <div className={styles.contactRow}>
-          <MobileOutlined className={styles.contactLargeIcon} />
-          <div className={styles.contactContent}>
-            <div className={styles.contactTitle}>手机号</div>
-            <Text type="secondary" className={styles.contactDesc}>
-              <span className={styles.contactText}>
-                {currentProfile?.phone
-                  ? currentProfile.phone.replace(
-                      /(\d{3})\d{4}(\d{4})/,
-                      '$1****$2',
-                    )
-                  : '未绑定'}
-              </span>
-              {phoneBound ? (
-                <CheckCircleFilled className={styles.verifiedIcon} />
-              ) : (
-                <ExclamationCircleFilled className={styles.unverifiedIcon} />
-              )}
-            </Text>
-          </div>
-          <Tag color={phoneBound ? 'green' : 'default'}>
-            {phoneBound ? '已绑定' : '未绑定'}
-          </Tag>
-        </div>
       </Card>
     </>
   );

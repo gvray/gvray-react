@@ -1,9 +1,7 @@
 import { PageContainer } from '@/components';
 import {
   BellOutlined,
-  CheckCircleFilled,
   ClockCircleOutlined,
-  ExclamationCircleFilled,
   HistoryOutlined,
   IdcardOutlined,
   LockOutlined,
@@ -80,8 +78,6 @@ const TAB_META: Array<{
 
 export default function ProfilePage() {
   const model = useProfilePageModel();
-  const emailBound = !!model.profile?.email;
-  const phoneBound = !!model.profile?.phone;
   const departmentName = model.profile?.department?.name || '未设置部门';
   const positionName = model.profile?.positions?.[0]?.name || '未设置岗位';
 
@@ -205,24 +201,6 @@ export default function ProfilePage() {
                   <Text type="secondary">联系与组织</Text>
                   <div className={styles.summaryTitle}>{departmentName}</div>
                 </div>
-              </div>
-              <div className={styles.bindingStatus}>
-                <Tag color={emailBound ? 'green' : 'default'}>
-                  {emailBound ? (
-                    <CheckCircleFilled />
-                  ) : (
-                    <ExclamationCircleFilled />
-                  )}
-                  邮箱{emailBound ? '已绑定' : '未绑定'}
-                </Tag>
-                <Tag color={phoneBound ? 'green' : 'default'}>
-                  {phoneBound ? (
-                    <CheckCircleFilled />
-                  ) : (
-                    <ExclamationCircleFilled />
-                  )}
-                  手机{phoneBound ? '已绑定' : '未绑定'}
-                </Tag>
               </div>
               <div className={styles.summaryRows}>
                 <div className={styles.summaryRow}>
