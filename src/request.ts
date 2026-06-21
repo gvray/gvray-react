@@ -29,7 +29,7 @@ const client = createClient({
       setToken: (token) => tokenManager.setAccessToken(token),
       exclude: ['/auth/login', '/auth/refresh'],
     },
-    logging: true,
+    logging: true, // 开启请求日志，生产环境建议关闭
   },
 });
 

@@ -53,7 +53,12 @@ const TabProfile: React.FC<TabProfileProps> = ({ profile }) => {
         <Descriptions
           column={{ xs: 1, sm: 1, md: 2 }}
           colon={false}
-          labelStyle={{ color: 'var(--ant-color-text-secondary)', width: 100 }}
+          styles={{
+            label: {
+              color: 'var(--ant-color-text-secondary)',
+              width: 100,
+            },
+          }}
         >
           <Descriptions.Item label="用户名">
             <span className={styles.readonlyField}>
@@ -63,7 +68,7 @@ const TabProfile: React.FC<TabProfileProps> = ({ profile }) => {
           <Descriptions.Item label="昵称">
             {currentProfile?.nickname || '-'}
           </Descriptions.Item>
-          <Descriptions.Item label="用户 ID" span={2}>
+          <Descriptions.Item label="用户 ID" span={{ xs: 1, sm: 1, md: 2 }}>
             <Text copyable type="secondary">
               {currentProfile?.userId || '-'}
             </Text>
@@ -103,7 +108,7 @@ const TabProfile: React.FC<TabProfileProps> = ({ profile }) => {
               <LockOutlined />
             </span>
           </Descriptions.Item>
-          <Descriptions.Item label="角色" span={2}>
+          <Descriptions.Item label="角色" span={{ xs: 1, sm: 1, md: 2 }}>
             <Space size={4} wrap>
               {currentProfile?.roles?.map((role) => (
                 <Tooltip
@@ -119,7 +124,7 @@ const TabProfile: React.FC<TabProfileProps> = ({ profile }) => {
               )}
             </Space>
           </Descriptions.Item>
-          <Descriptions.Item label="账号状态">
+          <Descriptions.Item label="账号状态" span={{ xs: 1, sm: 1, md: 2 }}>
             <Tag color={statusMeta.color}>{statusMeta.label}</Tag>
           </Descriptions.Item>
           <Descriptions.Item label="注册时间">
