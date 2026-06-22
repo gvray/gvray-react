@@ -21,16 +21,6 @@ export function getConfigById(configId: string) {
   );
 }
 
-/** 获取运行时配置 */
-export function getRuntimeConfig() {
-  return request<API.Response<Record<string, unknown>>>(
-    '/system/runtime-config',
-    {
-      method: 'GET',
-    },
-  );
-}
-
 /** 创建配置 */
 export function createConfig(data: API.CreateConfigDto) {
   return request<API.Response<API.ConfigResponseDto>>('/system/configs', {

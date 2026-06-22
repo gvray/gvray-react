@@ -1,10 +1,14 @@
 import { LOGIN_PATH } from '@/constants';
 import { resolveServerConfig } from '@/constants/settings';
-import { queryMenus } from '@/services/auth';
-import { getRuntimeConfig } from '@/services/config';
+import { queryMe, queryMenus } from '@/services/auth';
 import { getDictionaryItemsByTypeCodes } from '@/services/dictionary';
-import { queryProfile } from '@/services/profile';
-import { useAppStore, useAuthStore, useDictStore } from '@/stores';
+import { getRuntimeConfig } from '@/services/system';
+import {
+  normalizeMePreferences,
+  useAppStore,
+  useAuthStore,
+  useDictStore,
+} from '@/stores';
 import { history, matchRoutes } from 'umi';
 import { logger, redirectToLogin, tokenManager } from './utils';
 
@@ -18,7 +22,7 @@ import { logger, redirectToLogin, tokenManager } from './utils';
  */
 export async function getInitialState() {
   let runtimeConfig: Record<string, unknown> | undefined;
-  let profile: API.CurrentUserResponseDto | undefined;
+  let me: API.CurrentUserResponseDto | undefined;
   let menus: API.MenuResponseDto[] | undefined;
 
   // 获取运行时配置（无需登录）
@@ -29,14 +33,14 @@ export async function getInitialState() {
     logger.error(error);
   }
 
-  // 已登录时并行获取用户信息和菜单
+  // 已登录时并行获取身份信息和菜单
   if (tokenManager.isAuthenticated()) {
     try {
-      const [profileRes, menusRes] = await Promise.all([
-        queryProfile({ skipErrorHandler: true }),
+      const [meRes, menusRes] = await Promise.all([
+        queryMe({ skipErrorHandler: true }),
         queryMenus(),
       ]);
-      profile = profileRes.data;
+      me = meRes.data;
       menus = menusRes.data;
       // 在login页面刷新 这里应该跳转到首页
       if (history.location.pathname === LOGIN_PATH) {
@@ -52,8 +56,11 @@ export async function getInitialState() {
   useAppStore.getState().setServerConfig(resolveServerConfig(runtimeConfig));
 
   // 认证数据 → 分发到 AuthStore
-  if (profile) {
-    useAuthStore.getState().setAuth(profile, menus);
+  if (me) {
+    useAuthStore.getState().setAuth(me, menus);
+    useAppStore
+      .getState()
+      .setMePreferences(normalizeMePreferences(me.preferences));
   }
 
   // 已登录时预加载常用字典到全局缓存

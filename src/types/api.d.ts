@@ -1,6 +1,6 @@
 /**
  * 此文件由 scripts/gen-api-types.ts 自动生成
- * 生成时间: 2026-06-19T11:57:09.571Z
+ * 生成时间: 2026-06-22T15:58:56.532Z
  * 数据来源: http://localhost:8001/api-json
  * 请勿手动修改此文件
  */
@@ -48,6 +48,119 @@ declare namespace API {
      * @example a1b2c3d4e5f6...
      */
     refreshToken: string;
+  }
+
+  interface PermissionResponseDto {
+    id: number;
+    /**
+     * 权限唯一标识符（UUID）
+     * @example a3d7d76e-5a4e-4f0a-93c3-d0b2b27d471e
+     */
+    permissionId: string;
+    /** 权限名称 */
+    name: string;
+    /** 权限代码 */
+    code: string;
+    /** HTTP 方法 */
+    httpMethod: string;
+    /** 权限来源 */
+    origin: 'USER' | 'SYSTEM';
+    /** 权限描述 */
+    description?: string;
+    /** 创建时间 */
+    createdAt: string;
+    /** 更新时间 */
+    updatedAt: string;
+  }
+
+  interface CurrentUserRoleResponseDto {
+    /** 角色ID */
+    id: number;
+    /**
+     * 角色唯一标识符（UUID）
+     * @example a3d7d76e-5a4e-4f0a-93c3-d0b2b27d471e
+     */
+    roleId: string;
+    /** 角色名称 */
+    name: string;
+    /** 角色标识（用于判断是否超管） */
+    roleKey?: string;
+    /** 角色描述 */
+    description?: string;
+    /** 角色权限列表 */
+    permissions?: PermissionResponseDto[];
+  }
+
+  interface CurrentUserDepartmentResponseDto {
+    /** 部门ID */
+    id: number;
+    /**
+     * 部门唯一标识符（UUID）
+     * @example a3d7d76e-5a4e-4f0a-93c3-d0b2b27d471e
+     */
+    departmentId: string;
+    /** 部门名称 */
+    name: string;
+    /** 部门描述 */
+    description?: string;
+  }
+
+  interface CurrentUserPositionResponseDto {
+    /** 岗位ID */
+    id: number;
+    /**
+     * 岗位唯一标识符（UUID）
+     * @example a3d7d76e-5a4e-4f0a-93c3-d0b2b27d471e
+     */
+    positionId: string;
+    /** 岗位名称 */
+    name: string;
+    /** 岗位描述 */
+    description?: string;
+  }
+
+  interface CurrentUserProfileDto {
+    /** 昵称 */
+    nickname: string;
+    /** 头像 */
+    avatar?: Record<string, unknown>;
+    /** 邮箱 */
+    email?: Record<string, unknown>;
+    /** 手机号码 */
+    phone?: Record<string, unknown>;
+    /** 性别 */
+    gender?: Record<string, unknown>;
+    /**
+     * 用户状态
+     * @example enabled
+     */
+    status: 'disabled' | 'enabled' | 'pending' | 'banned';
+  }
+
+  interface CurrentUserResponseDto {
+    /** 用户数据库ID */
+    id: number;
+    /**
+     * 用户唯一标识符（UUID）
+     * @example a3d7d76e-5a4e-4f0a-93c3-d0b2b27d471e
+     */
+    userId: string;
+    /** 用户名 */
+    username: string;
+    /** 是否为超级管理员 */
+    isSuperAdmin?: boolean;
+    /** 权限代码聚合（超管动态返回全部权限代码） */
+    permissionCodes?: string[];
+    /** 用户角色列表（包含权限信息） */
+    roles?: CurrentUserRoleResponseDto[];
+    /** 所属部门 */
+    department?: CurrentUserDepartmentResponseDto;
+    /** 所属岗位 */
+    positions?: CurrentUserPositionResponseDto[];
+    /** 用户偏好设置 */
+    preferences?: Record<string, unknown>;
+    /** 个人资料 */
+    profile?: CurrentUserProfileDto;
   }
 
   interface AuthMenuResponseDto {
@@ -463,29 +576,6 @@ declare namespace API {
   interface BatchDeleteRolesDto {
     /** 待删除角色ID列表 */
     ids: string[];
-  }
-
-  interface PermissionResponseDto {
-    id: number;
-    /**
-     * 权限唯一标识符（UUID）
-     * @example a3d7d76e-5a4e-4f0a-93c3-d0b2b27d471e
-     */
-    permissionId: string;
-    /** 权限名称 */
-    name: string;
-    /** 权限代码 */
-    code: string;
-    /** HTTP 方法 */
-    httpMethod: string;
-    /** 权限来源 */
-    origin: 'USER' | 'SYSTEM';
-    /** 权限描述 */
-    description?: string;
-    /** 创建时间 */
-    createdAt: string;
-    /** 更新时间 */
-    updatedAt: string;
   }
 
   interface UpdatePermissionDto {
@@ -1050,6 +1140,26 @@ declare namespace API {
      * @example HH:mm:ss
      */
     timeFormat: string;
+    /**
+     * 主题主色
+     * @example #1890ff
+     */
+    primaryColor: string;
+    /**
+     * 默认时区
+     * @example Asia/Shanghai
+     */
+    timezone: string;
+    /**
+     * 默认启用通知
+     * @example true
+     */
+    enableNotification: boolean;
+    /**
+     * 全站灰度模式
+     * @example false
+     */
+    grayMode: boolean;
   }
 
   interface RuntimeSecurityDto {
@@ -1456,91 +1566,23 @@ declare namespace API {
     process: ProcessMetricsDto;
   }
 
-  interface CurrentUserRoleResponseDto {
-    /** 角色ID */
-    id: number;
-    /**
-     * 角色唯一标识符（UUID）
-     * @example a3d7d76e-5a4e-4f0a-93c3-d0b2b27d471e
-     */
-    roleId: string;
-    /** 角色名称 */
-    name: string;
-    /** 角色标识（用于判断是否超管） */
-    roleKey?: string;
-    /** 角色描述 */
-    description?: string;
-    /** 角色权限列表 */
-    permissions?: PermissionResponseDto[];
-  }
-
-  interface CurrentUserDepartmentResponseDto {
-    /** 部门ID */
-    id: number;
-    /**
-     * 部门唯一标识符（UUID）
-     * @example a3d7d76e-5a4e-4f0a-93c3-d0b2b27d471e
-     */
-    departmentId: string;
-    /** 部门名称 */
-    name: string;
-    /** 部门描述 */
-    description?: string;
-  }
-
-  interface CurrentUserPositionResponseDto {
-    /** 岗位ID */
-    id: number;
-    /**
-     * 岗位唯一标识符（UUID）
-     * @example a3d7d76e-5a4e-4f0a-93c3-d0b2b27d471e
-     */
-    positionId: string;
-    /** 岗位名称 */
-    name: string;
-    /** 岗位描述 */
-    description?: string;
-  }
-
-  interface CurrentUserResponseDto {
-    /** 用户数据库ID */
-    id: number;
-    /**
-     * 用户唯一标识符（UUID）
-     * @example a3d7d76e-5a4e-4f0a-93c3-d0b2b27d471e
-     */
+  interface ProfileResponseDto {
+    /** 用户唯一标识符（UUID） */
     userId: string;
     /** 用户名 */
     username: string;
     /** 昵称 */
     nickname: string;
     /** 头像 */
-    avatar?: string;
+    avatar?: Record<string, unknown>;
     /** 邮箱 */
-    email?: string;
+    email?: Record<string, unknown>;
     /** 手机号码 */
-    phone?: string;
-    /**
-     * 用户状态
-     * @example enabled
-     */
-    status: 'disabled' | 'enabled' | 'pending' | 'banned';
-    /** 创建时间 */
-    createdAt: string;
+    phone?: Record<string, unknown>;
+    /** 性别 */
+    gender?: Record<string, unknown>;
     /** 更新时间 */
     updatedAt: string;
-    /** 是否为超级管理员 */
-    isSuperAdmin?: boolean;
-    /** 权限代码聚合（超管动态返回全部权限代码） */
-    permissionCodes?: string[];
-    /** 用户角色列表（包含权限信息） */
-    roles?: CurrentUserRoleResponseDto[];
-    /** 所属部门 */
-    department?: CurrentUserDepartmentResponseDto;
-    /** 用户偏好设置 */
-    preferences?: Record<string, unknown>;
-    /** 所属岗位 */
-    positions?: CurrentUserPositionResponseDto[];
   }
 
   interface UserRoleSimpleDto {
@@ -1599,8 +1641,76 @@ declare namespace API {
   }
 
   interface UpdateSettingsDto {
-    /** 用户偏好设置 */
-    settings: Record<string, unknown>;
+    /**
+     * 主题模式
+     * @example light
+     */
+    theme?: 'light' | 'dark' | 'auto';
+    /**
+     * 主题主色（Hex 颜色值或颜色名称，如 #1890ff、blue）
+     * @example #1890ff
+     */
+    primaryColor?: string;
+    /**
+     * 色弱模式
+     * @example false
+     */
+    colorWeak?: boolean;
+    /**
+     * 固定顶栏
+     * @example false
+     */
+    fixedHeader?: boolean;
+    /**
+     * 显示 Logo
+     * @example true
+     */
+    showLogo?: boolean;
+    /**
+     * 侧边栏深色（theme 控制全局亮暗，此字段仅控制侧边栏是否深色）
+     * @example false
+     */
+    sidebarDark?: boolean;
+    /**
+     * 侧边栏是否折叠
+     * @example false
+     */
+    sidebarCollapsed?: boolean;
+    /**
+     * 侧边栏只展开一个子菜单
+     * @example true
+     */
+    uniqueOpened?: boolean;
+    /**
+     * 显示面包屑
+     * @example true
+     */
+    showBreadcrumb?: boolean;
+    /**
+     * 显示页脚
+     * @example true
+     */
+    showFooter?: boolean;
+    /**
+     * 语言
+     * @example zh-CN
+     */
+    language?: 'zh-CN' | 'en-US';
+    /**
+     * 默认分页大小
+     * @example 10
+     */
+    pageSize?: number;
+    /**
+     * 时区
+     * @example Asia/Shanghai
+     */
+    timezone?: string;
+    /**
+     * 是否启用通知
+     * @example true
+     */
+    enableNotification?: boolean;
   }
 
   interface BatchDeleteOperationLogsDto {
@@ -1872,6 +1982,13 @@ declare namespace API {
 
   interface ConfigsGetConfigsByKeysParams {
     keys?: string;
+  }
+
+  interface ProfileGetLoginLogsParams {
+    /** 页码 */
+    page?: number;
+    /** 每页数量 */
+    pageSize?: number;
   }
 
   interface OperationLogsFindManyParams {

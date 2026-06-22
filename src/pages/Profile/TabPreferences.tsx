@@ -3,6 +3,10 @@ import {
   ThemeMode,
   ThemeModeWithoutSystem,
 } from '@/constants';
+import {
+  queryProfileSettings,
+  updateProfileSettings,
+} from '@/services/profile';
 import { useAppStore, usePreferences } from '@/stores';
 import {
   LayoutOutlined,
@@ -10,6 +14,7 @@ import {
   SettingOutlined,
   SkinOutlined,
 } from '@ant-design/icons';
+import { debounce } from '@gvray/eskit';
 import {
   Button,
   Card,
@@ -22,6 +27,7 @@ import {
   Tag,
   Typography,
 } from 'antd';
+import { useCallback, useEffect, useRef } from 'react';
 import styles from './index.less';
 
 const { Text } = Typography;
@@ -65,6 +71,78 @@ const TabPreferences: React.FC = () => {
 
   const uiDefaults = serverConfig.uiDefaults;
 
+  // ── 服务端同步 ──────────────────────────────────────────
+
+  const pendingRef = useRef<Record<string, unknown>>({});
+
+  const flushSettings = useCallback(
+    debounce(() => {
+      const settings = { ...pendingRef.current };
+      pendingRef.current = {};
+      if (Object.keys(settings).length === 0) return;
+      updateProfileSettings(settings).catch(() => {
+        // silent
+      });
+    }, 500),
+    [],
+  );
+
+  /** 变更后排队同步到服务端（嵌套字段做一层浅合并） */
+  const queueSync = useCallback(
+    (patch: Record<string, unknown>) => {
+      const prev = pendingRef.current;
+      const next: Record<string, unknown> = { ...prev };
+      for (const [key, val] of Object.entries(patch)) {
+        if (
+          typeof val === 'object' &&
+          val !== null &&
+          !Array.isArray(val) &&
+          typeof prev[key] === 'object' &&
+          prev[key] !== null &&
+          !Array.isArray(prev[key])
+        ) {
+          next[key] = { ...(prev[key] as Record<string, unknown>), ...val };
+        } else {
+          next[key] = val;
+        }
+      }
+      pendingRef.current = next;
+      flushSettings();
+    },
+    [flushSettings],
+  );
+
+  /** 初始化时拉取服务端偏好设置（扁平 schema） */
+  useEffect(() => {
+    queryProfileSettings()
+      .then((res) => {
+        if (!res.data) return;
+        const s = res.data as Record<string, unknown>;
+        if (s.theme) setThemeMode(s.theme as ThemeModeWithoutSystem);
+        if (s.language) setLanguage(s.language as string);
+        if (typeof s.pageSize === 'number') setPageSize(s.pageSize);
+        if (typeof s.showBreadcrumb === 'boolean')
+          setShowBreadcrumb(s.showBreadcrumb);
+        if (typeof s.sidebarCollapsed === 'boolean')
+          setSider({ collapsed: s.sidebarCollapsed });
+        if (typeof s.sidebarDark === 'boolean')
+          setSider({ theme: s.sidebarDark ? 'dark' : 'light' });
+        if (typeof s.showLogo === 'boolean') setSider({ showLogo: s.showLogo });
+        if (typeof s.fixedHeader === 'boolean')
+          setHeader({ fixed: s.fixedHeader });
+        if (typeof s.showFooter === 'boolean')
+          setContent({ showFooter: s.showFooter });
+        if (typeof s.colorWeak === 'boolean')
+          setAccessibility({ colorWeak: s.colorWeak });
+      })
+      .catch(() => {
+        // silent
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // ── UI helpers ──────────────────────────────────────────
+
   /** 判断某个偏好字段是否被用户修改过 */
   const isModified = (key: string): boolean => {
     const parts = key.split('.');
@@ -89,6 +167,71 @@ const TabPreferences: React.FC = () => {
       已修改
     </Tag>
   );
+
+  // ── Handlers（本地更新 + 排队同步）──────────────────────
+
+  const handleThemeMode = (v: ThemeMode) => {
+    setThemeMode(v as ThemeModeWithoutSystem);
+    queueSync({ theme: v });
+  };
+
+  const handleLanguage = (v: string) => {
+    setLanguage(v);
+    queueSync({ language: v });
+  };
+
+  const handleSiderCollapsed = (v: boolean) => {
+    setSider({ collapsed: v });
+    queueSync({ sidebarCollapsed: v });
+  };
+
+  const handleHeaderFixed = (v: boolean) => {
+    setHeader({ fixed: v });
+    queueSync({ fixedHeader: v });
+  };
+
+  const handleShowLogo = (v: boolean) => {
+    setSider({ showLogo: v });
+    queueSync({ showLogo: v });
+  };
+
+  const handleSiderTheme = (v: boolean) => {
+    const mode = v ? 'dark' : 'light';
+    setSider({ theme: mode });
+    queueSync({ sidebarDark: v });
+  };
+
+  const handleShowBreadcrumb = (v: boolean) => {
+    setShowBreadcrumb(v);
+    queueSync({ showBreadcrumb: v });
+  };
+
+  const handlePageSize = (v: number) => {
+    setPageSize(v);
+    queueSync({ pageSize: v });
+  };
+
+  const handleShowFooter = (v: boolean) => {
+    setContent({ showFooter: v });
+    queueSync({ showFooter: v });
+  };
+
+  const handleColorWeak = (v: boolean) => {
+    setAccessibility({ colorWeak: v });
+    queueSync({ colorWeak: v });
+  };
+
+  const handleGrayMode = (v: boolean) => {
+    setAccessibility({ grayMode: v });
+    queueSync({ grayMode: v });
+  };
+
+  const handleReset = () => {
+    resetPreferences();
+    updateProfileSettings({}).catch(() => {
+      // silent
+    });
+  };
 
   return (
     <Row gutter={[16, 16]}>
@@ -122,7 +265,7 @@ const TabPreferences: React.FC = () => {
                 extra: (
                   <Select
                     value={themeMode}
-                    onChange={(v) => setThemeMode(v as ThemeModeWithoutSystem)}
+                    onChange={handleThemeMode}
                     style={{ width: 110 }}
                     options={Object.entries(THEME_MODE_LABELS).map(
                       ([value, label]) => ({ value, label }),
@@ -148,7 +291,7 @@ const TabPreferences: React.FC = () => {
                 extra: (
                   <Select
                     value={language}
-                    onChange={setLanguage}
+                    onChange={handleLanguage}
                     style={{ width: 110 }}
                     options={LANGUAGE_OPTIONS}
                   />
@@ -168,7 +311,7 @@ const TabPreferences: React.FC = () => {
                 extra: (
                   <Switch
                     checked={sider.collapsed}
-                    onChange={(v) => setSider({ collapsed: v })}
+                    onChange={handleSiderCollapsed}
                   />
                 ),
               },
@@ -181,10 +324,7 @@ const TabPreferences: React.FC = () => {
                   </>
                 ),
                 extra: (
-                  <Switch
-                    checked={header.fixed}
-                    onChange={(v) => setHeader({ fixed: v })}
-                  />
+                  <Switch checked={header.fixed} onChange={handleHeaderFixed} />
                 ),
               },
               {
@@ -196,10 +336,7 @@ const TabPreferences: React.FC = () => {
                   </>
                 ),
                 extra: (
-                  <Switch
-                    checked={sider.showLogo}
-                    onChange={(v) => setSider({ showLogo: v })}
-                  />
+                  <Switch checked={sider.showLogo} onChange={handleShowLogo} />
                 ),
               },
               {
@@ -213,7 +350,7 @@ const TabPreferences: React.FC = () => {
                 extra: (
                   <Switch
                     checked={sider.theme === 'dark'}
-                    onChange={(v) => setSider({ theme: v ? 'dark' : 'light' })}
+                    onChange={handleSiderTheme}
                   />
                 ),
               },
@@ -231,7 +368,7 @@ const TabPreferences: React.FC = () => {
                 extra: (
                   <Switch
                     checked={showBreadcrumb}
-                    onChange={setShowBreadcrumb}
+                    onChange={handleShowBreadcrumb}
                   />
                 ),
               },
@@ -279,7 +416,7 @@ const TabPreferences: React.FC = () => {
                 extra: (
                   <Select
                     value={pageSize}
-                    onChange={setPageSize}
+                    onChange={handlePageSize}
                     style={{ width: 110 }}
                     options={PAGE_SIZE_OPTIONS}
                   />
@@ -296,7 +433,7 @@ const TabPreferences: React.FC = () => {
                 extra: (
                   <Switch
                     checked={content.showFooter}
-                    onChange={(v) => setContent({ showFooter: v })}
+                    onChange={handleShowFooter}
                   />
                 ),
               },
@@ -311,7 +448,7 @@ const TabPreferences: React.FC = () => {
                 extra: (
                   <Switch
                     checked={accessibility.colorWeak}
-                    onChange={(v) => setAccessibility({ colorWeak: v })}
+                    onChange={handleColorWeak}
                   />
                 ),
               },
@@ -326,7 +463,7 @@ const TabPreferences: React.FC = () => {
                 extra: (
                   <Switch
                     checked={accessibility.grayMode}
-                    onChange={(v) => setAccessibility({ grayMode: v })}
+                    onChange={handleGrayMode}
                   />
                 ),
               },
@@ -380,7 +517,7 @@ const TabPreferences: React.FC = () => {
             <Popconfirm
               title="确认恢复默认设置？"
               description="所有偏好将重置为服务端默认值"
-              onConfirm={resetPreferences}
+              onConfirm={handleReset}
               okText="确认"
               cancelText="取消"
             >

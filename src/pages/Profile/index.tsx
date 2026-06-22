@@ -20,7 +20,7 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
-import type { ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import styles from './index.less';
 import { useProfilePageModel } from './model';
 import TabLoginLog from './TabLoginLog';
@@ -80,6 +80,7 @@ export default function ProfilePage() {
   const model = useProfilePageModel();
   const departmentName = model.profile?.department?.name || '未设置部门';
   const positionName = model.profile?.positions?.[0]?.name || '未设置岗位';
+  const [activeKey, setActiveKey] = useState('profile');
 
   const tabItems = TAB_META.map((item) => ({
     key: item.key,
@@ -89,7 +90,7 @@ export default function ProfilePage() {
         {item.label}
       </span>
     ),
-    children: item.children,
+    children: activeKey === item.key ? item.children : null,
   }));
 
   return (
@@ -184,8 +185,8 @@ export default function ProfilePage() {
                   <span>更新时间</span>
                   <Text type="secondary">
                     <ClockCircleOutlined />{' '}
-                    {model.profile?.updatedAt
-                      ? new Date(model.profile.updatedAt).toLocaleDateString()
+                    {model.updatedAt
+                      ? new Date(model.updatedAt).toLocaleDateString()
                       : '-'}
                   </Text>
                 </div>
@@ -224,7 +225,8 @@ export default function ProfilePage() {
           <Card className={styles.tabsCard}>
             <Tabs
               className={styles.responsiveTabs}
-              defaultActiveKey="profile"
+              activeKey={activeKey}
+              onChange={setActiveKey}
               items={tabItems}
             />
           </Card>

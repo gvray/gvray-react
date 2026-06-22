@@ -1,9 +1,13 @@
 import { resolveServerConfig } from '@/constants/settings';
-import { login, queryMenus } from '@/services/auth';
-import { getRuntimeConfig } from '@/services/config';
+import { login, queryMe, queryMenus } from '@/services/auth';
 import { getDictionaryItemsByTypeCodes } from '@/services/dictionary';
-import { queryProfile } from '@/services/profile';
-import { useAppStore, useAuthStore, useDictStore } from '@/stores';
+import { getRuntimeConfig } from '@/services/system';
+import {
+  normalizeMePreferences,
+  useAppStore,
+  useAuthStore,
+  useDictStore,
+} from '@/stores';
 import { decrypt, encrypt, logger, tokenManager } from '@/utils';
 import {
   AlipayCircleFilled,
@@ -46,14 +50,17 @@ const LoginPage: React.FC = () => {
     } catch (error) {
       logger.error(error);
     }
-    const [profileRes, menusRes] = await Promise.all([
-      queryProfile({ skipErrorHandler: true }).catch(() => undefined),
+    const [meRes, menusRes] = await Promise.all([
+      queryMe({ skipErrorHandler: true }).catch(() => undefined),
       queryMenus().catch(() => undefined),
     ]);
-    const profile = profileRes?.data;
+    const me = meRes?.data;
     const menus = menusRes?.data;
-    if (profile) {
-      useAuthStore.getState().setAuth(profile, menus);
+    if (me) {
+      useAuthStore.getState().setAuth(me, menus);
+      useAppStore
+        .getState()
+        .setMePreferences(normalizeMePreferences(me.preferences));
     }
     useAppStore.getState().setServerConfig(resolveServerConfig(runtimeConfig));
   };

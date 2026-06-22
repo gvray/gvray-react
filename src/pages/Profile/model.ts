@@ -1,6 +1,9 @@
 import { LOGIN_PATH } from '@/constants';
-import { queryLoginLogList } from '@/services/loginLog';
-import { changePassword, queryProfilePermissions } from '@/services/profile';
+import {
+  changePassword,
+  queryProfileLoginLogs,
+  queryProfilePermissions,
+} from '@/services/profile';
 import { useAuthStore, usePreferences } from '@/stores';
 import { logger, tokenManager } from '@/utils';
 import { FormInstance, message } from 'antd';
@@ -16,10 +19,7 @@ export type LoginLogDateRange = [Dayjs | null, Dayjs | null] | null;
 
 const DEFAULT_AVATAR = 'https://api.dicebear.com/9.x/bottts/svg?seed=GavinRay';
 
-const STATUS_MAP: Record<
-  API.CurrentUserResponseDto['status'],
-  { label: string; color: string }
-> = {
+const STATUS_MAP: Record<string, { label: string; color: string }> = {
   enabled: { label: '正常', color: 'green' },
   disabled: { label: '停用', color: 'default' },
   pending: { label: '待激活', color: 'gold' },
@@ -43,19 +43,33 @@ export function collectPermissionKeys(nodes: PermissionTreeNode[]): string[] {
 }
 
 export function useProfilePageModel() {
-  const profile = useAuthStore((s) => s.profile);
-  const statusMeta = getAccountStatusMeta(profile?.status);
+  const me = useAuthStore((s) => s.profile);
+  const meProfile = (me as any)?.profile;
+
+  const statusMeta = getAccountStatusMeta(me?.status);
 
   const completenessChecks = useMemo(
     () => [
-      { key: 'avatar', label: '头像', done: !!profile?.avatar },
-      { key: 'email', label: '邮箱', done: !!profile?.email },
-      { key: 'phone', label: '手机', done: !!profile?.phone },
-      { key: 'nickname', label: '昵称', done: !!profile?.nickname },
-      { key: 'department', label: '部门', done: !!profile?.department?.name },
-      { key: 'position', label: '岗位', done: !!profile?.positions?.[0]?.name },
+      {
+        key: 'avatar',
+        label: '头像',
+        done: !!meProfile?.avatar,
+      },
+      {
+        key: 'email',
+        label: '邮箱',
+        done: !!meProfile?.email,
+      },
+      {
+        key: 'phone',
+        label: '手机',
+        done: !!meProfile?.phone,
+      },
+      { key: 'nickname', label: '昵称', done: !!meProfile?.nickname },
+      { key: 'department', label: '部门', done: !!me?.department?.name },
+      { key: 'position', label: '岗位', done: !!me?.positions?.[0]?.name },
     ],
-    [profile],
+    [meProfile, me],
   );
 
   const doneCount = completenessChecks.filter((item) => item.done).length;
@@ -64,15 +78,17 @@ export function useProfilePageModel() {
   );
 
   return {
-    profile,
-    avatarSrc: profile?.avatar || DEFAULT_AVATAR,
-    displayName: profile?.nickname || profile?.username || '用户名',
+    me,
+    profile: me,
+    avatarSrc: (meProfile?.avatar as string) || DEFAULT_AVATAR,
+    displayName: meProfile?.nickname || me?.username || '用户名',
     accountStatusLabel: statusMeta.label,
     accountStatusColor: statusMeta.color,
-    isEnabled: profile?.status === 'enabled',
+    isEnabled: me?.status === 'enabled',
     completenessChecks,
     doneCount,
     completenessPercent,
+    updatedAt: me?.updatedAt,
   };
 }
 
@@ -226,7 +242,6 @@ export function useProfileLoginLogModel() {
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
   const [statusFilter, setStatusFilter] = useState<string | undefined>();
-  const [keyword, setKeyword] = useState('');
   const [dateRange, setDateRange] = useState<LoginLogDateRange>(null);
 
   const fetchData = useCallback(
@@ -239,13 +254,12 @@ export function useProfileLoginLogModel() {
           pageSize,
           ...overrides,
         };
-        if (statusFilter !== undefined) params.status = statusFilter;
-        if (keyword) params.account = keyword;
+        if (statusFilter !== undefined) (params as any).status = statusFilter;
         if (range?.[0])
           params.createdAtStart = dayjs(range[0]).format('YYYY-MM-DD');
         if (range?.[1])
           params.createdAtEnd = dayjs(range[1]).format('YYYY-MM-DD');
-        const res = await queryLoginLogList(params);
+        const res = await queryProfileLoginLogs(params);
         if (res?.data) {
           setData(res.data.items || []);
           setTotal(res.data.total || 0);
@@ -256,7 +270,7 @@ export function useProfileLoginLogModel() {
         setLoading(false);
       }
     },
-    [dateRange, keyword, page, pageSize, statusFilter],
+    [dateRange, page, pageSize, statusFilter],
   );
 
   useEffect(() => {
@@ -274,7 +288,6 @@ export function useProfileLoginLogModel() {
   };
 
   const handleReset = () => {
-    setKeyword('');
     setStatusFilter(undefined);
     setDateRange(null);
     setPage(1);
@@ -288,8 +301,6 @@ export function useProfileLoginLogModel() {
     pageSize,
     setPage,
     statusFilter,
-    keyword,
-    setKeyword,
     dateRange,
     setDateRange,
     fetchData,

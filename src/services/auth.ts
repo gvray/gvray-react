@@ -1,4 +1,4 @@
-import { request } from '@gvray/request';
+import { RuntimeControlFields, request } from '@gvray/request';
 
 /** 用户注册 */
 export function register(data: API.RegisterDto) {
@@ -37,6 +37,14 @@ export function login(data: API.LoginDto) {
 export function logout() {
   return request<API.Response<void>>('/auth/logout', {
     method: 'POST',
+  });
+}
+
+/** 获取当前用户身份信息（角色、权限码、部门、岗位） */
+export function queryMe(options?: RuntimeControlFields) {
+  return request<API.Response<API.CurrentUserResponseDto>>('/auth/me', {
+    method: 'GET',
+    ...options,
   });
 }
 

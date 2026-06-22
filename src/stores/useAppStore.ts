@@ -81,18 +81,79 @@ export function configToPreferences(config: ServerConfig): Preferences {
   };
 }
 
-// ─── resolve：userSettings ?? serverConfig ───────────────
+// ─── me.preferences → Partial<Preferences> 映射 ────────────
 
 /**
- * 两层优先级：userSettings > base（来自 serverConfig）
+ * 把 /auth/me 返回的扁平 preferences 映射为前端 Preferences 的 Partial 结构。
+ * 与 /profile/settings 共用同一套扁平 schema。
+ */
+export function normalizeMePreferences(
+  raw?: Record<string, unknown>,
+): Partial<Preferences> {
+  if (!raw) return {};
+  const result: Partial<Preferences> = {};
+
+  if (raw.theme) result.themeMode = raw.theme as ThemeMode;
+  if (raw.language) result.language = raw.language as string;
+  if (typeof raw.pageSize === 'number') result.pageSize = raw.pageSize;
+  if (typeof raw.showBreadcrumb === 'boolean')
+    result.showBreadcrumb = raw.showBreadcrumb;
+
+  if (
+    typeof raw.sidebarCollapsed === 'boolean' ||
+    typeof raw.sidebarDark === 'boolean' ||
+    typeof raw.showLogo === 'boolean'
+  ) {
+    result.sider = {
+      collapsed: false,
+      theme: 'light' as SiderTheme,
+      width: 220,
+      collapsedWidth: 64,
+      showLogo: true,
+    };
+    if (typeof raw.sidebarCollapsed === 'boolean')
+      result.sider.collapsed = raw.sidebarCollapsed;
+    if (typeof raw.sidebarDark === 'boolean')
+      result.sider.theme = raw.sidebarDark ? 'dark' : 'light';
+    if (typeof raw.showLogo === 'boolean') result.sider.showLogo = raw.showLogo;
+  }
+
+  if (typeof raw.fixedHeader === 'boolean') {
+    result.header = { fixed: raw.fixedHeader };
+  }
+
+  if (typeof raw.showFooter === 'boolean') {
+    result.content = {
+      showFooter: raw.showFooter,
+      footerText: '© 2026 G-ADMIN · Crafted with ❤️',
+    };
+  }
+
+  if (typeof raw.colorWeak === 'boolean' || typeof raw.grayMode === 'boolean') {
+    result.accessibility = { colorWeak: false, grayMode: false };
+    if (typeof raw.colorWeak === 'boolean')
+      result.accessibility.colorWeak = raw.colorWeak;
+    if (typeof raw.grayMode === 'boolean')
+      result.accessibility.grayMode = raw.grayMode;
+  }
+
+  return result;
+}
+
+// ─── resolve：userSettings > mePreferences > base ─────────
+
+/**
+ * 三层优先级：userSettings > mePreferences > base（来自 serverConfig）
  * 对象类型字段做浅合并，基本类型字段直接 ??。
  */
 export function resolvePreferences(
   userSettings: Partial<Preferences>,
+  mePreferences: Partial<Preferences> | undefined,
   base: Preferences,
 ): Preferences {
   const pick = <K extends keyof Preferences>(key: K): Preferences[K] => {
     const user = userSettings[key];
+    const me = mePreferences?.[key];
     const fallback = base[key];
 
     if (
@@ -100,9 +161,13 @@ export function resolvePreferences(
       fallback !== null &&
       !Array.isArray(fallback)
     ) {
-      return { ...(fallback as any), ...(user as any) };
+      // 对象类型浅合并：base <- me <- user
+      return { ...(fallback as any), ...(me as any), ...(user as any) };
     }
-    return user !== undefined ? user : fallback;
+    // 基本类型：user > me > fallback
+    if (user !== undefined) return user;
+    if (me !== undefined) return me;
+    return fallback;
   };
 
   return {
@@ -132,10 +197,19 @@ interface AppState {
    * 持久化到 localStorage。
    */
   userSettings: Partial<Preferences>;
+
+  /**
+   * ③ /auth/me 返回的用户偏好（中间层）。
+   * 不持久化，每次登录/刷新从 API 获取，覆盖 serverConfig。
+   */
+  mePreferences?: Partial<Preferences>;
 }
 
 interface AppActions {
   setServerConfig: (config: ServerConfig) => void;
+
+  /** 设置 me 返回的 preferences（中间优先级） */
+  setMePreferences: (prefs: Partial<Preferences>) => void;
 
   setThemeMode: (mode: ThemeMode) => void;
   setColorPrimary: (color: PrimaryColor) => void;
@@ -148,23 +222,31 @@ interface AppActions {
   setAccessibility: (patch: Partial<AccessibilityPrefs>) => void;
   toggleCollapsed: () => void;
 
-  /** 清空用户设置，回退到 serverConfig 基准值 */
+  /** 清空用户设置，回退到 mePreferences / serverConfig 基准值 */
   resetPreferences: () => void;
 }
 
 // ─── Store 实例 ──────────────────────────────────────────
+
+// const DEFAULT_PREFERENCES = configToPreferences(DEFAULT_SERVER_CONFIG);
 
 export const useAppStore = create<AppState & AppActions>()(
   persist(
     immer((set) => ({
       serverConfig: { ...DEFAULT_SERVER_CONFIG },
       userSettings: {},
+      mePreferences: undefined,
 
       // ── Actions ──
 
       setServerConfig: (config) =>
         set((s) => {
           s.serverConfig = config;
+        }),
+
+      setMePreferences: (prefs) =>
+        set((s) => {
+          s.mePreferences = prefs;
         }),
 
       setThemeMode: (mode) =>
@@ -196,6 +278,7 @@ export const useAppStore = create<AppState & AppActions>()(
         set((s) => {
           const current = resolvePreferences(
             s.userSettings,
+            s.mePreferences,
             configToPreferences(s.serverConfig),
           ).sider;
           s.userSettings.sider = { ...current, ...patch };
@@ -205,6 +288,7 @@ export const useAppStore = create<AppState & AppActions>()(
         set((s) => {
           const current = resolvePreferences(
             s.userSettings,
+            s.mePreferences,
             configToPreferences(s.serverConfig),
           ).header;
           s.userSettings.header = { ...current, ...patch };
@@ -214,6 +298,7 @@ export const useAppStore = create<AppState & AppActions>()(
         set((s) => {
           const current = resolvePreferences(
             s.userSettings,
+            s.mePreferences,
             configToPreferences(s.serverConfig),
           ).content;
           s.userSettings.content = { ...current, ...patch };
@@ -223,6 +308,7 @@ export const useAppStore = create<AppState & AppActions>()(
         set((s) => {
           const current = resolvePreferences(
             s.userSettings,
+            s.mePreferences,
             configToPreferences(s.serverConfig),
           ).accessibility;
           s.userSettings.accessibility = { ...current, ...patch };
@@ -232,6 +318,7 @@ export const useAppStore = create<AppState & AppActions>()(
         set((s) => {
           const current = resolvePreferences(
             s.userSettings,
+            s.mePreferences,
             configToPreferences(s.serverConfig),
           ).sider;
           s.userSettings.sider = { ...current, collapsed: !current.collapsed };
@@ -262,10 +349,16 @@ export const useAppStore = create<AppState & AppActions>()(
  */
 export function usePreferences(): Preferences {
   const userSettings = useAppStore((s) => s.userSettings);
+  const mePreferences = useAppStore((s) => s.mePreferences);
   const serverConfig = useAppStore((s) => s.serverConfig);
   return useMemo(
-    () => resolvePreferences(userSettings, configToPreferences(serverConfig)),
-    [userSettings, serverConfig],
+    () =>
+      resolvePreferences(
+        userSettings,
+        mePreferences,
+        configToPreferences(serverConfig),
+      ),
+    [userSettings, mePreferences, serverConfig],
   );
 }
 
@@ -273,6 +366,10 @@ export function usePreferences(): Preferences {
  * 非 React 上下文中获取 resolved 偏好（如 app.tsx 初始化）。
  */
 export function getPreferences(): Preferences {
-  const { userSettings, serverConfig } = useAppStore.getState();
-  return resolvePreferences(userSettings, configToPreferences(serverConfig));
+  const { userSettings, mePreferences, serverConfig } = useAppStore.getState();
+  return resolvePreferences(
+    userSettings,
+    mePreferences,
+    configToPreferences(serverConfig),
+  );
 }

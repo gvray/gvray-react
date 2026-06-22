@@ -40,21 +40,14 @@ export default {
     });
   },
 
-  'GET /api/profile': async (_req: Request, res: Response) => {
+  'GET /api/auth/me': async (_req: Request, res: Response) => {
     res.send({
       success: true,
       code: 200,
-      message: '获取当前用户信息',
+      message: '获取当前用户身份信息',
       data: {
         userId: '41a39361-ba24-4a9e-acbf-bc941914c03b',
         username: 'super_admin',
-        nickname: '超级管理员',
-        avatar: '',
-        email: 'super@example.com',
-        phone: '13900139000',
-        status: 'enabled',
-        createdAt: '2026-02-22T15:14:51.935Z',
-        updatedAt: '2026-03-01T13:58:20.485Z',
         isSuperAdmin: true,
         permissionCodes: ['*:*:*'],
         roles: [
@@ -63,21 +56,29 @@ export default {
             name: '超级管理员',
             roleKey: 'super_admin',
             description: '超级管理员角色，拥有所有权限，不允许删除、创建和修改',
-            rolePermissions: [],
+            permissions: [],
           },
         ],
         department: null,
+        positions: [],
         preferences: {
           theme: 'light',
+          primaryColor: '#1890ff',
+          colorWeak: false,
+          fixedHeader: false,
+          showLogo: true,
+          sidebarDark: false,
+          sidebarCollapsed: false,
+          uniqueOpened: true,
+          showBreadcrumb: true,
+          showFooter: true,
           language: 'zh-CN',
           pageSize: 20,
           timezone: 'Asia/Shanghai',
-          colorScheme: 'default',
-          showWatermark: true,
-          sidebarCollapsed: false,
           enableNotification: true,
         },
-        positions: [],
+        createdAt: '2026-02-22T15:14:51.935Z',
+        updatedAt: '2026-03-01T13:58:20.485Z',
       },
     });
   },
@@ -206,7 +207,7 @@ export default {
     });
   },
 
-  'GET /api/system/runtime-config': async (_req: Request, res: Response) => {
+  'GET /api/public/runtime-config': async (_req: Request, res: Response) => {
     res.send({
       success: true,
       code: 200,

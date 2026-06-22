@@ -3,7 +3,6 @@ import {
   Button,
   Card,
   DatePicker,
-  Input,
   Select,
   Space,
   Table,
@@ -87,15 +86,6 @@ const TabLoginLog: React.FC = () => {
   return (
     <Card className={styles.moduleCard} size="small" title="登录记录">
       <div className={styles.logFilters}>
-        <Input
-          placeholder="搜索账号"
-          prefix={<SearchOutlined />}
-          className={styles.logFilterControl}
-          allowClear
-          value={model.keyword}
-          onChange={(event) => model.setKeyword(event.target.value)}
-          onPressEnter={model.handleSearch}
-        />
         <Select
           placeholder="登录状态"
           className={styles.logStatusSelect}

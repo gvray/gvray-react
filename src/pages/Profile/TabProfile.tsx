@@ -1,3 +1,4 @@
+import { queryProfile } from '@/services/profile';
 import { useAuthStore } from '@/stores';
 import {
   CheckCircleFilled,
@@ -14,6 +15,7 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
+import { useEffect, useState } from 'react';
 import styles from './index.less';
 import { getAccountStatusMeta } from './model';
 
@@ -24,13 +26,27 @@ interface TabProfileProps {
 }
 
 const TabProfile: React.FC<TabProfileProps> = ({ profile }) => {
-  const storeProfile = useAuthStore((s) => s.profile);
-  const currentProfile = profile ?? storeProfile;
-  const statusMeta = getAccountStatusMeta(currentProfile?.status);
-  const emailBound = !!currentProfile?.email;
-  const phoneBound = !!currentProfile?.phone;
-  const maskedPhone = currentProfile?.phone
-    ? currentProfile.phone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2')
+  const me = useAuthStore((s) => s.profile);
+  const currentMe = profile ?? me;
+  const [userProfile, setUserProfile] = useState<API.ProfileResponseDto>();
+
+  useEffect(() => {
+    queryProfile()
+      .then((res) => {
+        if (res.data) setUserProfile(res.data);
+      })
+      .catch(() => {
+        // silent
+      });
+  }, []);
+
+  const statusMeta = getAccountStatusMeta(currentMe?.status);
+  const email = (userProfile?.email as unknown as string) || '';
+  const phone = (userProfile?.phone as unknown as string) || '';
+  const emailBound = !!email;
+  const phoneBound = !!phone;
+  const maskedPhone = phone
+    ? phone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2')
     : '';
 
   return (
@@ -62,20 +78,20 @@ const TabProfile: React.FC<TabProfileProps> = ({ profile }) => {
         >
           <Descriptions.Item label="用户名">
             <span className={styles.readonlyField}>
-              {currentProfile?.username || '-'} <LockOutlined />
+              {currentMe?.username || '-'} <LockOutlined />
             </span>
           </Descriptions.Item>
           <Descriptions.Item label="昵称">
-            {currentProfile?.nickname || '-'}
+            {userProfile?.nickname || '-'}
           </Descriptions.Item>
           <Descriptions.Item label="用户 ID" span={{ xs: 1, sm: 1, md: 2 }}>
             <Text copyable type="secondary">
-              {currentProfile?.userId || '-'}
+              {currentMe?.userId || '-'}
             </Text>
           </Descriptions.Item>
           <Descriptions.Item label="邮箱">
             <Space size={6}>
-              <span>{currentProfile?.email || '未绑定'}</span>
+              <span>{email || '未绑定'}</span>
               <Tooltip title={emailBound ? '已绑定' : '未绑定'}>
                 {emailBound ? (
                   <CheckCircleFilled className={styles.verifiedIcon} />
@@ -99,18 +115,17 @@ const TabProfile: React.FC<TabProfileProps> = ({ profile }) => {
           </Descriptions.Item>
           <Descriptions.Item label="部门">
             <span className={styles.readonlyField}>
-              {currentProfile?.department?.name || '未设置'} <LockOutlined />
+              {currentMe?.department?.name || '未设置'} <LockOutlined />
             </span>
           </Descriptions.Item>
           <Descriptions.Item label="岗位">
             <span className={styles.readonlyField}>
-              {currentProfile?.positions?.[0]?.name || '未设置'}{' '}
-              <LockOutlined />
+              {currentMe?.positions?.[0]?.name || '未设置'} <LockOutlined />
             </span>
           </Descriptions.Item>
           <Descriptions.Item label="角色" span={{ xs: 1, sm: 1, md: 2 }}>
             <Space size={4} wrap>
-              {currentProfile?.roles?.map((role) => (
+              {currentMe?.roles?.map((role: any) => (
                 <Tooltip
                   key={role.roleId}
                   title={String(role.description || role.name)}
@@ -119,7 +134,7 @@ const TabProfile: React.FC<TabProfileProps> = ({ profile }) => {
                   <Tag color="blue">{role.name}</Tag>
                 </Tooltip>
               ))}
-              {!currentProfile?.roles?.length && (
+              {!currentMe?.roles?.length && (
                 <Text type="secondary">暂无角色</Text>
               )}
             </Space>
@@ -129,16 +144,18 @@ const TabProfile: React.FC<TabProfileProps> = ({ profile }) => {
           </Descriptions.Item>
           <Descriptions.Item label="注册时间">
             <span className={styles.readonlyField}>
-              {currentProfile?.createdAt
-                ? new Date(currentProfile.createdAt).toLocaleString()
+              {(currentMe as any)?.createdAt
+                ? new Date((currentMe as any).createdAt).toLocaleString()
                 : '-'}{' '}
               <LockOutlined />
             </span>
           </Descriptions.Item>
           <Descriptions.Item label="更新时间">
             <span className={styles.readonlyField}>
-              {currentProfile?.updatedAt
-                ? new Date(currentProfile.updatedAt).toLocaleString()
+              {userProfile?.updatedAt
+                ? new Date(userProfile.updatedAt).toLocaleString()
+                : (currentMe as any)?.updatedAt
+                ? new Date((currentMe as any).updatedAt).toLocaleString()
                 : '-'}{' '}
               <LockOutlined />
             </span>

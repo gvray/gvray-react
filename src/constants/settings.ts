@@ -1,7 +1,7 @@
 /**
  * 服务端运行时配置
  *
- * 数据来源：GET /system/runtime-config（无需登录即可获取）
+ * 数据来源：GET /runtime-config（无需登录即可获取）
  * 运营 / 管理员在后台配置的全局参数，前端只读、不持久化。
  */
 
@@ -109,104 +109,87 @@ export const DEFAULT_SERVER_CONFIG: ServerConfig = {
 
 // ─── 解析函数 ───────────────────────────────────────────
 
-const str = (v: unknown, fallback: string): string =>
-  typeof v === 'string' && v ? v : fallback;
-const bool = (v: unknown, fallback: boolean): boolean =>
-  typeof v === 'boolean' ? v : fallback;
-const num = (v: unknown, fallback: number): number =>
-  typeof v === 'number' ? v : fallback;
+const pick = <T extends string | boolean | number>(
+  val: unknown,
+  fallback: T,
+): T => {
+  if (typeof val === typeof fallback && val !== undefined) return val as T;
+  return fallback;
+};
 
 /**
  * 从 runtime-config 的 data 中安全提取 ServerConfig，缺失字段用默认值兜底。
  */
 export function resolveServerConfig(raw?: Record<string, any>): ServerConfig {
-  if (!raw) return { ...DEFAULT_SERVER_CONFIG };
+  const d = DEFAULT_SERVER_CONFIG;
+  if (!raw) return { ...d };
 
-  const defaults = DEFAULT_SERVER_CONFIG;
-  const system = raw.system ?? {};
-  const env = raw.env ?? {};
-  const uiDefaults = raw.uiDefaults ?? {};
-  const securityPolicy = raw.securityPolicy ?? {};
-  const feature = raw.feature ?? {};
-  const capabilities = raw.capabilities ?? {};
+  const s = raw.system ?? {};
+  const e = raw.env ?? {};
+  const u = raw.uiDefaults ?? {};
+  const sp = raw.securityPolicy ?? {};
+  const f = raw.feature ?? {};
+  const c = raw.capabilities ?? {};
 
   return {
     system: {
-      name: str(system.name, defaults.system.name),
-      description: str(system.description, defaults.system.description),
-      logo: str(system.logo, defaults.system.logo),
-      favicon: str(system.favicon, defaults.system.favicon),
-      defaultAvatar: str(system.defaultAvatar, defaults.system.defaultAvatar),
+      name: pick(s.name, d.system.name),
+      description: pick(s.description, d.system.description),
+      logo: pick(s.logo, d.system.logo),
+      favicon: pick(s.favicon, d.system.favicon),
+      defaultAvatar: pick(s.defaultAvatar, d.system.defaultAvatar),
     },
     env: {
-      mode: str(env.mode, defaults.env.mode),
-      apiPrefix: str(env.apiPrefix, defaults.env.apiPrefix),
+      mode: pick(e.mode, d.env.mode),
+      apiPrefix: pick(e.apiPrefix, d.env.apiPrefix),
     },
     uiDefaults: {
-      theme: str(uiDefaults.theme, defaults.uiDefaults.theme),
-      language: str(uiDefaults.language, defaults.uiDefaults.language),
-      timezone: str(uiDefaults.timezone, defaults.uiDefaults.timezone),
-      sidebarCollapsed: bool(
-        uiDefaults.sidebarCollapsed,
-        defaults.uiDefaults.sidebarCollapsed,
-      ),
-      pageSize: num(uiDefaults.pageSize, defaults.uiDefaults.pageSize),
-      welcomeMessage: str(
-        uiDefaults.welcomeMessage,
-        defaults.uiDefaults.welcomeMessage,
-      ),
-      showBreadcrumb: bool(
-        uiDefaults.showBreadcrumb,
-        defaults.uiDefaults.showBreadcrumb,
-      ),
+      theme: pick(u.theme, d.uiDefaults.theme),
+      language: pick(u.language, d.uiDefaults.language),
+      timezone: pick(u.timezone, d.uiDefaults.timezone),
+      sidebarCollapsed: pick(u.sidebarCollapsed, d.uiDefaults.sidebarCollapsed),
+      pageSize: pick(u.pageSize, d.uiDefaults.pageSize),
+      welcomeMessage: pick(u.welcomeMessage, d.uiDefaults.welcomeMessage),
+      showBreadcrumb: pick(u.showBreadcrumb, d.uiDefaults.showBreadcrumb),
     },
     securityPolicy: {
-      watermarkEnabled: bool(
-        securityPolicy.watermarkEnabled,
-        defaults.securityPolicy.watermarkEnabled,
+      watermarkEnabled: pick(
+        sp.watermarkEnabled,
+        d.securityPolicy.watermarkEnabled,
       ),
-      passwordMinLength: num(
-        securityPolicy.passwordMinLength,
-        defaults.securityPolicy.passwordMinLength,
+      passwordMinLength: pick(
+        sp.passwordMinLength,
+        d.securityPolicy.passwordMinLength,
       ),
-      passwordRequireComplexity: bool(
-        securityPolicy.passwordRequireComplexity,
-        defaults.securityPolicy.passwordRequireComplexity,
+      passwordRequireComplexity: pick(
+        sp.passwordRequireComplexity,
+        d.securityPolicy.passwordRequireComplexity,
       ),
-      loginFailureLockCount: num(
-        securityPolicy.loginFailureLockCount,
-        defaults.securityPolicy.loginFailureLockCount,
+      loginFailureLockCount: pick(
+        sp.loginFailureLockCount,
+        d.securityPolicy.loginFailureLockCount,
       ),
     },
     feature: {
-      register: bool(feature.register, defaults.feature.register),
-      fileUploadMaxSize: num(
-        feature.fileUploadMaxSize,
-        defaults.feature.fileUploadMaxSize,
+      register: pick(f.register, d.feature.register),
+      fileUploadMaxSize: pick(f.fileUploadMaxSize, d.feature.fileUploadMaxSize),
+      fileUploadAllowedTypes: pick(
+        f.fileUploadAllowedTypes,
+        d.feature.fileUploadAllowedTypes,
       ),
-      fileUploadAllowedTypes: str(
-        feature.fileUploadAllowedTypes,
-        defaults.feature.fileUploadAllowedTypes,
-      ),
-      ossEnabled: bool(feature.ossEnabled, defaults.feature.ossEnabled),
-      emailEnabled: bool(feature.emailEnabled, defaults.feature.emailEnabled),
-      oauthGithubEnabled: bool(
-        feature.oauthGithubEnabled,
-        defaults.feature.oauthGithubEnabled,
+      ossEnabled: pick(f.ossEnabled, d.feature.ossEnabled),
+      emailEnabled: pick(f.emailEnabled, d.feature.emailEnabled),
+      oauthGithubEnabled: pick(
+        f.oauthGithubEnabled,
+        d.feature.oauthGithubEnabled,
       ),
     },
     capabilities: {
-      totalUsers: num(
-        capabilities.totalUsers,
-        defaults.capabilities.totalUsers,
-      ),
-      totalRoles: num(
-        capabilities.totalRoles,
-        defaults.capabilities.totalRoles,
-      ),
-      totalPermissions: num(
-        capabilities.totalPermissions,
-        defaults.capabilities.totalPermissions,
+      totalUsers: pick(c.totalUsers, d.capabilities.totalUsers),
+      totalRoles: pick(c.totalRoles, d.capabilities.totalRoles),
+      totalPermissions: pick(
+        c.totalPermissions,
+        d.capabilities.totalPermissions,
       ),
     },
   };
