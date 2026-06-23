@@ -1,6 +1,7 @@
 import AntIcon from '@/components/AntIcon';
-import { useAppStore, useAuthStore } from '@/stores';
-import type { SiderTheme } from '@/stores/useAppStore';
+import { useAuthStore, useSettingStore } from '@/stores';
+import type { SiderTheme } from '@/types/settings';
+import { runtimeConfig } from '@/utils/runtime-config';
 import { AppstoreOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { ConfigProvider, Layout, Menu, Skeleton } from 'antd';
@@ -60,8 +61,8 @@ const SideNav: React.FC<SideNavProps> = ({
   showLogo = true,
 }) => {
   const menus = useAuthStore((s) => s.menus);
-  const siteName = useAppStore((s) => s.serverConfig.system.name);
-  const toggleCollapsed = useAppStore((s) => s.toggleCollapsed);
+  const siteName = runtimeConfig.get().system.name;
+  const toggleCollapsed = useSettingStore((s) => s.toggleCollapsed);
 
   const location = useLocation();
 

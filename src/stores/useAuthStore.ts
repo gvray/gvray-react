@@ -5,8 +5,6 @@ export interface AuthStore {
   profile: API.CurrentUserResponseDto | undefined;
   menus: API.MenuResponseDto[] | undefined;
 
-  /** 是否已登录 */
-  isLogin: boolean;
   /** 权限代码列表 */
   permissions: string[];
 
@@ -25,31 +23,27 @@ export const useAuthStore = create(
   immer<AuthStore>((set) => ({
     profile: undefined,
     menus: undefined,
-    isLogin: false,
     permissions: [],
 
     setProfile: (profile) =>
       set((state) => {
-        state.profile = profile as any;
-        state.isLogin = !!profile;
+        state.profile = profile;
         state.permissions = profile?.permissionCodes || [];
       }),
     setMenus: (menus) =>
       set((state) => {
-        state.menus = menus as any;
+        state.menus = menus;
       }),
     setAuth: (profile, menus) =>
       set((state) => {
-        state.profile = profile as any;
-        state.menus = menus as any;
-        state.isLogin = true;
+        state.profile = profile;
+        state.menus = menus;
         state.permissions = profile?.permissionCodes || [];
       }),
     clearAuth: () =>
       set((state) => {
         state.profile = undefined;
         state.menus = undefined;
-        state.isLogin = false;
         state.permissions = [];
       }),
   })),

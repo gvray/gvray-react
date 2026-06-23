@@ -4,7 +4,7 @@ import {
   queryProfileLoginLogs,
   queryProfilePermissions,
 } from '@/services/profile';
-import { useAuthStore, usePreferences } from '@/stores';
+import { useAuthStore, useSettingStore } from '@/stores';
 import { logger, tokenManager } from '@/utils';
 import { FormInstance, message } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
@@ -27,7 +27,7 @@ const STATUS_MAP: Record<string, { label: string; color: string }> = {
 };
 
 export function getAccountStatusMeta(
-  status?: API.CurrentUserResponseDto['status'],
+  status?: API.CurrentUserProfileDto['status'],
 ) {
   return status ? STATUS_MAP[status] : { label: '未知', color: 'default' };
 }
@@ -46,7 +46,7 @@ export function useProfilePageModel() {
   const me = useAuthStore((s) => s.profile);
   const meProfile = (me as any)?.profile;
 
-  const statusMeta = getAccountStatusMeta(me?.status);
+  const statusMeta = getAccountStatusMeta(me?.profile?.status);
 
   const completenessChecks = useMemo(
     () => [
@@ -84,11 +84,11 @@ export function useProfilePageModel() {
     displayName: meProfile?.nickname || me?.username || '用户名',
     accountStatusLabel: statusMeta.label,
     accountStatusColor: statusMeta.color,
-    isEnabled: me?.status === 'enabled',
+    isEnabled: me?.profile?.status === 'enabled',
     completenessChecks,
     doneCount,
     completenessPercent,
-    updatedAt: me?.updatedAt,
+    updatedAt: undefined,
   };
 }
 
@@ -236,7 +236,7 @@ const INITIAL_NOTIFICATIONS: NotifItem[] = [
 ];
 
 export function useProfileLoginLogModel() {
-  const { pageSize } = usePreferences();
+  const { pageSize } = useSettingStore();
   const [data, setData] = useState<API.LoginLogResponseDto[]>([]);
   const [loading, setLoading] = useState(false);
   const [total, setTotal] = useState(0);

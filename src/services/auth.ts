@@ -49,9 +49,10 @@ export function queryMe(options?: RuntimeControlFields) {
 }
 
 /** 获取当前用户菜单树 */
-export function queryMenus() {
+export function queryMenus(options?: RuntimeControlFields) {
   return request<API.Response<API.MenuResponseDto[]>>('/auth/menus', {
     method: 'GET',
+    ...options,
   });
 }
 

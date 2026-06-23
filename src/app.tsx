@@ -1,14 +1,10 @@
 import { LOGIN_PATH } from '@/constants';
-import { resolveServerConfig } from '@/constants/settings';
+import { uiToPreferences } from '@/constants/settings';
 import { queryMe, queryMenus } from '@/services/auth';
 import { getDictionaryItemsByTypeCodes } from '@/services/dictionary';
 import { getRuntimeConfig } from '@/services/system';
-import {
-  normalizeMePreferences,
-  useAppStore,
-  useAuthStore,
-  useDictStore,
-} from '@/stores';
+import { useAuthStore, useDictStore, useSettingStore } from '@/stores';
+import { runtimeConfig } from '@/utils/runtime-config';
 import { history, matchRoutes } from 'umi';
 import { logger, redirectToLogin, tokenManager } from './utils';
 
@@ -21,14 +17,15 @@ import { logger, redirectToLogin, tokenManager } from './utils';
  * @see  https://umijs.org/zh-CN/plugins/plugin-initial-state
  */
 export async function getInitialState() {
-  let runtimeConfig: Record<string, unknown> | undefined;
+  let runtimeConfigData: Record<string, unknown> | undefined;
   let me: API.CurrentUserResponseDto | undefined;
   let menus: API.MenuResponseDto[] | undefined;
 
   // 获取运行时配置（无需登录）
   try {
     const res = await getRuntimeConfig();
-    runtimeConfig = res.data;
+    runtimeConfigData = res.data;
+    runtimeConfig.set(runtimeConfigData);
   } catch (error) {
     logger.error(error);
   }
@@ -38,7 +35,7 @@ export async function getInitialState() {
     try {
       const [meRes, menusRes] = await Promise.all([
         queryMe({ skipErrorHandler: true }),
-        queryMenus(),
+        queryMenus({ skipErrorHandler: true }),
       ]);
       me = meRes.data;
       menus = menusRes.data;
@@ -52,24 +49,27 @@ export async function getInitialState() {
     }
   }
 
-  // 服务端配置 → AppStore
-  useAppStore.getState().setServerConfig(resolveServerConfig(runtimeConfig));
+  // 初始化 preferences：runtime.ui → me.preferences
+  useSettingStore.setState({
+    ...uiToPreferences(runtimeConfig.get().ui),
+    ...(me?.preferences || {}),
+  });
 
-  // 认证数据 → 分发到 AuthStore
+  // 认证数据 → AuthStore
   if (me) {
     useAuthStore.getState().setAuth(me, menus);
-    useAppStore
-      .getState()
-      .setMePreferences(normalizeMePreferences(me.preferences));
   }
 
   // 已登录时预加载常用字典到全局缓存
   if (tokenManager.isAuthenticated()) {
     try {
       if (!useDictStore.getState().getDict('common_status')) {
-        const dictRes = await getDictionaryItemsByTypeCodes({
-          typeCodes: 'common_status',
-        });
+        const dictRes = await getDictionaryItemsByTypeCodes(
+          {
+            typeCodes: 'common_status',
+          },
+          { skipErrorHandler: true },
+        );
         if (dictRes.data?.common_status) {
           useDictStore
             .getState()

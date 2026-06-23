@@ -1,6 +1,6 @@
 import { useFeedback } from '@/hooks';
 import { logout } from '@/services/auth';
-import { useAuthStore, usePreferences } from '@/stores';
+import { useAuthStore, useSettingStore } from '@/stores';
 import { logger, tokenManager } from '@/utils';
 import { Dropdown, MenuProps } from 'antd';
 import { history } from 'umi';
@@ -8,7 +8,7 @@ import { UserAvatar } from './styles';
 
 const UserDropdown = () => {
   const { profile, clearAuth } = useAuthStore();
-  const { colorPrimary } = usePreferences();
+  const { colorPrimary } = useSettingStore();
   const { message } = useFeedback();
 
   const handleLogout = async () => {

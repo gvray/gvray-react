@@ -7,7 +7,8 @@ import {
   queryProfileSettings,
   updateProfileSettings,
 } from '@/services/profile';
-import { useAppStore, usePreferences } from '@/stores';
+import { useSettingStore } from '@/stores';
+import { runtimeConfig } from '@/utils/runtime-config';
 import {
   LayoutOutlined,
   ReloadOutlined,
@@ -19,12 +20,12 @@ import {
   Button,
   Card,
   Col,
+  Input,
   List,
   Popconfirm,
   Row,
   Select,
   Switch,
-  Tag,
   Typography,
 } from 'antd';
 import { useCallback, useEffect, useRef } from 'react';
@@ -45,31 +46,39 @@ const PAGE_SIZE_OPTIONS = [
 
 const TabPreferences: React.FC = () => {
   const {
-    serverConfig,
-    userSettings,
-    setThemeMode,
+    setTheme,
     setLanguage,
     setPageSize,
     setShowBreadcrumb,
-    setSider,
-    setHeader,
-    setContent,
-    setAccessibility,
-    resetPreferences,
-  } = useAppStore();
+    setCollapsed,
+    setSidebarTheme,
+    setShowLogo,
+    setFixedHeader,
+    setShowFooter,
+    setColorWeak,
+    setUniqueOpened,
+    setTimezone,
+    setEnableNotification,
+    reset,
+  } = useSettingStore();
 
   const {
-    themeMode,
+    theme,
     language,
     pageSize,
     showBreadcrumb,
-    sider,
-    header,
-    content,
-    accessibility,
-  } = usePreferences();
+    collapsed,
+    sidebarTheme,
+    showLogo,
+    fixedHeader,
+    showFooter,
+    colorWeak,
+    uniqueOpened,
+    timezone,
+    enableNotification,
+  } = useSettingStore();
 
-  const uiDefaults = serverConfig.uiDefaults;
+  const serverConfig = runtimeConfig.get();
 
   // ── 服务端同步 ──────────────────────────────────────────
 
@@ -117,23 +126,7 @@ const TabPreferences: React.FC = () => {
     queryProfileSettings()
       .then((res) => {
         if (!res.data) return;
-        const s = res.data as Record<string, unknown>;
-        if (s.theme) setThemeMode(s.theme as ThemeModeWithoutSystem);
-        if (s.language) setLanguage(s.language as string);
-        if (typeof s.pageSize === 'number') setPageSize(s.pageSize);
-        if (typeof s.showBreadcrumb === 'boolean')
-          setShowBreadcrumb(s.showBreadcrumb);
-        if (typeof s.sidebarCollapsed === 'boolean')
-          setSider({ collapsed: s.sidebarCollapsed });
-        if (typeof s.sidebarDark === 'boolean')
-          setSider({ theme: s.sidebarDark ? 'dark' : 'light' });
-        if (typeof s.showLogo === 'boolean') setSider({ showLogo: s.showLogo });
-        if (typeof s.fixedHeader === 'boolean')
-          setHeader({ fixed: s.fixedHeader });
-        if (typeof s.showFooter === 'boolean')
-          setContent({ showFooter: s.showFooter });
-        if (typeof s.colorWeak === 'boolean')
-          setAccessibility({ colorWeak: s.colorWeak });
+        useSettingStore.getState().patchSettings(res.data as any);
       })
       .catch(() => {
         // silent
@@ -141,38 +134,11 @@ const TabPreferences: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // ── UI helpers ──────────────────────────────────────────
-
-  /** 判断某个偏好字段是否被用户修改过 */
-  const isModified = (key: string): boolean => {
-    const parts = key.split('.');
-    let val: any = userSettings;
-    for (const p of parts) {
-      if (val === null || val === undefined) return false;
-      val = val[p];
-    }
-    return val !== undefined;
-  };
-
-  /** 服务端默认值标签 */
-  const ServerDefault: React.FC<{ label: string }> = ({ label }) => (
-    <Tag color="blue" style={{ fontSize: 11, marginLeft: 6 }}>
-      默认: {label}
-    </Tag>
-  );
-
-  /** 用户已修改标签 */
-  const ModifiedTag: React.FC = () => (
-    <Tag color="orange" style={{ fontSize: 11, marginLeft: 6 }}>
-      已修改
-    </Tag>
-  );
-
   // ── Handlers（本地更新 + 排队同步）──────────────────────
 
   const handleThemeMode = (v: ThemeMode) => {
-    setThemeMode(v as ThemeModeWithoutSystem);
-    queueSync({ theme: v });
+    setTheme(v as ThemeModeWithoutSystem);
+    queueSync({ theme: v === 'system' ? 'auto' : v });
   };
 
   const handleLanguage = (v: string) => {
@@ -181,23 +147,23 @@ const TabPreferences: React.FC = () => {
   };
 
   const handleSiderCollapsed = (v: boolean) => {
-    setSider({ collapsed: v });
+    setCollapsed(v);
     queueSync({ sidebarCollapsed: v });
   };
 
   const handleHeaderFixed = (v: boolean) => {
-    setHeader({ fixed: v });
+    setFixedHeader(v);
     queueSync({ fixedHeader: v });
   };
 
   const handleShowLogo = (v: boolean) => {
-    setSider({ showLogo: v });
+    setShowLogo(v);
     queueSync({ showLogo: v });
   };
 
   const handleSiderTheme = (v: boolean) => {
     const mode = v ? 'dark' : 'light';
-    setSider({ theme: mode });
+    setSidebarTheme(mode);
     queueSync({ sidebarDark: v });
   };
 
@@ -212,22 +178,32 @@ const TabPreferences: React.FC = () => {
   };
 
   const handleShowFooter = (v: boolean) => {
-    setContent({ showFooter: v });
+    setShowFooter(v);
     queueSync({ showFooter: v });
   };
 
   const handleColorWeak = (v: boolean) => {
-    setAccessibility({ colorWeak: v });
+    setColorWeak(v);
     queueSync({ colorWeak: v });
   };
 
-  const handleGrayMode = (v: boolean) => {
-    setAccessibility({ grayMode: v });
-    queueSync({ grayMode: v });
+  const handleUniqueOpened = (v: boolean) => {
+    setUniqueOpened(v);
+    queueSync({ uniqueOpened: v });
+  };
+
+  const handleTimezone = (v: string) => {
+    setTimezone(v);
+    queueSync({ timezone: v });
+  };
+
+  const handleEnableNotification = (v: boolean) => {
+    setEnableNotification(v);
+    queueSync({ enableNotification: v });
   };
 
   const handleReset = () => {
-    resetPreferences();
+    reset();
     updateProfileSettings({}).catch(() => {
       // silent
     });
@@ -250,21 +226,10 @@ const TabPreferences: React.FC = () => {
             dataSource={[
               {
                 title: '主题模式',
-                desc: (
-                  <>
-                    切换浅色 / 深色主题
-                    <ServerDefault
-                      label={
-                        THEME_MODE_LABELS[uiDefaults.theme as ThemeMode] ||
-                        uiDefaults.theme
-                      }
-                    />
-                    {isModified('themeMode') && <ModifiedTag />}
-                  </>
-                ),
+                desc: '切换浅色 / 深色主题',
                 extra: (
                   <Select
-                    value={themeMode}
+                    value={theme}
                     onChange={handleThemeMode}
                     style={{ width: 110 }}
                     options={Object.entries(THEME_MODE_LABELS).map(
@@ -275,19 +240,7 @@ const TabPreferences: React.FC = () => {
               },
               {
                 title: '语言',
-                desc: (
-                  <>
-                    界面显示语言
-                    <ServerDefault
-                      label={
-                        LANGUAGE_OPTIONS.find(
-                          (o) => o.value === uiDefaults.language,
-                        )?.label || uiDefaults.language
-                      }
-                    />
-                    {isModified('language') && <ModifiedTag />}
-                  </>
-                ),
+                desc: '界面显示语言',
                 extra: (
                   <Select
                     value={language}
@@ -299,72 +252,36 @@ const TabPreferences: React.FC = () => {
               },
               {
                 title: '侧边栏折叠',
-                desc: (
-                  <>
-                    默认折叠侧边导航
-                    <ServerDefault
-                      label={uiDefaults.sidebarCollapsed ? '折叠' : '展开'}
-                    />
-                    {isModified('sider.collapsed') && <ModifiedTag />}
-                  </>
-                ),
+                desc: '默认折叠侧边导航',
                 extra: (
-                  <Switch
-                    checked={sider.collapsed}
-                    onChange={handleSiderCollapsed}
-                  />
+                  <Switch checked={collapsed} onChange={handleSiderCollapsed} />
                 ),
               },
               {
                 title: '固定顶栏',
-                desc: (
-                  <>
-                    页面滚动时固定头部
-                    {isModified('header.fixed') && <ModifiedTag />}
-                  </>
-                ),
+                desc: '页面滚动时固定头部',
                 extra: (
-                  <Switch checked={header.fixed} onChange={handleHeaderFixed} />
+                  <Switch checked={fixedHeader} onChange={handleHeaderFixed} />
                 ),
               },
               {
                 title: '显示 Logo',
-                desc: (
-                  <>
-                    侧边栏顶部显示 Logo
-                    {isModified('sider.showLogo') && <ModifiedTag />}
-                  </>
-                ),
-                extra: (
-                  <Switch checked={sider.showLogo} onChange={handleShowLogo} />
-                ),
+                desc: '侧边栏顶部显示 Logo',
+                extra: <Switch checked={showLogo} onChange={handleShowLogo} />,
               },
               {
                 title: '侧边栏深色',
-                desc: (
-                  <>
-                    侧边导航栏深浅主题
-                    {isModified('sider.theme') && <ModifiedTag />}
-                  </>
-                ),
+                desc: '侧边导航栏深浅主题',
                 extra: (
                   <Switch
-                    checked={sider.theme === 'dark'}
+                    checked={sidebarTheme === 'dark'}
                     onChange={handleSiderTheme}
                   />
                 ),
               },
               {
                 title: '显示面包屑',
-                desc: (
-                  <>
-                    页面顶部导航路径
-                    <ServerDefault
-                      label={uiDefaults.showBreadcrumb ? '显示' : '隐藏'}
-                    />
-                    {isModified('showBreadcrumb') && <ModifiedTag />}
-                  </>
-                ),
+                desc: '页面顶部导航路径',
                 extra: (
                   <Switch
                     checked={showBreadcrumb}
@@ -406,13 +323,7 @@ const TabPreferences: React.FC = () => {
             dataSource={[
               {
                 title: '默认分页数',
-                desc: (
-                  <>
-                    每页显示条数
-                    <ServerDefault label={`${uiDefaults.pageSize} 条/页`} />
-                    {isModified('pageSize') && <ModifiedTag />}
-                  </>
-                ),
+                desc: '每页显示条数',
                 extra: (
                   <Select
                     value={pageSize}
@@ -424,46 +335,47 @@ const TabPreferences: React.FC = () => {
               },
               {
                 title: '显示页脚',
-                desc: (
-                  <>
-                    页面底部版权信息
-                    {isModified('content.showFooter') && <ModifiedTag />}
-                  </>
-                ),
+                desc: '页面底部版权信息',
                 extra: (
-                  <Switch
-                    checked={content.showFooter}
-                    onChange={handleShowFooter}
-                  />
+                  <Switch checked={showFooter} onChange={handleShowFooter} />
                 ),
               },
               {
                 title: '色弱模式',
-                desc: (
-                  <>
-                    适配色弱用户的配色方案
-                    {isModified('accessibility.colorWeak') && <ModifiedTag />}
-                  </>
+                desc: '适配色弱用户的配色方案',
+                extra: (
+                  <Switch checked={colorWeak} onChange={handleColorWeak} />
                 ),
+              },
+              {
+                title: '侧边栏独占展开',
+                desc: '侧边栏只展开一个子菜单',
                 extra: (
                   <Switch
-                    checked={accessibility.colorWeak}
-                    onChange={handleColorWeak}
+                    checked={uniqueOpened}
+                    onChange={handleUniqueOpened}
                   />
                 ),
               },
               {
-                title: '灰色模式',
-                desc: (
-                  <>
-                    全站灰色（特殊纪念日）
-                    {isModified('accessibility.grayMode') && <ModifiedTag />}
-                  </>
+                title: '时区',
+                desc: '日期时间显示时区',
+                extra: (
+                  <Input
+                    value={timezone}
+                    onChange={(e) => handleTimezone(e.target.value)}
+                    placeholder="如 Asia/Shanghai"
+                    style={{ width: 160 }}
+                  />
                 ),
+              },
+              {
+                title: '启用通知',
+                desc: '接收系统通知消息',
                 extra: (
                   <Switch
-                    checked={accessibility.grayMode}
-                    onChange={handleGrayMode}
+                    checked={enableNotification}
+                    onChange={handleEnableNotification}
                   />
                 ),
               },
@@ -505,13 +417,13 @@ const TabPreferences: React.FC = () => {
               将所有偏好设置恢复为服务端下发的默认值（{serverConfig.system.name}
               ）。 此操作不可撤销。
             </Text>
-            {uiDefaults.welcomeMessage && (
+            {serverConfig.system.welcomeMessage && (
               <Text
                 type="secondary"
                 italic
                 style={{ display: 'block', marginBottom: 16, fontSize: 12 }}
               >
-                {uiDefaults.welcomeMessage}
+                {serverConfig.system.welcomeMessage}
               </Text>
             )}
             <Popconfirm

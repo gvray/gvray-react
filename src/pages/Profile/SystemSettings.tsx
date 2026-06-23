@@ -1,5 +1,5 @@
 import { THEME_MODE_LABELS, ThemeModeWithoutSystem } from '@/constants';
-import { useAppStore, usePreferences } from '@/stores';
+import { useSettingStore } from '@/stores';
 import { BellOutlined, SettingOutlined } from '@ant-design/icons';
 import { Card, Col, List, Row, Select, Switch } from 'antd';
 import { useState } from 'react';
@@ -12,10 +12,10 @@ const SystemSettings = () => {
     push: true,
   });
 
-  const { themeMode } = usePreferences();
-  const setThemeMode = useAppStore((s) => s.setThemeMode);
+  const { theme } = useSettingStore();
+  const setTheme = useSettingStore((s) => s.setTheme);
   const handleThemeModeChange = (value: string) => {
-    setThemeMode(value as ThemeModeWithoutSystem);
+    setTheme(value as ThemeModeWithoutSystem);
   };
 
   return (
@@ -69,7 +69,7 @@ const SystemSettings = () => {
                 desc: '修改算法生成主题',
                 extra: (
                   <Select
-                    value={themeMode}
+                    value={theme}
                     onChange={handleThemeModeChange}
                     style={{ width: 120 }}
                     options={Object.entries(THEME_MODE_LABELS).map(

@@ -1,14 +1,10 @@
-import { resolveServerConfig } from '@/constants/settings';
+import { uiToPreferences } from '@/constants/settings';
 import { login, queryMe, queryMenus } from '@/services/auth';
 import { getDictionaryItemsByTypeCodes } from '@/services/dictionary';
 import { getRuntimeConfig } from '@/services/system';
-import {
-  normalizeMePreferences,
-  useAppStore,
-  useAuthStore,
-  useDictStore,
-} from '@/stores';
+import { useAuthStore, useDictStore, useSettingStore } from '@/stores';
 import { decrypt, encrypt, logger, tokenManager } from '@/utils';
+import { runtimeConfig } from '@/utils/runtime-config';
 import {
   AlipayCircleFilled,
   GithubFilled,
@@ -33,8 +29,9 @@ const formItemLayout = {
 };
 
 const LoginPage: React.FC = () => {
-  const siteName = useAppStore((s) => s.serverConfig.system.name);
-  const registerEnabled = useAppStore((s) => s.serverConfig.feature.register);
+  const { system, feature } = runtimeConfig.get();
+  const siteName = system.name;
+  const registerEnabled = feature.register;
   const [isLogging, setLogging] = useState(false);
 
   const [form] = Form.useForm();
@@ -43,10 +40,10 @@ const LoginPage: React.FC = () => {
   const navigate = useNavigate();
 
   const loadInitData = async () => {
-    let runtimeConfig: Record<string, unknown> | undefined;
+    let runtimeConfigData: Record<string, unknown> | undefined;
     try {
       const res = await getRuntimeConfig();
-      runtimeConfig = res.data;
+      runtimeConfigData = res.data;
     } catch (error) {
       logger.error(error);
     }
@@ -56,13 +53,19 @@ const LoginPage: React.FC = () => {
     ]);
     const me = meRes?.data;
     const menus = menusRes?.data;
+
+    // 运行时配置 → 单例
+    runtimeConfig.set(runtimeConfigData);
+
+    // 初始化 preferences：runtime.ui → me.preferences
+    useSettingStore.setState({
+      ...uiToPreferences(runtimeConfig.get().ui),
+      ...(me?.preferences || {}),
+    });
+
     if (me) {
       useAuthStore.getState().setAuth(me, menus);
-      useAppStore
-        .getState()
-        .setMePreferences(normalizeMePreferences(me.preferences));
     }
-    useAppStore.getState().setServerConfig(resolveServerConfig(runtimeConfig));
   };
 
   const handleSubmit = async (values: any) => {

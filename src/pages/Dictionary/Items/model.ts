@@ -21,7 +21,10 @@ export const useDictionaryItems = () => {
       typeCode: string,
       params?: API.DictionariesFindAllDictionaryItemsParams,
     ) => {
-      return queryDictionaryItemList({ ...params, typeCode });
+      return queryDictionaryItemList(
+        { ...params, typeCode },
+        { skipErrorHandler: true },
+      );
     },
     [],
   );

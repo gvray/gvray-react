@@ -1,4 +1,4 @@
-import { usePreferences } from '@/stores';
+import { useSettingStore } from '@/stores';
 import { logger } from '@/utils';
 import { useEffect, useRef, useState } from 'react';
 
@@ -6,7 +6,7 @@ export const useTablePro = (
   request: (params: any) => Promise<any>,
   isTree?: boolean,
 ) => {
-  const { pageSize: defaultPageSize } = usePreferences();
+  const { pageSize: defaultPageSize } = useSettingStore();
   const [loading, setLoading] = useState(false);
   const [listData, setListData] = useState<any[]>([]);
   const [total, setTotal] = useState(0);

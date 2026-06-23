@@ -27,8 +27,8 @@ const { Text } = Typography;
 const TabSecurity: React.FC = () => {
   const [passwordForm] = Form.useForm();
   const model = useProfileSecurityModel(passwordForm);
-  const emailBound = !!model.profile?.email;
-  const phoneBound = !!model.profile?.phone;
+  const emailBound = !!model.profile?.profile?.email;
+  const phoneBound = !!model.profile?.profile?.phone;
 
   return (
     <div className={styles.securityGrid}>
@@ -129,7 +129,7 @@ const TabSecurity: React.FC = () => {
               icon: <MailOutlined />,
               title: '邮箱绑定',
               desc: emailBound
-                ? model.profile?.email
+                ? String(model.profile?.profile?.email)
                 : '暂未绑定邮箱，建议联系管理员补全',
               ok: emailBound,
             },
@@ -137,7 +137,7 @@ const TabSecurity: React.FC = () => {
               icon: <MobileOutlined />,
               title: '手机号绑定',
               desc: phoneBound
-                ? model.profile?.phone?.replace(
+                ? String(model.profile?.profile?.phone).replace(
                     /(\d{3})\d{4}(\d{4})/,
                     '$1****$2',
                   )

@@ -5,7 +5,15 @@ import { createConfig, getConfigById, updateConfig } from '@/services/config';
 import type { DictOption } from '@/types/dict';
 import { logger } from '@/utils';
 import { createFormLayout } from '@gvray/adminkit';
-import { Form, FormInstance, Input, InputNumber, Modal, Select } from 'antd';
+import {
+  Form,
+  FormInstance,
+  Input,
+  InputNumber,
+  Modal,
+  Select,
+  Switch,
+} from 'antd';
 import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
 
 const { TextArea } = Input;
@@ -298,6 +306,20 @@ const UpdateForm = forwardRef<UpdateFormRef, UpdateFormProps>(
                   <Select
                     placeholder="请选择"
                     options={dict.common_status}
+                    disabled={formLoading}
+                  />
+                </Form.Item>
+              </FormGrid.Item>
+
+              <FormGrid.Item span={12}>
+                <Form.Item
+                  name="isPublic"
+                  label="前端公开"
+                  valuePropName="checked"
+                >
+                  <Switch
+                    checkedChildren="公开"
+                    unCheckedChildren="私有"
                     disabled={formLoading}
                   />
                 </Form.Item>

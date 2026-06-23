@@ -1,4 +1,4 @@
-import { request } from '@gvray/request';
+import { request, RuntimeControlFields } from '@gvray/request';
 
 // ─── 字典类型 ───────────────────────────────────────────
 
@@ -74,13 +74,14 @@ export function batchDeleteDictionaryTypes(
 /** 获取字典项列表 */
 export function queryDictionaryItemList(
   params?: API.DictionariesFindAllDictionaryItemsParams,
+  options?: RuntimeControlFields,
 ) {
   return request<
     API.Response<API.PaginatedResponse<API.DictionaryItemResponseDto>>
   >('/system/dictionaries/items', {
     method: 'GET',
     params,
-    skipErrorHandler: true,
+    ...options,
   });
 }
 
@@ -142,13 +143,14 @@ export function batchDeleteDictionaryItems(
 /** 根据类型编码批量获取字典项 */
 export function getDictionaryItemsByTypeCodes(
   params: API.DictionariesGetDictionaryItemsByTypeCodesParams,
+  options?: RuntimeControlFields,
 ) {
   return request<API.Response<Record<string, API.DictionaryItemResponseDto[]>>>(
     '/system/dictionaries/types/batch',
     {
       method: 'GET',
       params,
-      skipErrorHandler: true, // 跳过全局错误处理，避免在字典项获取失败时弹出错误提示
+      ...options,
     },
   );
 }

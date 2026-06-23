@@ -1,4 +1,4 @@
-import { usePreferences } from '@/stores';
+import { useSettingStore } from '@/stores';
 import { theme } from 'antd';
 import { PropsWithChildren, useEffect, useMemo, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
@@ -60,7 +60,7 @@ const PageContainer: React.FC<PropsWithChildren<PageContainerProps>> = ({
 }) => {
   const [isVisible, setIsVisible] = useState(false);
 
-  const { showBreadcrumb } = usePreferences();
+  const { showBreadcrumb } = useSettingStore();
 
   const {
     token: { colorBgContainer, borderRadiusLG },

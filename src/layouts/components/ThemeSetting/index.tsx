@@ -1,5 +1,5 @@
 import { PRIMARY_COLOR_LABELS, PrimaryColor } from '@/constants';
-import { useAppStore, usePreferences } from '@/stores';
+import { useSettingStore } from '@/stores';
 import { logger } from '@/utils';
 import React, { useState } from 'react';
 import { styled } from 'umi';
@@ -34,8 +34,8 @@ const ThemeSettingWrapper = styled.div`
   }
 `;
 const ThemeSetting: React.FC<ThemeSettingProps> = ({ onChange }) => {
-  const { colorPrimary } = usePreferences();
-  const setColorPrimary = useAppStore((s) => s.setColorPrimary);
+  const { colorPrimary } = useSettingStore();
+  const setColorPrimary = useSettingStore((s) => s.setColorPrimary);
   const [isVisible, setIsVisible] = useState(false);
   const themeSelectHandle = (selected: { label: string; color: string }) => {
     logger.info(`主题切换为：${selected.label} ${selected.color}`);

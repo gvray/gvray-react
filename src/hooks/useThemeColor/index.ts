@@ -10,10 +10,10 @@ export interface ThemeColor {
 }
 
 const useThemeColor = (): ThemeColor => {
-  const themeMode = useThemeMode();
+  const theme = useThemeMode();
 
   const themeColor = useMemo<ThemeColor>(() => {
-    if (themeMode === 'dark') {
+    if (theme === 'dark') {
       return {
         textColor: '#ffffff',
         bgColor: '#000',
@@ -30,7 +30,7 @@ const useThemeColor = (): ThemeColor => {
       hoverColor: '#e6e6e6',
       bgGradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
     };
-  }, [themeMode]);
+  }, [theme]);
 
   return themeColor;
 };

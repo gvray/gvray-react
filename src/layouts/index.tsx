@@ -5,7 +5,8 @@ import { RouteMetaProvider } from '@/contexts/routeMeta';
 import { useAppTheme, useRouteMeta } from '@/hooks';
 import useThemeColor from '@/hooks/useThemeColor';
 import useThemeMode from '@/hooks/useThemeMode';
-import { useAppStore, usePreferences } from '@/stores';
+import { useSettingStore } from '@/stores';
+import { runtimeConfig } from '@/utils/runtime-config';
 import { App, ConfigProvider, Layout } from 'antd';
 import classNames from 'classnames';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
@@ -21,9 +22,17 @@ const AppLayout = styled(Layout)`
 `;
 
 export default function BaseLayout() {
-  const serverConfig = useAppStore((s) => s.serverConfig);
-  const { colorPrimary, sider, header, content, accessibility } =
-    usePreferences();
+  const { system } = runtimeConfig.get();
+  const {
+    colorPrimary,
+    collapsed,
+    sidebarTheme,
+    showLogo,
+    fixedHeader,
+    showFooter,
+    colorWeak,
+  } = useSettingStore();
+  const grayMode = runtimeConfig.get().ui.grayMode;
   const themeColor = useThemeColor();
   const meta = useRouteMeta();
   const routeTitle = meta.title ?? '';
@@ -32,15 +41,15 @@ export default function BaseLayout() {
 
   // 暗色模式下强制 sidebar dark，浅色模式下尊重用户偏好
   const effectiveSiderTheme =
-    effectiveThemeMode === 'dark' ? 'dark' : sider.theme;
+    effectiveThemeMode === 'dark' ? 'dark' : sidebarTheme;
 
   const documentTitle = routeTitle
-    ? `${routeTitle} - ${serverConfig.system.name}`
-    : serverConfig.system.name;
+    ? `${routeTitle} - ${system.name}`
+    : system.name;
 
   const layoutClassName = classNames({
-    'color-weak': accessibility.colorWeak,
-    'gray-mode': accessibility.grayMode,
+    'color-weak': colorWeak,
+    'gray-mode': grayMode,
   });
 
   return (
@@ -64,26 +73,23 @@ export default function BaseLayout() {
             <ThemeTokenInjector>
               <AppLayout className={layoutClassName}>
                 <SideNav
-                  collapsed={sider.collapsed}
+                  collapsed={collapsed}
                   theme={effectiveSiderTheme}
-                  width={sider.width}
-                  collapsedWidth={sider.collapsedWidth}
-                  showLogo={sider.showLogo}
+                  width={220}
+                  collapsedWidth={64}
+                  showLogo={showLogo}
                 />
                 <AppViewport>
                   <NavigationProgress />
                   <AppHeader
                     themeColor={themeColor}
-                    headerFixed={header.fixed}
+                    headerFixed={fixedHeader}
                   />
 
                   <ErrorBoundary>
                     <Outlet />
                   </ErrorBoundary>
-                  <AppFooter
-                    visible={content.showFooter}
-                    text={content.footerText}
-                  />
+                  <AppFooter visible={showFooter} text={system.footerText} />
                   <AppWatermark />
                 </AppViewport>
               </AppLayout>

@@ -1,10 +1,10 @@
 import { useAuthStore } from '@/stores';
 
 const useAuth = () => {
-  const { isLogin, profile, permissions } = useAuthStore();
+  const { profile, permissions } = useAuthStore();
 
   return {
-    isLogin,
+    isLogin: !!profile,
     profile,
     permissions,
   };

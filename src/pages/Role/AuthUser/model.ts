@@ -1,10 +1,10 @@
 import { assignRoleUsers, getRoleById } from '@/services/role';
 import { queryUserList } from '@/services/user';
-import { usePreferences } from '@/stores';
+import { useSettingStore } from '@/stores';
 import { useCallback, useState } from 'react';
 
 export const useAuthUser = (roleId?: string) => {
-  const { pageSize } = usePreferences();
+  const { pageSize } = useSettingStore();
   const [users, setUsers] = useState<API.UserResponseDto[]>([]);
   const [selectedRole, setSelectedRole] = useState<API.RoleResponseDto | null>(
     null,

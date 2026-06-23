@@ -40,7 +40,7 @@ const TabProfile: React.FC<TabProfileProps> = ({ profile }) => {
       });
   }, []);
 
-  const statusMeta = getAccountStatusMeta(currentMe?.status);
+  const statusMeta = getAccountStatusMeta(currentMe?.profile?.status);
   const email = (userProfile?.email as unknown as string) || '';
   const phone = (userProfile?.phone as unknown as string) || '';
   const emailBound = !!email;
@@ -144,18 +144,13 @@ const TabProfile: React.FC<TabProfileProps> = ({ profile }) => {
           </Descriptions.Item>
           <Descriptions.Item label="注册时间">
             <span className={styles.readonlyField}>
-              {(currentMe as any)?.createdAt
-                ? new Date((currentMe as any).createdAt).toLocaleString()
-                : '-'}{' '}
-              <LockOutlined />
+              - <LockOutlined />
             </span>
           </Descriptions.Item>
           <Descriptions.Item label="更新时间">
             <span className={styles.readonlyField}>
               {userProfile?.updatedAt
                 ? new Date(userProfile.updatedAt).toLocaleString()
-                : (currentMe as any)?.updatedAt
-                ? new Date((currentMe as any).updatedAt).toLocaleString()
                 : '-'}{' '}
               <LockOutlined />
             </span>

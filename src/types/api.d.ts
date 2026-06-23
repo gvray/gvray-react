@@ -1,6 +1,6 @@
 /**
  * 此文件由 scripts/gen-api-types.ts 自动生成
- * 生成时间: 2026-06-22T15:58:56.532Z
+ * 生成时间: 2026-06-23T15:43:56.317Z
  * 数据来源: http://localhost:8001/api-json
  * 请勿手动修改此文件
  */
@@ -1053,291 +1053,6 @@ declare namespace API {
     ids: string[];
   }
 
-  interface RuntimeSystemDto {
-    /**
-     * 系统名称
-     * @example GVRAY Admin
-     */
-    name: string;
-    /**
-     * 系统 Logo
-     * @example /logo.svg
-     */
-    logo: string;
-    /**
-     * 浏览器图标
-     * @example /favicon.ico
-     */
-    favicon: string;
-    /**
-     * 系统欢迎语
-     * @example 欢迎使用 GVRAY Admin
-     */
-    welcomeMessage: string;
-    /**
-     * 版权信息
-     * @example © 2025 GVRAY Admin. All rights reserved.
-     */
-    copyright: string;
-    /**
-     * ICP 备案号
-     * @example 京ICP备XXXXXXXX号
-     */
-    icp: string;
-    /**
-     * 默认时区
-     * @example Asia/Shanghai
-     */
-    timezone: string;
-  }
-
-  interface RuntimeEnvDto {
-    /**
-     * 运行环境
-     * @example development
-     */
-    mode: string;
-    /**
-     * API 基础路径
-     * @example /api/v1
-     */
-    apiPrefix: string;
-  }
-
-  interface RuntimeUiDto {
-    /**
-     * 默认主题
-     * @example light
-     */
-    theme: string;
-    /**
-     * 默认语言
-     * @example zh-CN
-     */
-    language: string;
-    /**
-     * 表格默认分页大小
-     * @example 10
-     */
-    pageSize: number;
-    /**
-     * 是否显示面包屑
-     * @example true
-     */
-    showBreadcrumb: boolean;
-    /**
-     * 侧边栏默认折叠
-     * @example false
-     */
-    sidebarCollapsed: boolean;
-    /**
-     * 日期格式
-     * @example YYYY-MM-DD
-     */
-    dateFormat: string;
-    /**
-     * 时间格式
-     * @example HH:mm:ss
-     */
-    timeFormat: string;
-    /**
-     * 主题主色
-     * @example #1890ff
-     */
-    primaryColor: string;
-    /**
-     * 默认时区
-     * @example Asia/Shanghai
-     */
-    timezone: string;
-    /**
-     * 默认启用通知
-     * @example true
-     */
-    enableNotification: boolean;
-    /**
-     * 全站灰度模式
-     * @example false
-     */
-    grayMode: boolean;
-  }
-
-  interface RuntimeSecurityDto {
-    /**
-     * 全局水印开关
-     * @example true
-     */
-    watermarkEnabled: boolean;
-    /**
-     * 密码最小长度
-     * @example 8
-     */
-    passwordMinLength: number;
-    /**
-     * 密码最大长度
-     * @example 32
-     */
-    passwordMaxLength: number;
-    /**
-     * 密码复杂度要求
-     * @example true
-     */
-    passwordRequireComplexity: boolean;
-    /**
-     * 密码有效期(天)，0 表示永不过期
-     * @example 0
-     */
-    passwordExpiryDays: number;
-    /**
-     * 首次登录强制修改密码
-     * @example true
-     */
-    mustChangePassword: boolean;
-    /**
-     * 登录失败锁定次数
-     * @example 5
-     */
-    loginFailureLockCount: number;
-    /**
-     * 账号锁定时长(分钟)
-     * @example 30
-     */
-    loginFailureLockDuration: number;
-    /**
-     * 单用户最大会话数
-     * @example 3
-     */
-    sessionConcurrentLimit: number;
-  }
-
-  interface RuntimeUserDto {
-    /**
-     * 默认角色编码
-     * @example user
-     */
-    defaultRole: string;
-    /**
-     * 默认头像地址
-     * @example https://api.dicebear.com/9.x/bottts/svg?seed=GVRAY
-     */
-    defaultAvatar: string;
-  }
-
-  interface RuntimeFeatureDto {
-    /**
-     * 开放注册
-     * @example true
-     */
-    register: boolean;
-    /**
-     * 操作审计日志
-     * @example true
-     */
-    auditLog: boolean;
-    /**
-     * 邮件通知
-     * @example true
-     */
-    emailNotification: boolean;
-    /**
-     * 短信通知
-     * @example false
-     */
-    smsNotification: boolean;
-    /**
-     * 双因子认证(MFA)
-     * @example false
-     */
-    mfa: boolean;
-  }
-
-  interface RuntimeStorageDto {
-    /**
-     * 存储驱动
-     * @example local
-     */
-    provider: string;
-    /**
-     * 最大上传大小(字节)
-     * @example 10485760
-     */
-    maxFileSize: number;
-    /**
-     * 允许上传的文件类型
-     * @example jpg,jpeg,png,gif,pdf,doc,docx,xls,xlsx
-     */
-    allowedTypes: string;
-    /**
-     * 文件访问基础 URL
-     * @example
-     */
-    baseUrl: string;
-  }
-
-  interface RuntimeOauthDto {
-    /**
-     * GitHub 登录
-     * @example false
-     */
-    githubEnabled: boolean;
-    /**
-     * Google 登录
-     * @example false
-     */
-    googleEnabled: boolean;
-    /**
-     * 微信登录
-     * @example false
-     */
-    wechatEnabled: boolean;
-  }
-
-  interface RuntimeMailDto {
-    /**
-     * 邮件功能开关
-     * @example false
-     */
-    enabled: boolean;
-    /**
-     * SMTP 主机
-     * @example smtp.qq.com
-     */
-    host: string;
-    /**
-     * SMTP 端口
-     * @example 465
-     */
-    port: number;
-    /**
-     * 发件人地址
-     * @example noreply@gvray.com
-     */
-    from: string;
-    /**
-     * SSL/TLS 加密
-     * @example true
-     */
-    ssl: boolean;
-  }
-
-  interface RuntimeSmsDto {
-    /**
-     * 短信功能开关
-     * @example false
-     */
-    enabled: boolean;
-    /**
-     * 短信服务商
-     * @example aliyun
-     */
-    provider: string;
-    /**
-     * 短信签名
-     * @example 【GVRAY】
-     */
-    signature: string;
-  }
-
   interface RuntimeCapabilitiesDto {
     /**
      * 已注册用户总数
@@ -1357,26 +1072,6 @@ declare namespace API {
   }
 
   interface RuntimeConfigResponseDto {
-    /** 系统基础信息 */
-    system: RuntimeSystemDto;
-    /** 环境信息 */
-    env: RuntimeEnvDto;
-    /** 界面配置 */
-    ui: RuntimeUiDto;
-    /** 安全配置 */
-    security: RuntimeSecurityDto;
-    /** 用户配置 */
-    user: RuntimeUserDto;
-    /** 功能开关 */
-    feature: RuntimeFeatureDto;
-    /** 存储配置 */
-    storage: RuntimeStorageDto;
-    /** 第三方登录 */
-    oauth: RuntimeOauthDto;
-    /** 邮件配置 */
-    mail: RuntimeMailDto;
-    /** 短信配置 */
-    sms: RuntimeSmsDto;
     /** 系统能力（动态计算） */
     capabilities: RuntimeCapabilitiesDto;
   }
@@ -1400,6 +1095,8 @@ declare namespace API {
     sort: number;
     /** 备注信息 */
     remark?: string;
+    /** 是否对前端公开 */
+    isPublic: boolean;
   }
 
   interface ConfigResponseDto {
@@ -1421,6 +1118,8 @@ declare namespace API {
     status: number;
     /** 排序权重 */
     sort: number;
+    /** 是否对前端公开 */
+    isPublic: boolean;
     /** 备注信息 */
     remark: string;
     /** 创建时间 */
@@ -1448,6 +1147,8 @@ declare namespace API {
     sort?: number;
     /** 备注信息 */
     remark?: string;
+    /** 是否对前端公开 */
+    isPublic?: boolean;
   }
 
   interface BatchDeleteConfigsDto {
@@ -1974,6 +1675,8 @@ declare namespace API {
     group?: string;
     /** 状态：disabled-禁用, enabled-启用 */
     status?: string;
+    /** 是否对前端公开：true-公开, false-不公开 */
+    isPublic?: string;
     /** 创建时间开始（YYYY-MM-DD） */
     createdAtStart?: string;
     /** 创建时间结束（YYYY-MM-DD） */

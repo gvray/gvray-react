@@ -1,7 +1,7 @@
 import { LOGIN_PATH } from '@/constants';
 import LoginBg from '@/pages/Login/components/LoginBg';
 import { register } from '@/services/auth';
-import { useAppStore } from '@/stores';
+import { runtimeConfig } from '@/utils/runtime-config';
 import {
   LockOutlined,
   MailOutlined,
@@ -19,8 +19,9 @@ const formItemLayout = {
 };
 
 const RegisterPage: React.FC = () => {
-  const siteName = useAppStore((s) => s.serverConfig.system.name);
-  const registerEnabled = useAppStore((s) => s.serverConfig.feature.register);
+  const { system, feature } = runtimeConfig.get();
+  const siteName = system.name;
+  const registerEnabled = feature.register;
   const [isRegistering, setRegistering] = useState(false);
   const [form] = Form.useForm();
   const navigate = useNavigate();

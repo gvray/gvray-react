@@ -45,6 +45,15 @@ export const getConfigColumns =
         },
       },
       {
+        title: '前端公开',
+        dataIndex: 'isPublic',
+        key: 'isPublic',
+        width: 100,
+        advancedSearch: {
+          type: 'SELECT',
+        },
+      },
+      {
         title: '创建时间',
         key: 'createdAt',
         dataIndex: 'createdAt',

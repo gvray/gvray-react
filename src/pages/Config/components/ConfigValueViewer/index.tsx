@@ -95,6 +95,11 @@ const ConfigValueViewer: React.FC<ConfigValueViewerProps> = ({
           <Tag>{groupLabel}</Tag>
         </Descriptions.Item>
         <Descriptions.Item label="排序权重">{config.sort}</Descriptions.Item>
+        <Descriptions.Item label="是否公开">
+          <Tag color={config.isPublic ? 'green' : 'default'}>
+            {config.isPublic ? '公开' : '私有'}
+          </Tag>
+        </Descriptions.Item>
         <Descriptions.Item label="状态">
           <StatusTag value={config.status} options={dict.common_status} />
         </Descriptions.Item>

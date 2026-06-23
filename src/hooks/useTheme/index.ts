@@ -1,34 +1,34 @@
-import { usePreferences } from '@/stores';
+import { useSettingStore } from '@/stores';
 import { startSystemThemeWatcher, stopSystemThemeWatcher } from '@/utils/theme';
-import { theme } from 'antd';
+import { theme as antdTheme } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 
 const useAppTheme = () => {
-  const { themeMode } = usePreferences();
+  const { theme } = useSettingStore();
   const [systemTheme, setSystemTheme] = useState(() => {
     return window.matchMedia('(prefers-color-scheme: dark)').matches
       ? 'dark'
       : 'light';
   });
   const themeAlgorithm = useMemo(() => {
-    if (themeMode === 'dark') {
-      return theme.darkAlgorithm;
-    } else if (themeMode === 'system') {
+    if (theme === 'dark') {
+      return antdTheme.darkAlgorithm;
+    } else if (theme === 'system') {
       if (systemTheme === 'dark') {
-        return theme.darkAlgorithm;
+        return antdTheme.darkAlgorithm;
       }
     }
-    return theme.defaultAlgorithm;
-  }, [themeMode, systemTheme]);
+    return antdTheme.defaultAlgorithm;
+  }, [theme, systemTheme]);
 
   useEffect(() => {
-    if (themeMode === 'system') {
+    if (theme === 'system') {
       startSystemThemeWatcher(setSystemTheme);
     }
     return () => {
       stopSystemThemeWatcher();
     };
-  }, [themeMode]);
+  }, [theme]);
 
   return { themeAlgorithm };
 };

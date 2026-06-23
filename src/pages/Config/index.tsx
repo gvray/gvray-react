@@ -145,6 +145,23 @@ const ConfigPage = () => {
         ),
       };
     }
+    if (column.dataIndex === 'isPublic') {
+      return {
+        ...column,
+        advancedSearch: {
+          type: 'SELECT',
+          value: [
+            { label: '公开', value: 'true' },
+            { label: '私有', value: 'false' },
+          ],
+        },
+        render: (isPublic: boolean) => (
+          <Tag color={isPublic ? 'green' : 'default'}>
+            {isPublic ? '公开' : '私有'}
+          </Tag>
+        ),
+      };
+    }
     if (column.dataIndex === 'createdAt') {
       return {
         ...column,
