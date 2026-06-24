@@ -1,5 +1,5 @@
 import { LOGIN_PATH } from '@/constants';
-import { uiToPreferences } from '@/constants/settings';
+import { buildPreferences } from '@/constants/runtime-settings';
 import { queryMe, queryMenus } from '@/services/auth';
 import { getDictionaryItemsByTypeCodes } from '@/services/dictionary';
 import { getRuntimeConfig } from '@/services/system';
@@ -51,7 +51,7 @@ export async function getInitialState() {
 
   // 初始化 preferences：runtime.ui → me.preferences
   useSettingStore.setState({
-    ...uiToPreferences(runtimeConfig.get().ui),
+    ...buildPreferences(runtimeConfig.get().ui),
     ...(me?.preferences || {}),
   });
 

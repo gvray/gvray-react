@@ -20,7 +20,6 @@ import {
   Button,
   Card,
   Col,
-  Input,
   List,
   Popconfirm,
   Row,
@@ -50,14 +49,13 @@ const TabPreferences: React.FC = () => {
     setLanguage,
     setPageSize,
     setShowBreadcrumb,
-    setCollapsed,
+    setSidebarCollapsed,
     setSidebarTheme,
     setShowLogo,
     setFixedHeader,
     setShowFooter,
     setColorWeak,
     setUniqueOpened,
-    setTimezone,
     setEnableNotification,
     reset,
   } = useSettingStore();
@@ -67,14 +65,13 @@ const TabPreferences: React.FC = () => {
     language,
     pageSize,
     showBreadcrumb,
-    collapsed,
+    sidebarCollapsed,
     sidebarTheme,
     showLogo,
     fixedHeader,
     showFooter,
     colorWeak,
     uniqueOpened,
-    timezone,
     enableNotification,
   } = useSettingStore();
 
@@ -147,7 +144,7 @@ const TabPreferences: React.FC = () => {
   };
 
   const handleSiderCollapsed = (v: boolean) => {
-    setCollapsed(v);
+    setSidebarCollapsed(v);
     queueSync({ sidebarCollapsed: v });
   };
 
@@ -190,11 +187,6 @@ const TabPreferences: React.FC = () => {
   const handleUniqueOpened = (v: boolean) => {
     setUniqueOpened(v);
     queueSync({ uniqueOpened: v });
-  };
-
-  const handleTimezone = (v: string) => {
-    setTimezone(v);
-    queueSync({ timezone: v });
   };
 
   const handleEnableNotification = (v: boolean) => {
@@ -254,7 +246,10 @@ const TabPreferences: React.FC = () => {
                 title: '侧边栏折叠',
                 desc: '默认折叠侧边导航',
                 extra: (
-                  <Switch checked={collapsed} onChange={handleSiderCollapsed} />
+                  <Switch
+                    checked={sidebarCollapsed}
+                    onChange={handleSiderCollapsed}
+                  />
                 ),
               },
               {
@@ -358,18 +353,6 @@ const TabPreferences: React.FC = () => {
                 ),
               },
               {
-                title: '时区',
-                desc: '日期时间显示时区',
-                extra: (
-                  <Input
-                    value={timezone}
-                    onChange={(e) => handleTimezone(e.target.value)}
-                    placeholder="如 Asia/Shanghai"
-                    style={{ width: 160 }}
-                  />
-                ),
-              },
-              {
                 title: '启用通知',
                 desc: '接收系统通知消息',
                 extra: (
@@ -417,15 +400,6 @@ const TabPreferences: React.FC = () => {
               将所有偏好设置恢复为服务端下发的默认值（{serverConfig.system.name}
               ）。 此操作不可撤销。
             </Text>
-            {serverConfig.system.welcomeMessage && (
-              <Text
-                type="secondary"
-                italic
-                style={{ display: 'block', marginBottom: 16, fontSize: 12 }}
-              >
-                {serverConfig.system.welcomeMessage}
-              </Text>
-            )}
             <Popconfirm
               title="确认恢复默认设置？"
               description="所有偏好将重置为服务端默认值"

@@ -1,4 +1,4 @@
-import { uiToPreferences } from '@/constants/settings';
+import { buildPreferences } from '@/constants/runtime-settings';
 import { login, queryMe, queryMenus } from '@/services/auth';
 import { getDictionaryItemsByTypeCodes } from '@/services/dictionary';
 import { getRuntimeConfig } from '@/services/system';
@@ -59,7 +59,7 @@ const LoginPage: React.FC = () => {
 
     // 初始化 preferences：runtime.ui → me.preferences
     useSettingStore.setState({
-      ...uiToPreferences(runtimeConfig.get().ui),
+      ...buildPreferences(runtimeConfig.get().ui),
       ...(me?.preferences || {}),
     });
 

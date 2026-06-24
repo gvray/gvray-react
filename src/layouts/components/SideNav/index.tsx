@@ -1,6 +1,6 @@
 import AntIcon from '@/components/AntIcon';
+import type { SiderTheme } from '@/constants/runtime-settings';
 import { useAuthStore, useSettingStore } from '@/stores';
-import type { SiderTheme } from '@/types/settings';
 import { runtimeConfig } from '@/utils/runtime-config';
 import { AppstoreOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
@@ -62,7 +62,9 @@ const SideNav: React.FC<SideNavProps> = ({
 }) => {
   const menus = useAuthStore((s) => s.menus);
   const siteName = runtimeConfig.get().system.name;
-  const toggleCollapsed = useSettingStore((s) => s.toggleCollapsed);
+  const toggleSidebarCollapsed = useSettingStore(
+    (s) => s.toggleSidebarCollapsed,
+  );
 
   const location = useLocation();
 
@@ -213,7 +215,7 @@ const SideNav: React.FC<SideNavProps> = ({
       <CollapseTrigger
         collapsed={collapsed}
         dark={isDark}
-        onToggle={toggleCollapsed}
+        onToggle={toggleSidebarCollapsed}
       />
     </SiderWrapper>
   );

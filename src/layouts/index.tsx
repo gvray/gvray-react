@@ -25,7 +25,7 @@ export default function BaseLayout() {
   const { system } = runtimeConfig.get();
   const {
     colorPrimary,
-    collapsed,
+    sidebarCollapsed,
     sidebarTheme,
     showLogo,
     fixedHeader,
@@ -73,7 +73,7 @@ export default function BaseLayout() {
             <ThemeTokenInjector>
               <AppLayout className={layoutClassName}>
                 <SideNav
-                  collapsed={collapsed}
+                  collapsed={sidebarCollapsed}
                   theme={effectiveSiderTheme}
                   width={220}
                   collapsedWidth={64}
@@ -89,7 +89,12 @@ export default function BaseLayout() {
                   <ErrorBoundary>
                     <Outlet />
                   </ErrorBoundary>
-                  <AppFooter visible={showFooter} text={system.footerText} />
+                  <AppFooter
+                    visible={showFooter}
+                    text={system.footerText}
+                    copyright={system.copyright}
+                    icp={system.icp}
+                  />
                   <AppWatermark />
                 </AppViewport>
               </AppLayout>

@@ -1,57 +1,42 @@
-import { PrimaryColor, ThemeMode } from '@/constants';
-import { DEFAULT_SERVER_CONFIG, uiToPreferences } from '@/constants/settings';
-import type { Preferences } from '@/types/settings';
+import {
+  DEFAULT_RUNTIME_CONFIG,
+  type PreferenceDefaults,
+  type SiderTheme,
+  buildPreferences,
+} from '@/constants/runtime-settings';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
 // ─── Store ──────────────────────────────────────────────────────
 
-interface SettingState {
-  theme: ThemeMode;
-  colorPrimary: PrimaryColor;
-  language: string;
-  pageSize: number;
-  showBreadcrumb: boolean;
-  collapsed: boolean;
-  sidebarTheme: Preferences['sidebarTheme'];
-  showLogo: boolean;
-  fixedHeader: boolean;
-  showFooter: boolean;
-  colorWeak: boolean;
-  uniqueOpened: boolean;
-  timezone: string;
-  enableNotification: boolean;
-}
-
 interface SettingActions {
   /** 增量 patch（用户手动修改） */
-  patchSettings: (patch: Partial<Preferences>) => void;
+  patchSettings: (patch: Partial<PreferenceDefaults>) => void;
 
-  setTheme: (mode: ThemeMode) => void;
-  setColorPrimary: (color: PrimaryColor) => void;
+  setTheme: (mode: PreferenceDefaults['theme']) => void;
+  setColorPrimary: (color: PreferenceDefaults['colorPrimary']) => void;
   setLanguage: (lang: string) => void;
   setPageSize: (size: number) => void;
   setShowBreadcrumb: (show: boolean) => void;
-  setCollapsed: (collapsed: boolean) => void;
-  setSidebarTheme: (theme: Preferences['sidebarTheme']) => void;
+  setSidebarCollapsed: (collapsed: boolean) => void;
+  setSidebarTheme: (theme: SiderTheme) => void;
   setShowLogo: (show: boolean) => void;
   setFixedHeader: (fixed: boolean) => void;
   setShowFooter: (show: boolean) => void;
   setColorWeak: (enabled: boolean) => void;
   setUniqueOpened: (enabled: boolean) => void;
-  setTimezone: (tz: string) => void;
   setEnableNotification: (enabled: boolean) => void;
-  toggleCollapsed: () => void;
+  toggleSidebarCollapsed: () => void;
 
   /** 清空用户修改，回退到传入的默认值 */
   reset: () => void;
 }
 
-export const useSettingStore = create<SettingState & SettingActions>()(
+export const useSettingStore = create<PreferenceDefaults & SettingActions>()(
   persist(
     immer((set) => ({
-      ...uiToPreferences(DEFAULT_SERVER_CONFIG.ui),
+      ...buildPreferences(DEFAULT_RUNTIME_CONFIG.ui),
 
       patchSettings: (patch) =>
         set((s) => {
@@ -87,9 +72,9 @@ export const useSettingStore = create<SettingState & SettingActions>()(
           s.showBreadcrumb = show;
         }),
 
-      setCollapsed: (collapsed) =>
+      setSidebarCollapsed: (collapsed) =>
         set((s) => {
-          s.collapsed = collapsed;
+          s.sidebarCollapsed = collapsed;
         }),
 
       setSidebarTheme: (theme) =>
@@ -122,24 +107,19 @@ export const useSettingStore = create<SettingState & SettingActions>()(
           s.uniqueOpened = enabled;
         }),
 
-      setTimezone: (tz) =>
-        set((s) => {
-          s.timezone = tz;
-        }),
-
       setEnableNotification: (enabled) =>
         set((s) => {
           s.enableNotification = enabled;
         }),
 
-      toggleCollapsed: () =>
+      toggleSidebarCollapsed: () =>
         set((s) => {
-          s.collapsed = !s.collapsed;
+          s.sidebarCollapsed = !s.sidebarCollapsed;
         }),
 
       reset: () =>
         set((s) => {
-          Object.assign(s, uiToPreferences(DEFAULT_SERVER_CONFIG.ui));
+          Object.assign(s, buildPreferences(DEFAULT_RUNTIME_CONFIG.ui));
         }),
     })),
     {

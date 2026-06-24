@@ -58,7 +58,16 @@ const UpdateForm = forwardRef<UpdateFormRef, UpdateFormProps>(
                 const n = Number(data.value);
                 parsedValue = Number.isNaN(n) ? undefined : n;
               }
-              form.setFieldsValue({ ...data, value: parsedValue });
+              // 编辑回显：只展示 key 的短名部分
+              const shortKey =
+                data.group && data.key?.startsWith(`${data.group}.`)
+                  ? data.key.slice(data.group.length + 1)
+                  : data.key;
+              form.setFieldsValue({
+                ...data,
+                value: parsedValue,
+                key: shortKey,
+              });
             }
           } else {
             form.setFieldsValue({
@@ -88,6 +97,9 @@ const UpdateForm = forwardRef<UpdateFormRef, UpdateFormProps>(
       try {
         setConfirmLoading(true);
         const values = await form.validateFields();
+
+        // 拼接 group + key
+        values.key = `${values.group}.${values.key}`;
 
         // 类型转换
         if (values.type === 'number') {
@@ -240,14 +252,14 @@ const UpdateForm = forwardRef<UpdateFormRef, UpdateFormProps>(
                   rules={[
                     { required: true, message: '请输入配置键' },
                     {
-                      pattern: /^[a-zA-Z][a-zA-Z0-9._-]*$/,
-                      message: '以字母开头，仅含字母、数字、点、下划线、横线',
+                      pattern: /^[a-zA-Z][a-zA-Z0-9_-]*$/,
+                      message: '以字母开头，仅含字母、数字、下划线、横线',
                     },
                     { max: 50, message: '不能超过50个字符' },
                   ]}
                 >
                   <Input
-                    placeholder="如 app.siteName"
+                    placeholder="如 siteName"
                     disabled={Boolean(configId) || formLoading}
                   />
                 </Form.Item>

@@ -7,7 +7,7 @@ export const THEME_MODE_LABELS: Record<ThemeMode, string> = {
   system: '跟随系统',
 };
 
-export type PrimaryColor =
+export type ColorPrimary =
   | '#1677ff'
   | '#1890ff'
   | '#f5222d'
@@ -20,7 +20,7 @@ export type PrimaryColor =
   | '#722ed1'
   | '#eb2f96';
 
-export const PRIMARY_COLOR_LABELS: Record<PrimaryColor, string> = {
+export const PRIMARY_COLOR_LABELS: Record<ColorPrimary, string> = {
   '#1677ff': '拂晓蓝',
   '#1890ff': '极客蓝',
   '#f5222d': '薄暮',

@@ -1,4 +1,4 @@
-import { PRIMARY_COLOR_LABELS, PrimaryColor } from '@/constants';
+import { ColorPrimary, PRIMARY_COLOR_LABELS } from '@/constants';
 import { useSettingStore } from '@/stores';
 import { logger } from '@/utils';
 import React, { useState } from 'react';
@@ -39,7 +39,7 @@ const ThemeSetting: React.FC<ThemeSettingProps> = ({ onChange }) => {
   const [isVisible, setIsVisible] = useState(false);
   const themeSelectHandle = (selected: { label: string; color: string }) => {
     logger.info(`主题切换为：${selected.label} ${selected.color}`);
-    setColorPrimary(selected.color as PrimaryColor);
+    setColorPrimary(selected.color as ColorPrimary);
     onChange?.(selected);
   };
 
