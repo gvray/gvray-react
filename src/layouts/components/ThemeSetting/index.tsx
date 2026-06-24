@@ -1,4 +1,5 @@
 import { ColorPrimary, PRIMARY_COLOR_LABELS } from '@/constants';
+import { updateProfileSettings } from '@/services/profile';
 import { useSettingStore } from '@/stores';
 import { logger } from '@/utils';
 import React, { useState } from 'react';
@@ -40,6 +41,9 @@ const ThemeSetting: React.FC<ThemeSettingProps> = ({ onChange }) => {
   const themeSelectHandle = (selected: { label: string; color: string }) => {
     logger.info(`主题切换为：${selected.label} ${selected.color}`);
     setColorPrimary(selected.color as ColorPrimary);
+    updateProfileSettings({ colorPrimary: selected.color }).catch(() => {
+      // silent
+    });
     onChange?.(selected);
   };
 

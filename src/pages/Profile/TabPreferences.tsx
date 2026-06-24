@@ -1,8 +1,4 @@
-import {
-  THEME_MODE_LABELS,
-  ThemeMode,
-  ThemeModeWithoutSystem,
-} from '@/constants';
+import { THEME_MODE_LABELS, ThemeMode } from '@/constants';
 import {
   deleteProfileSettings,
   queryProfileSettings,
@@ -135,8 +131,8 @@ const TabPreferences: React.FC = () => {
   // ── Handlers（本地更新 + 排队同步）──────────────────────
 
   const handleThemeMode = (v: ThemeMode) => {
-    setTheme(v as ThemeModeWithoutSystem);
-    queueSync({ theme: v === 'system' ? 'auto' : v });
+    setTheme(v);
+    queueSync({ theme: v });
   };
 
   const handleLanguage = (v: string) => {
