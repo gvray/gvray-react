@@ -20,7 +20,8 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
-import { useState, type ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
+import { history, useLocation } from 'umi';
 import styles from './index.less';
 import { useProfilePageModel } from './model';
 import TabLoginLog from './TabLoginLog';
@@ -80,7 +81,26 @@ export default function ProfilePage() {
   const model = useProfilePageModel();
   const departmentName = model.profile?.department?.name || '未设置部门';
   const positionName = model.profile?.positions?.[0]?.name || '未设置岗位';
-  const [activeKey, setActiveKey] = useState('profile');
+  const location = useLocation();
+
+  const hashKey = location.hash?.replace(/^#/, '');
+  const initialKey = TAB_META.some((t) => t.key === hashKey)
+    ? hashKey
+    : 'profile';
+  const [activeKey, setActiveKey] = useState(initialKey);
+
+  useEffect(() => {
+    const key = location.hash?.replace(/^#/, '');
+    if (key && TAB_META.some((t) => t.key === key) && key !== activeKey) {
+      setActiveKey(key);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.hash]);
+
+  const handleTabChange = (key: string) => {
+    setActiveKey(key);
+    history.push({ pathname: location.pathname, hash: key });
+  };
 
   const tabItems = TAB_META.map((item) => ({
     key: item.key,
@@ -226,7 +246,7 @@ export default function ProfilePage() {
             <Tabs
               className={styles.responsiveTabs}
               activeKey={activeKey}
-              onChange={setActiveKey}
+              onChange={handleTabChange}
               items={tabItems}
             />
           </Card>

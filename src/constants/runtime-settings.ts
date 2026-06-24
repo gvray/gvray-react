@@ -39,7 +39,7 @@ export interface SystemConfig {
 
 export type SiderTheme = 'light' | 'dark';
 
-export interface PreferenceDefaults {
+export interface UserSettings {
   theme: ThemeMode;
   colorPrimary: ColorPrimary;
   language: string;
@@ -58,7 +58,7 @@ export interface PreferenceDefaults {
 /** 运行时 UI 配置。后端字段带 `default*` 前缀，normalizeUi 去掉前缀后映射到本结构。 */
 export interface AppRuntimeUiConfig
   extends Omit<
-    PreferenceDefaults,
+    UserSettings,
     | 'theme'
     | 'language'
     | 'pageSize'
@@ -139,7 +139,7 @@ export const DEFAULT_RUNTIME_CONFIG: AppRuntimeConfig = {
   },
 };
 
-export function buildPreferences(ui: AppRuntimeUiConfig): PreferenceDefaults {
+export function buildPreferences(ui: AppRuntimeUiConfig): UserSettings {
   return {
     theme: ui.theme as ThemeMode,
     colorPrimary: ui.colorPrimary as ColorPrimary,

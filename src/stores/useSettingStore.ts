@@ -1,7 +1,7 @@
 import {
   DEFAULT_RUNTIME_CONFIG,
-  type PreferenceDefaults,
   type SiderTheme,
+  type UserSettings,
   buildPreferences,
 } from '@/constants/runtime-settings';
 import { create } from 'zustand';
@@ -12,10 +12,10 @@ import { immer } from 'zustand/middleware/immer';
 
 interface SettingActions {
   /** 增量 patch（用户手动修改） */
-  patchSettings: (patch: Partial<PreferenceDefaults>) => void;
+  patchSettings: (patch: Partial<UserSettings>) => void;
 
-  setTheme: (mode: PreferenceDefaults['theme']) => void;
-  setColorPrimary: (color: PreferenceDefaults['colorPrimary']) => void;
+  setTheme: (mode: UserSettings['theme']) => void;
+  setColorPrimary: (color: UserSettings['colorPrimary']) => void;
   setLanguage: (lang: string) => void;
   setPageSize: (size: number) => void;
   setShowBreadcrumb: (show: boolean) => void;
@@ -33,7 +33,7 @@ interface SettingActions {
   reset: () => void;
 }
 
-export const useSettingStore = create<PreferenceDefaults & SettingActions>()(
+export const useSettingStore = create<UserSettings & SettingActions>()(
   persist(
     immer((set) => ({
       ...buildPreferences(DEFAULT_RUNTIME_CONFIG.ui),

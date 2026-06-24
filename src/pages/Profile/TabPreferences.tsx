@@ -162,7 +162,7 @@ const TabPreferences: React.FC = () => {
   const handleSiderTheme = (v: boolean) => {
     const mode = v ? 'dark' : 'light';
     setSidebarTheme(mode);
-    queueSync({ sidebarDark: v });
+    queueSync({ sidebarTheme: v ? 'dark' : 'light' });
   };
 
   const handleShowBreadcrumb = (v: boolean) => {

@@ -1,6 +1,6 @@
 /**
  * 此文件由 scripts/gen-api-types.ts 自动生成
- * 生成时间: 2026-06-24T14:18:06.097Z
+ * 生成时间: 2026-06-24T14:41:28.199Z
  * 数据来源: http://localhost:8001/api-json
  * 请勿手动修改此文件
  */
@@ -155,7 +155,7 @@ declare namespace API {
     roles?: CurrentUserRoleResponseDto[];
     /** 所属部门 */
     department?: CurrentUserDepartmentResponseDto;
-    /** 所属岗位 */
+    /** 所属���位 */
     positions?: CurrentUserPositionResponseDto[];
     /** 用户偏好设置 */
     preferences?: Record<string, unknown>;
@@ -1351,7 +1351,7 @@ declare namespace API {
      * 主题主色（Hex 颜色值或颜色名称，如 #1890ff、blue）
      * @example #1890ff
      */
-    primaryColor?: string;
+    colorPrimary?: string;
     /**
      * 色弱模式
      * @example false
@@ -1368,10 +1368,10 @@ declare namespace API {
      */
     showLogo?: boolean;
     /**
-     * 侧边栏深色（theme 控制全局亮暗，此字段仅控制侧边栏是否深色）
-     * @example false
+     * 侧边栏主题（light / dark，与全局 theme 独立控制）
+     * @example light
      */
-    sidebarDark?: boolean;
+    sidebarTheme?: string;
     /**
      * 侧边栏是否折叠
      * @example false
@@ -1402,11 +1402,6 @@ declare namespace API {
      * @example 10
      */
     pageSize?: number;
-    /**
-     * 时区
-     * @example Asia/Shanghai
-     */
-    timezone?: string;
     /**
      * 是否启用通知
      * @example true
