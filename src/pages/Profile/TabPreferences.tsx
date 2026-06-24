@@ -4,6 +4,7 @@ import {
   ThemeModeWithoutSystem,
 } from '@/constants';
 import {
+  deleteProfileSettings,
   queryProfileSettings,
   updateProfileSettings,
 } from '@/services/profile';
@@ -196,7 +197,7 @@ const TabPreferences: React.FC = () => {
 
   const handleReset = () => {
     reset();
-    updateProfileSettings({}).catch(() => {
+    deleteProfileSettings().catch(() => {
       // silent
     });
   };

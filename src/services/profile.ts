@@ -50,6 +50,13 @@ export function queryProfileLoginLogs(params?: API.LoginLogsFindAllParams) {
   );
 }
 
+/** 重置当前用户偏好设置（清空服务端存储） */
+export function deleteProfileSettings() {
+  return request<API.Response<void>>('/profile/settings', {
+    method: 'DELETE',
+  });
+}
+
 /** 修改当前用户密码 */
 export function changePassword(data: API.ChangePasswordDto) {
   return request<API.Response<void>>('/profile/change-password', {

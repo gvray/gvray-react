@@ -22,9 +22,6 @@ export const getConfigColumns =
         dataIndex: 'type',
         key: 'type',
         width: 100,
-        advancedSearch: {
-          type: 'SELECT',
-        },
       },
       {
         title: '分组',
@@ -58,9 +55,6 @@ export const getConfigColumns =
         key: 'createdAt',
         dataIndex: 'createdAt',
         width: 160,
-        advancedSearch: {
-          type: 'DATE_RANGE',
-        },
       },
     ];
   };

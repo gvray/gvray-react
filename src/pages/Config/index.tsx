@@ -106,10 +106,6 @@ const ConfigPage = () => {
     if (column.dataIndex === 'type') {
       return {
         ...column,
-        advancedSearch: {
-          type: 'SELECT',
-          value: dict.config_type,
-        },
         render: (type: string) => (
           <Tag>
             {dict.config_type?.find((d) => d.value === String(type))?.label ||

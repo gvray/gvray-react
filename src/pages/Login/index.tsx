@@ -32,6 +32,7 @@ const LoginPage: React.FC = () => {
   const { system, feature } = runtimeConfig.get();
   const siteName = system.name;
   const registerEnabled = feature.register;
+  const guestAccount = feature.guestAccount;
   const [isLogging, setLogging] = useState(false);
 
   const [form] = Form.useForm();
@@ -186,6 +187,28 @@ const LoginPage: React.FC = () => {
                 placeholder="密码"
               />
             </Form.Item>
+            {guestAccount && (
+              <Form.Item
+                wrapperCol={{ sm: { span: 20, offset: 4 } }}
+                style={{ marginBottom: 4 }}
+              >
+                <Space size={16} style={{ fontSize: 13, color: '#888' }}>
+                  <span>
+                    访客账号：
+                    <span style={{ color: '#1677ff', fontWeight: 500 }}>
+                      {guestAccount.username}
+                    </span>
+                  </span>
+                  <span>
+                    密码：
+                    <span style={{ color: '#1677ff', fontWeight: 500 }}>
+                      {guestAccount.password}
+                    </span>
+                  </span>
+                </Space>
+              </Form.Item>
+            )}
+
             <Form.Item style={{ marginBottom: '5px' }}>
               <Form.Item name="rememberMe" valuePropName="checked" noStyle>
                 <Checkbox>

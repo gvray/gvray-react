@@ -6,6 +6,10 @@ export interface FeatureConfig {
   emailNotification: boolean;
   smsNotification: boolean;
   mfa: boolean;
+  guestAccount?: {
+    username: string;
+    password: string;
+  };
 }
 
 export interface OauthConfig {
@@ -74,6 +78,7 @@ export interface AppRuntimeUiConfig
 export interface UserConfig {
   defaultAvatar: string;
 }
+
 export interface AppRuntimeConfig {
   feature: FeatureConfig;
   oauth: OauthConfig;
