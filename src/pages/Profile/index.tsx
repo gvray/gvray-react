@@ -151,7 +151,7 @@ export default function ProfilePage() {
                       title={String(role.description || role.name)}
                       styles={{ body: { maxWidth: 280 } }}
                     >
-                      <Tag color="blue">{role.name}</Tag>
+                      <Tag color="processing">{role.name}</Tag>
                     </Tooltip>
                   ))}
                   {(model.profile?.roles?.length ?? 0) > 3 && (

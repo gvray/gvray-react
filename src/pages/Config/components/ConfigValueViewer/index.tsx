@@ -84,7 +84,7 @@ const ConfigValueViewer: React.FC<ConfigValueViewerProps> = ({
           <Text strong>{config.name}</Text>
         </Descriptions.Item>
         <Descriptions.Item label="配置键">
-          <Tag color="blue" style={{ fontFamily: 'monospace' }}>
+          <Tag color="processing" style={{ fontFamily: 'monospace' }}>
             {config.key}
           </Tag>
         </Descriptions.Item>

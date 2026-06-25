@@ -117,7 +117,7 @@ const MenuPage = () => {
           ],
         },
         render: (type: string) => (
-          <Tag color={type === 'CATALOG' ? 'blue' : 'green'}>
+          <Tag color={type === 'CATALOG' ? 'processing' : 'green'}>
             {type === 'CATALOG' ? '目录' : '菜单'}
           </Tag>
         ),

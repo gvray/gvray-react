@@ -1,5 +1,6 @@
 import {
   AuthButton,
+  BackButton,
   PageContainer,
   PageLoading,
   PagePlaceholder,
@@ -10,7 +11,6 @@ import { useFeedback } from '@/hooks';
 import useDict from '@/hooks/useDict';
 import type { DictOption } from '@/types/dict';
 import {
-  ArrowLeftOutlined,
   CheckOutlined,
   SaveOutlined,
   SearchOutlined,
@@ -164,11 +164,10 @@ export default function AuthUserPage() {
         <div className={styles.sidebar}>
           <Card className={styles.roleCard}>
             <div className={styles.roleHeader}>
-              <Tooltip title="返回角色列表">
-                <div className={styles.backButton} onClick={handleBackToRoles}>
-                  <ArrowLeftOutlined />
-                </div>
-              </Tooltip>
+              <BackButton
+                tooltipTitle="返回角色列表"
+                onClick={handleBackToRoles}
+              />
               <div className={styles.roleInfo}>
                 <div className={styles.roleName}>{selectedRole.name}</div>
                 <span className={styles.roleKey}>{selectedRole.roleKey}</span>

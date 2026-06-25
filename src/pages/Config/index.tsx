@@ -100,7 +100,7 @@ const ConfigPage = () => {
     if (column.dataIndex === 'key') {
       return {
         ...column,
-        render: (key: string) => <Tag color="blue">{key}</Tag>,
+        render: (key: string) => <Tag color="processing">{key}</Tag>,
       };
     }
     if (column.dataIndex === 'type') {

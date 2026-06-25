@@ -44,13 +44,6 @@ ol {
   list-style: none;
 }
 
-/* antd Tag 预设色 blue 跟随主题色 */
-.ant-tag-blue {
-  color: var(--gvray-primary-color);
-  background: var(--gvray-primary-1);
-  border-color: var(--gvray-primary-3);
-}
-
 /* antd Button link 跟随主题色 */
 .ant-btn.ant-btn-link {
   color: var(--gvray-primary-color) !important;
@@ -61,6 +54,15 @@ ol {
 
   &:where(:active) {
     color: var(--gvray-primary-color-active) !important;
+  }
+}
+
+/* antd Typography copy 图标跟随主题色 */
+.ant-typography-copy {
+  color: var(--gvray-primary-color) !important;
+
+  &:where(:hover) {
+    color: var(--gvray-primary-color-hover) !important;
   }
 }
 

@@ -114,7 +114,7 @@ const DictionaryPage = () => {
     if (column.dataIndex === 'code') {
       return {
         ...column,
-        render: (code: string) => <Tag color="blue">{code}</Tag>,
+        render: (code: string) => <Tag color="processing">{code}</Tag>,
       };
     }
     if (column.dataIndex === 'status') {

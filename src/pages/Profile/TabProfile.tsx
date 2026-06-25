@@ -131,7 +131,7 @@ const TabProfile: React.FC<TabProfileProps> = ({ profile }) => {
                   title={String(role.description || role.name)}
                   styles={{ body: { maxWidth: 280 } }}
                 >
-                  <Tag color="blue">{role.name}</Tag>
+                  <Tag color="processing">{role.name}</Tag>
                 </Tooltip>
               ))}
               {!currentMe?.roles?.length && (

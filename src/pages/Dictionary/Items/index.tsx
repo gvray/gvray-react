@@ -111,15 +111,13 @@ const DictionaryItemsPage = () => {
     if (column.dataIndex === 'value') {
       return {
         ...column,
-        render: (value: string) => <Tag color="purple">{value}</Tag>,
+        render: (value: string) => <Tag color="processing">{value}</Tag>,
       };
     }
     if (column.dataIndex === 'sort') {
       return {
         ...column,
-        render: (sort: number) => (
-          <Tag color={sort === 0 ? 'default' : 'green'}>{sort}</Tag>
-        ),
+        render: (sort: number) => <Tag>{sort}</Tag>,
       };
     }
     if (column.dataIndex === 'status') {

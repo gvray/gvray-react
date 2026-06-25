@@ -259,7 +259,7 @@ export default function AuthDataScopeModal({
       title: (
         <Space>
           <span>{dept.name}</span>
-          <Tag color="blue">{dept.description}</Tag>
+          <Tag color="processing">{dept.description}</Tag>
         </Space>
       ),
       key: dept.departmentId,
@@ -278,7 +278,7 @@ export default function AuthDataScopeModal({
           />
           数据权限分配 - {currentRole?.name || roleName}
           {currentRole?.roleKey && (
-            <Tag color="blue" style={{ marginLeft: '8px' }}>
+            <Tag color="processing" style={{ marginLeft: '8px' }}>
               {currentRole.roleKey}
             </Tag>
           )}
@@ -371,7 +371,7 @@ export default function AuthDataScopeModal({
                                   <Text strong>选择允许访问的部门：</Text>
                                   {selectedDeptIds.length > 0 && (
                                     <Tag
-                                      color="blue"
+                                      color="processing"
                                       style={{ marginLeft: '8px' }}
                                     >
                                       已选 {selectedDeptIds.length} 个部门

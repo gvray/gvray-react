@@ -49,32 +49,6 @@
     gap: 12px;
   }
 
-  .backButton {
-    width: 48px;
-    height: 48px;
-    border-radius: 8px;
-    background: linear-gradient(
-      135deg,
-      var(--gvray-primary-color) 0%,
-      var(--gvray-primary-color-hover) 100%
-    );
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 20px;
-    font-weight: 600;
-    flex-shrink: 0;
-    cursor: pointer;
-    transition: all 0.2s;
-    overflow: hidden;
-
-    &:hover {
-      transform: translateX(-2px);
-      box-shadow: 0 4px 12px rgba(24, 144, 255, 0.35);
-    }
-  }
-
   .userInfo {
     flex: 1;
     min-width: 0;
@@ -198,18 +172,17 @@
     min-height: 110px;
     border-radius: 8px;
     background: var(--gvray-bg-container);
+    border: 1px solid var(--gvray-border-color-secondary);
     cursor: pointer;
-    transition: all 0.2s ease;
-    box-shadow: var(--gvray-box-shadow);
+    transition: background 0.2s;
 
     &:hover {
-      box-shadow: 0 3px 6px rgba(24, 144, 255, 0.12);
-      transform: translateY(-1px);
+      background: var(--gvray-bg-elevated);
     }
 
     &.selected {
       background: var(--gvray-primary-1);
-      box-shadow: none;
+      border-color: var(--gvray-primary-3);
 
       .checkIcon {
         opacity: 1;

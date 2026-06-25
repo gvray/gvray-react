@@ -1,5 +1,6 @@
 import {
   AuthButton,
+  BackButton,
   PageContainer,
   PageLoading,
   PagePlaceholder,
@@ -10,7 +11,6 @@ import { useFeedback } from '@/hooks';
 import useDict from '@/hooks/useDict';
 import type { DictOption } from '@/types/dict';
 import {
-  ArrowLeftOutlined,
   FolderOutlined,
   InfoCircleOutlined,
   KeyOutlined,
@@ -357,11 +357,10 @@ export default function AuthPermissionPage() {
         <div className={styles.sidebar}>
           <Card className={styles.roleCard}>
             <div className={styles.roleHeader}>
-              <Tooltip title="返回角色列表">
-                <div className={styles.backButton} onClick={handleBackToRoles}>
-                  <ArrowLeftOutlined />
-                </div>
-              </Tooltip>
+              <BackButton
+                tooltipTitle="返回角色列表"
+                onClick={handleBackToRoles}
+              />
               <div className={styles.roleInfo}>
                 <div className={styles.roleName}>{selectedRole.name}</div>
                 <span className={styles.roleKey}>{selectedRole.roleKey}</span>
@@ -424,7 +423,7 @@ export default function AuthPermissionPage() {
                 {selectedRole.permissions.slice(0, 12).map((p: any) => (
                   <Tag
                     key={p.permissionId}
-                    color="blue"
+                    color="processing"
                     style={{ margin: 0, fontSize: 11 }}
                   >
                     {p.name}

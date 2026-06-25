@@ -1,4 +1,5 @@
 import { AuthButton } from '@/components';
+import BackButton from '@/components/BackButton';
 import PageContainer from '@/components/PageContainer';
 import PageLoading from '@/components/PageLoading';
 import PagePlaceholder from '@/components/PagePlaceholder';
@@ -7,14 +8,13 @@ import { PERM } from '@/constants';
 import { useFeedback } from '@/hooks';
 import useDict from '@/hooks/useDict';
 import {
-  ArrowLeftOutlined,
   CheckOutlined,
   SaveOutlined,
   TeamOutlined,
   UndoOutlined,
   UserOutlined,
 } from '@ant-design/icons';
-import { Button, Card, Space, Tag, Tooltip, Typography } from 'antd';
+import { Button, Card, Space, Tag, Typography } from 'antd';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'umi';
 import styles from './index.less';
@@ -121,11 +121,10 @@ export default function AuthRolePage() {
         <div className={styles.sidebar}>
           <Card className={styles.userCard}>
             <div className={styles.userHeader}>
-              <Tooltip title="返回用户列表">
-                <div className={styles.backButton} onClick={handleBackToUsers}>
-                  <ArrowLeftOutlined />
-                </div>
-              </Tooltip>
+              <BackButton
+                tooltipTitle="返回用户列表"
+                onClick={handleBackToUsers}
+              />
               <div className={styles.userInfo}>
                 <div className={styles.userName}>
                   {selectedUser.nickname || selectedUser.username}
@@ -170,7 +169,7 @@ export default function AuthRolePage() {
             {selectedUser.roles && selectedUser.roles.length > 0 ? (
               <Space wrap size={[4, 8]}>
                 {selectedUser.roles.map((role) => (
-                  <Tag key={role.roleId} color="blue">
+                  <Tag key={role.roleId} color="processing">
                     {role.name}
                   </Tag>
                 ))}

@@ -53,7 +53,7 @@ export default function BaseLayout() {
         <ConfigProvider
           theme={{
             algorithm: themeAlgorithm,
-            token: { colorPrimary },
+            token: { colorPrimary, colorInfo: colorPrimary },
             components: {
               Menu: {
                 darkItemSelectedBg: colorPrimary,

@@ -27,7 +27,7 @@ function permTreeToData(nodes: PermissionTreeNode[]): DataNode[] {
             </Tag>
           )}
           {isResource && (
-            <Tag color="blue" className={styles.inlineTag}>
+            <Tag color="processing" className={styles.inlineTag}>
               资源
             </Tag>
           )}
