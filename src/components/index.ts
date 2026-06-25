@@ -3,6 +3,7 @@ import AntIcon from './AntIcon';
 import AppBreadcrumb from './AppBreadcrumb';
 import AppWatermark from './AppWatermark';
 import AuthButton from './AuthButton';
+import BackButton from './BackButton';
 import CellName from './CellName';
 import Charts from './Charts';
 import CopyId from './CopyId';
@@ -27,6 +28,7 @@ export {
   AppBreadcrumb,
   AppWatermark,
   AuthButton,
+  BackButton,
   CellName,
   Charts,
   CopyId,
