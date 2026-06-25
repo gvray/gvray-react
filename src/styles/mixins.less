@@ -73,16 +73,16 @@
 
 // 卡片阴影
 .card-shadow() {
-  box-shadow: var(--ant-box-shadow);
+  box-shadow: var(--gvray-box-shadow);
 }
 
 // 卡片悬停阴影
 .card-shadow-hover() {
-  box-shadow: var(--ant-box-shadow-secondary);
+  box-shadow: var(--gvray-box-shadow-secondary);
 }
 
 // 自定义阴影
-.box-shadow(@x: 0, @y: 2px, @blur: 8px, @spread: 0, @color: rgba(0, 0, 0, 0.1)) {
+.box-shadow(@x: 0, @y: 2px, @blur: 8px, @spread: 0, @color: var(--gvray-box-shadow)) {
   box-shadow: @x @y @blur @spread @color;
 }
 
@@ -92,8 +92,8 @@
 .gradient-primary() {
   background: linear-gradient(
     135deg,
-    var(--ant-primary-color) 0%,
-    var(--ant-purple-6, #722ed1) 100%
+    var(--gvray-primary-color) 0%,
+    var(--gvray-info-color) 100%
   );
 }
 
@@ -146,7 +146,7 @@
 }
 
 // 自定义滚动条
-.custom-scrollbar(@width: 6px, @track-color: transparent, @thumb-color: var(--ant-fill-color-secondary)) {
+.custom-scrollbar(@width: 6px, @track-color: transparent, @thumb-color: var(--gvray-fill-color-secondary)) {
   &::-webkit-scrollbar {
     width: @width;
     height: @width;
@@ -158,7 +158,7 @@
     background: @thumb-color;
     border-radius: @width / 2;
     &:hover {
-      background: var(--ant-fill-color);
+      background: var(--gvray-fill-color);
     }
   }
 }

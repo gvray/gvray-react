@@ -17,6 +17,7 @@ import {
   Table,
   Tag,
   Typography,
+  theme,
 } from 'antd';
 import type { EChartsOption } from 'echarts';
 import React, { useMemo } from 'react';
@@ -28,7 +29,11 @@ const { Title, Text } = Typography;
 // ─── ECharts 配置工厂 ───────────────────────────────────
 
 /** 环形仪表盘（CPU / 内存使用率） */
-const createGaugeOption = (value: number, name: string): EChartsOption => {
+const createGaugeOption = (
+  value: number,
+  name: string,
+  token: { colorFillSecondary: string; colorTextSecondary: string },
+): EChartsOption => {
   const color = getUsageColor(value);
   return {
     series: [
@@ -46,7 +51,7 @@ const createGaugeOption = (value: number, name: string): EChartsOption => {
           itemStyle: { color },
         },
         axisLine: {
-          lineStyle: { width: 10, color: [[1, '#f0f0f0']] },
+          lineStyle: { width: 10, color: [[1, token.colorFillSecondary]] },
         },
         axisTick: { show: false },
         splitLine: { show: false },
@@ -58,7 +63,7 @@ const createGaugeOption = (value: number, name: string): EChartsOption => {
             title: {
               offsetCenter: ['0%', '-20%'],
               fontSize: 12,
-              color: '#999',
+              color: token.colorTextSecondary,
             },
             detail: {
               offsetCenter: ['0%', '15%'],
@@ -76,7 +81,10 @@ const createGaugeOption = (value: number, name: string): EChartsOption => {
 };
 
 /** CPU 每核心使用率柱状图 */
-const createCpuBarOption = (data: number[]): EChartsOption => {
+const createCpuBarOption = (
+  data: number[],
+  token: { colorTextSecondary: string; colorFillSecondary: string },
+): EChartsOption => {
   return {
     tooltip: {
       trigger: 'axis',
@@ -94,15 +102,21 @@ const createCpuBarOption = (data: number[]): EChartsOption => {
       data: data.map((_, i) => `#${i + 1}`),
       axisLine: { show: false },
       axisTick: { show: false },
-      axisLabel: { color: '#94a3b8', fontSize: 10 },
+      axisLabel: { color: token.colorTextSecondary, fontSize: 10 },
     },
     yAxis: {
       type: 'value',
       max: 100,
       axisLine: { show: false },
       axisTick: { show: false },
-      axisLabel: { color: '#94a3b8', fontSize: 10, formatter: '{value}%' },
-      splitLine: { lineStyle: { color: '#f1f5f9', type: 'dashed' } },
+      axisLabel: {
+        color: token.colorTextSecondary,
+        fontSize: 10,
+        formatter: '{value}%',
+      },
+      splitLine: {
+        lineStyle: { color: token.colorFillSecondary, type: 'dashed' },
+      },
     },
     series: [
       {
@@ -118,7 +132,11 @@ const createCpuBarOption = (data: number[]): EChartsOption => {
 };
 
 /** 内存饼图 */
-const createMemoryPieOption = (used: number, free: number): EChartsOption => {
+const createMemoryPieOption = (
+  used: number,
+  free: number,
+  token: { colorTextSecondary: string; colorBgContainer: string },
+): EChartsOption => {
   return {
     tooltip: {
       trigger: 'item',
@@ -134,7 +152,7 @@ const createMemoryPieOption = (used: number, free: number): EChartsOption => {
       itemWidth: 10,
       itemHeight: 10,
       icon: 'circle',
-      textStyle: { fontSize: 12, color: '#64748b' },
+      textStyle: { fontSize: 12, color: token.colorTextSecondary },
     },
     series: [
       {
@@ -142,13 +160,17 @@ const createMemoryPieOption = (used: number, free: number): EChartsOption => {
         radius: ['45%', '72%'],
         center: ['35%', '50%'],
         avoidLabelOverlap: false,
-        itemStyle: { borderRadius: 6, borderColor: '#fff', borderWidth: 3 },
+        itemStyle: {
+          borderRadius: 6,
+          borderColor: token.colorBgContainer,
+          borderWidth: 3,
+        },
         label: { show: false },
         labelLine: { show: false },
         emphasis: {
           scale: true,
           scaleSize: 6,
-          itemStyle: { shadowBlur: 16, shadowColor: 'rgba(0,0,0,0.15)' },
+          itemStyle: { shadowBlur: 16 },
         },
         data: [
           {
@@ -243,6 +265,7 @@ const networkColumns = [
 // ─── 主组件 ─────────────────────────────────────────────
 
 const ServerMonitorPage: React.FC = () => {
+  const { token } = theme.useToken();
   const { data, loading, error, autoRefresh, setAutoRefresh, refresh } =
     useServerMonitor();
 
@@ -255,14 +278,14 @@ const ServerMonitorPage: React.FC = () => {
         title: 'CPU 使用率',
         icon: <DashboardOutlined />,
         value: data.cpu.usagePercent,
-        option: createGaugeOption(data.cpu.usagePercent, 'CPU'),
+        option: createGaugeOption(data.cpu.usagePercent, 'CPU', token),
       },
       {
         key: 'memory',
         title: '内存使用率',
         icon: <DashboardOutlined />,
         value: data.memory.usagePercent,
-        option: createGaugeOption(data.memory.usagePercent, '内存'),
+        option: createGaugeOption(data.memory.usagePercent, '内存', token),
       },
       {
         key: 'osUptime',
@@ -310,7 +333,7 @@ const ServerMonitorPage: React.FC = () => {
                 数据更新时间：{new Date(data.timestamp).toLocaleString()}
               </Text>
             )}
-            <a onClick={refresh}>
+            <a className={styles.actionLink} onClick={refresh}>
               <ReloadOutlined spin={loading} /> 刷新
             </a>
             <Space size={4}>
@@ -391,7 +414,7 @@ const ServerMonitorPage: React.FC = () => {
                   {/* 每核心使用率柱状图 */}
                   <div style={{ height: 220 }}>
                     <Charts
-                      options={createCpuBarOption(data.cpu.perCoreUsage)}
+                      options={createCpuBarOption(data.cpu.perCoreUsage, token)}
                     />
                   </div>
                 </div>
@@ -411,6 +434,7 @@ const ServerMonitorPage: React.FC = () => {
                       options={createMemoryPieOption(
                         data.memory.used,
                         data.memory.free,
+                        token,
                       )}
                     />
                   </div>

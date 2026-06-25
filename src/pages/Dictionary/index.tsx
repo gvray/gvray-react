@@ -58,7 +58,13 @@ const DictionaryPage = () => {
           <p>
             确定要删除字典类型 <strong>&quot;{record.name}&quot;</strong> 吗？
           </p>
-          <p style={{ color: '#ff4d4f', fontSize: '12px', marginTop: '8px' }}>
+          <p
+            style={{
+              color: 'var(--gvray-error-color)',
+              fontSize: '12px',
+              marginTop: '8px',
+            }}
+          >
             删除后将无法恢复，且会同时删除该类型下的所有字典项！
           </p>
         </div>

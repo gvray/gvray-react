@@ -26,19 +26,20 @@ const TriggerButton = styled.button<{
   font-size: 11px;
   transition: color 0.2s ease, box-shadow 0.2s ease;
   color: ${({ $dark }) =>
-    $dark ? 'rgba(255,255,255,0.45)' : 'rgba(0,0,0,0.25)'};
-  background: ${({ $dark }) => ($dark ? '#002140' : '#f5f5f5')};
-  border: ${({ $dark }) =>
-    $dark ? '1px solid rgba(255,255,255,0.08)' : '1px solid rgba(0,0,0,0.06)'};
-  box-shadow: ${({ $dark }) =>
-    $dark ? '0 1px 4px rgba(0,0,0,0.2)' : '0 1px 4px rgba(0,0,0,0.05)'};
+    $dark
+      ? 'var(--gvray-text-color-secondary)'
+      : 'var(--gvray-text-color-placeholder)'};
+  background: ${({ $dark }) =>
+    $dark ? 'var(--gvray-bg-container)' : 'var(--gvray-bg-elevated)'};
+  border: 1px solid var(--gvray-border-color);
+  box-shadow: var(--gvray-box-shadow);
   &:hover {
-    color: ${({ $dark }) =>
-      $dark ? 'rgba(255,255,255,0.85)' : 'rgba(0,0,0,0.65)'};
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+    color: var(--gvray-text-color);
+    box-shadow: var(--gvray-box-shadow-secondary);
   }
   &:focus-visible {
-    box-shadow: 0 0 0 2px rgba(22, 119, 255, 0.2), 0 2px 8px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 0 0 2px var(--gvray-primary-color-outline),
+      var(--gvray-box-shadow-secondary);
   }
 `;
 

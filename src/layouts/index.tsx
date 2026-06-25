@@ -3,8 +3,6 @@ import ErrorBoundary from '@/components/ErrorBoundary';
 import NavigationProgress from '@/components/NavigationProgress';
 import { RouteMetaProvider } from '@/contexts/routeMeta';
 import { useAppTheme, useRouteMeta } from '@/hooks';
-import useThemeColor from '@/hooks/useThemeColor';
-import useThemeMode from '@/hooks/useThemeMode';
 import { useSettingStore } from '@/stores';
 import { runtimeConfig } from '@/utils/runtime-config';
 import { App, ConfigProvider, Layout } from 'antd';
@@ -33,15 +31,9 @@ export default function BaseLayout() {
     colorWeak,
   } = useSettingStore();
   const grayMode = runtimeConfig.get().ui.grayMode;
-  const themeColor = useThemeColor();
   const meta = useRouteMeta();
   const routeTitle = meta.title ?? '';
   const { themeAlgorithm } = useAppTheme();
-  const effectiveThemeMode = useThemeMode();
-
-  // 暗色模式下强制 sidebar dark，浅色模式下尊重用户偏好
-  const effectiveSiderTheme =
-    effectiveThemeMode === 'dark' ? 'dark' : sidebarTheme;
 
   const documentTitle = routeTitle
     ? `${routeTitle} - ${system.name}`
@@ -74,17 +66,12 @@ export default function BaseLayout() {
               <AppLayout className={layoutClassName}>
                 <SideNav
                   collapsed={sidebarCollapsed}
-                  theme={effectiveSiderTheme}
-                  width={220}
-                  collapsedWidth={64}
+                  sidebarTheme={sidebarTheme}
                   showLogo={showLogo}
                 />
                 <AppViewport>
                   <NavigationProgress />
-                  <AppHeader
-                    themeColor={themeColor}
-                    headerFixed={fixedHeader}
-                  />
+                  <AppHeader headerFixed={fixedHeader} />
 
                   <ErrorBoundary>
                     <Outlet />

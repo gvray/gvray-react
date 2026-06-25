@@ -4,7 +4,7 @@
   :global {
     .ant-spin-nested-loading {
       > div > .ant-spin {
-        background: rgba(255, 255, 255, 0.75);
+        background: var(--gvray-bg-mask);
         backdrop-filter: blur(1px);
         max-height: unset;
         transition: opacity 0.2s ease;
@@ -15,7 +15,7 @@
 
         .ant-spin-text {
           font-size: 13px;
-          color: #888;
+          color: var(--gvray-text-color-secondary);
           margin-top: 10px;
         }
       }

@@ -1,4 +1,5 @@
 import { Charts } from '@/components';
+import { theme } from 'antd';
 import type { EChartsOption } from 'echarts';
 import React from 'react';
 
@@ -8,13 +9,14 @@ interface LoginTrendProps {
 }
 
 const LoginTrend: React.FC<LoginTrendProps> = ({ data, height = 340 }) => {
+  const { token } = theme.useToken();
   const options: EChartsOption = {
     tooltip: {
       trigger: 'axis',
-      backgroundColor: 'rgba(255,255,255,0.96)',
-      borderColor: '#e5e7eb',
+      backgroundColor: token.colorBgContainer,
+      borderColor: token.colorBorder,
       borderWidth: 1,
-      textStyle: { color: '#334155', fontSize: 13 },
+      textStyle: { color: token.colorText, fontSize: 13 },
       axisPointer: {
         type: 'shadow',
         shadowStyle: { color: 'rgba(102, 126, 234, 0.06)' },
@@ -40,7 +42,7 @@ const LoginTrend: React.FC<LoginTrendProps> = ({ data, height = 340 }) => {
       axisLine: { show: false },
       axisTick: { show: false },
       axisLabel: {
-        color: '#94a3b8',
+        color: token.colorTextSecondary,
         fontSize: 11,
         margin: 12,
       },
@@ -49,9 +51,9 @@ const LoginTrend: React.FC<LoginTrendProps> = ({ data, height = 340 }) => {
       type: 'value',
       axisLine: { show: false },
       axisTick: { show: false },
-      axisLabel: { color: '#94a3b8', fontSize: 11 },
+      axisLabel: { color: token.colorTextSecondary, fontSize: 11 },
       splitLine: {
-        lineStyle: { color: '#f1f5f9', type: 'dashed' },
+        lineStyle: { color: token.colorFillSecondary, type: 'dashed' },
       },
     },
     series: [
@@ -100,7 +102,7 @@ const LoginTrend: React.FC<LoginTrendProps> = ({ data, height = 340 }) => {
         },
         itemStyle: {
           color: '#667eea',
-          borderColor: '#fff',
+          borderColor: token.colorBgContainer,
           borderWidth: 2,
         },
         symbolSize: 8,

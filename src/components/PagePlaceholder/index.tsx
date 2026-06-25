@@ -24,14 +24,20 @@ const PagePlaceholder: React.FC<PagePlaceholderProps> = ({
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        color: '#999',
+        color: 'var(--gvray-text-color-placeholder)',
         padding: '24px 16px',
         textAlign: 'center',
         ...style,
       }}
     >
       {icon ? (
-        <div style={{ fontSize: 48, color: '#d9d9d9', marginBottom: 16 }}>
+        <div
+          style={{
+            fontSize: 48,
+            color: 'var(--gvray-text-color-placeholder)',
+            marginBottom: 16,
+          }}
+        >
           {icon}
         </div>
       ) : null}

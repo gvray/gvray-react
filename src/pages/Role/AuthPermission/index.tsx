@@ -206,7 +206,11 @@ export default function AuthPermissionPage() {
             {permission.description && (
               <Tooltip title={permission.description}>
                 <InfoCircleOutlined
-                  style={{ color: '#bbb', fontSize: 12, cursor: 'help' }}
+                  style={{
+                    color: 'var(--gvray-text-color-placeholder)',
+                    fontSize: 12,
+                    cursor: 'help',
+                  }}
                 />
               </Tooltip>
             )}
@@ -396,7 +400,12 @@ export default function AuthPermissionPage() {
                 <div className="label">权限点</div>
               </div>
             </div>
-            <div style={{ borderTop: '1px solid #f0f0f0', margin: '10px 0' }} />
+            <div
+              style={{
+                borderTop: '1px solid var(--gvray-border-color)',
+                margin: '10px 0',
+              }}
+            />
             <div className={styles.statsGrid}>
               <div className={`${styles.statItem} ${styles.orange}`}>
                 <div className="number">{stats.domains}</div>

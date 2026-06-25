@@ -56,8 +56,8 @@
     border-radius: 8px;
     background: linear-gradient(
       135deg,
-      var(--ant-primary-color) 0%,
-      #1890ff 100%
+      var(--gvray-primary-color) 0%,
+      var(--gvray-primary-color-hover) 100%
     );
     display: flex;
     align-items: center;
@@ -82,7 +82,7 @@
     .roleName {
       font-size: 16px;
       font-weight: 600;
-      color: var(--ant-text-color);
+      color: var(--gvray-text-color);
       margin-bottom: 2px;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -91,8 +91,8 @@
 
     .roleKey {
       font-size: 12px;
-      color: var(--ant-primary-color);
-      background: var(--ant-primary-1);
+      color: var(--gvray-primary-color);
+      background: var(--gvray-primary-1);
       padding: 2px 8px;
       border-radius: 4px;
       display: inline-block;
@@ -101,7 +101,7 @@
   }
 
   .divider {
-    border-top: 1px solid #f0f0f0;
+    border-top: 1px solid var(--gvray-border-color);
     margin: 16px 0;
   }
 
@@ -113,11 +113,11 @@
     font-size: 13px;
 
     :global(.label) {
-      color: var(--ant-text-color-secondary);
+      color: var(--gvray-text-color-secondary);
     }
 
     :global(.value) {
-      color: var(--ant-text-color);
+      color: var(--gvray-text-color);
       font-weight: 500;
     }
   }
@@ -128,7 +128,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    color: var(--ant-text-color);
+    color: var(--gvray-text-color);
     font-weight: 500;
   }
 
@@ -139,58 +139,58 @@
   }
 
   .statItem {
-    background: var(--ant-fill-color-quaternary);
-    border: 1px solid var(--ant-border-color);
+    background: var(--gvray-fill-color-quaternary);
+    border: 1px solid var(--gvray-border-color);
     border-radius: 8px;
     padding: 10px 8px;
     text-align: center;
 
     &.purple {
-      background: var(--ant-primary-1);
-      border-color: var(--ant-primary-3);
+      background: var(--gvray-primary-1);
+      border-color: var(--gvray-primary-3);
 
       :global(.number) {
-        color: var(--ant-primary-color);
+        color: var(--gvray-primary-color);
       }
     }
 
     &.blue {
-      background: rgba(24, 144, 255, 0.1);
-      border-color: rgba(24, 144, 255, 0.3);
+      background: var(--gvray-primary-1);
+      border-color: var(--gvray-primary-3);
 
       :global(.number) {
-        color: var(--ant-info-color);
+        color: var(--gvray-info-color);
       }
     }
 
     &.orange {
-      background: rgba(250, 173, 20, 0.1);
-      border-color: rgba(250, 173, 20, 0.3);
+      background: var(--gvray-warning-color-bg);
+      border-color: var(--gvray-warning-color-border);
 
       :global(.number) {
-        color: var(--ant-warning-color);
+        color: var(--gvray-warning-color);
       }
     }
 
     :global(.number) {
       font-size: 20px;
       font-weight: 600;
-      color: var(--ant-text-color);
+      color: var(--gvray-text-color);
       line-height: 1;
       margin-bottom: 4px;
     }
 
     :global(.label) {
       font-size: 11px;
-      color: var(--ant-text-color-secondary);
+      color: var(--gvray-text-color-secondary);
     }
   }
 
   .mainContent {
     flex: 1;
     min-width: 0;
-    background: var(--ant-bg-container);
-    border: 1px solid var(--ant-border-color);
+    background: var(--gvray-bg-container);
+    border: 1px solid var(--gvray-border-color);
     border-radius: 8px;
     overflow: hidden;
 
@@ -206,7 +206,7 @@
     align-items: center;
     gap: 12px;
     padding: 12px 16px;
-    border-bottom: 1px solid var(--ant-border-color);
+    border-bottom: 1px solid var(--gvray-border-color);
     flex-wrap: wrap;
     flex-shrink: 0;
   }
@@ -235,27 +235,27 @@
     gap: 6px;
 
     .nodeIcon {
-      color: var(--ant-primary-color);
+      color: var(--gvray-primary-color);
     }
 
     .nodeName {
       font-size: 13px;
-      color: var(--ant-text-color);
+      color: var(--gvray-text-color);
     }
 
     .nodePermission {
       font-size: 11px;
       padding: 1px 6px;
       border-radius: 3px;
-      background: var(--ant-primary-1);
-      color: var(--ant-primary-color);
+      background: var(--gvray-primary-1);
+      color: var(--gvray-primary-color);
       font-family: 'SF Mono', Monaco, monospace;
     }
   }
 
   .emptyState {
     text-align: center;
-    color: #999;
+    color: var(--gvray-text-color-placeholder);
     padding: 60px 20px;
 
     .icon {

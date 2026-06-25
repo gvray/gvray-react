@@ -35,7 +35,8 @@ const STAT_CONFIG: StatItem[] = [
     key: 'users',
     label: '用户总数',
     icon: <UserOutlined />,
-    gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+    gradient:
+      'linear-gradient(135deg, var(--gvray-primary-color) 0%, var(--gvray-info-color) 100%)',
     trendUp: true,
     trendValue: '+12%',
     trendLabel: '较上月',
@@ -44,7 +45,8 @@ const STAT_CONFIG: StatItem[] = [
     key: 'roles',
     label: '角色数量',
     icon: <TeamOutlined />,
-    gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+    gradient:
+      'linear-gradient(135deg, var(--gvray-error-color) 0%, var(--gvray-warning-color) 100%)',
     trendUp: true,
     trendValue: '+2',
     trendLabel: '本月新增',
@@ -53,7 +55,8 @@ const STAT_CONFIG: StatItem[] = [
     key: 'permissions',
     label: '权限点数',
     icon: <SafetyCertificateOutlined />,
-    gradient: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+    gradient:
+      'linear-gradient(135deg, var(--gvray-info-color) 0%, var(--gvray-primary-color-hover) 100%)',
     trendUp: true,
     trendValue: '+5',
     trendLabel: '本月新增',
@@ -62,7 +65,8 @@ const STAT_CONFIG: StatItem[] = [
     key: 'onlineUsers',
     label: '在线用户',
     icon: <WifiOutlined />,
-    gradient: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
+    gradient:
+      'linear-gradient(135deg, var(--gvray-success-color) 0%, var(--gvray-primary-color) 100%)',
     trendUp: false,
     trendValue: '-3',
     trendLabel: '较昨日',

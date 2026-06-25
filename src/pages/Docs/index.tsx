@@ -14,7 +14,7 @@ export default function DocsPage() {
         <div style={{ fontWeight: 600, margin: '12px 0 8px' }}>环境变量</div>
         <pre
           style={{
-            background: '#f7f7f7',
+            background: 'var(--gvray-fill-color)',
             padding: 12,
             borderRadius: 6,
             fontSize: 13,

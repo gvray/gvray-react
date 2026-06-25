@@ -32,10 +32,10 @@ const ActivityItem = styled.div`
   justify-content: space-between;
   padding: 8px 16px;
   border-radius: 8px;
-  background: #fafafa;
+  background: var(--gvray-bg-elevated);
   transition: background 0.2s;
   &:hover {
-    background: #f0f5ff;
+    background: var(--gvray-primary-1);
   }
 `;
 
@@ -64,28 +64,34 @@ const IpText = styled(Text)`
 
 const getActionIcon = (action: string) => {
   if (action.includes('删除'))
-    return <DeleteOutlined style={{ color: '#ff4d4f' }} />;
+    return <DeleteOutlined style={{ color: 'var(--gvray-error-color)' }} />;
   if (
     action.includes('修改') ||
     action.includes('编辑') ||
     action.includes('更新')
   )
-    return <EditOutlined style={{ color: '#faad14' }} />;
+    return <EditOutlined style={{ color: 'var(--gvray-warning-color)' }} />;
   if (action.includes('登录'))
-    return <LoginOutlined style={{ color: '#1890ff' }} />;
+    return <LoginOutlined style={{ color: 'var(--gvray-primary-color)' }} />;
   if (action.includes('权限'))
-    return <SafetyCertificateOutlined style={{ color: '#722ed1' }} />;
+    return (
+      <SafetyCertificateOutlined style={{ color: 'var(--gvray-info-color)' }} />
+    );
   if (
     action.includes('新增') ||
     action.includes('创建') ||
     action.includes('注册')
   )
-    return <UserAddOutlined style={{ color: '#52c41a' }} />;
-  return <EditOutlined style={{ color: '#8c8c8c' }} />;
+    return <UserAddOutlined style={{ color: 'var(--gvray-success-color)' }} />;
+  return (
+    <EditOutlined style={{ color: 'var(--gvray-text-color-placeholder)' }} />
+  );
 };
 
 const getTimelineDotColor = (status: string): string => {
-  return status === '成功' ? '#52c41a' : '#ff4d4f';
+  return status === '成功'
+    ? 'var(--gvray-success-color)'
+    : 'var(--gvray-error-color)';
 };
 
 const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
@@ -102,7 +108,13 @@ const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
 
   if (!logs || logs.length === 0) {
     return (
-      <div style={{ textAlign: 'center', padding: '40px 0', color: '#bfbfbf' }}>
+      <div
+        style={{
+          textAlign: 'center',
+          padding: '40px 0',
+          color: 'var(--gvray-text-color-placeholder)',
+        }}
+      >
         暂无操作记录
       </div>
     );

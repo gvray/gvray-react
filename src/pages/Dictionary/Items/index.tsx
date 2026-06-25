@@ -182,7 +182,11 @@ const DictionaryItemsPage = () => {
       <PageContainer>
         <Card>
           <div
-            style={{ textAlign: 'center', color: '#999', padding: '40px 0' }}
+            style={{
+              textAlign: 'center',
+              color: 'var(--gvray-text-color-placeholder)',
+              padding: '40px 0',
+            }}
           >
             请提供字典类型ID
           </div>

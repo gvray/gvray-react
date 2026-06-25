@@ -178,7 +178,7 @@ gvray-react/
 │   │   ├── useDict/           # 字典 Hook
 │   │   ├── useRouteMeta/      # 路由元信息 Hook
 │   │   ├── useTheme/          # 主题 Hook
-│   │   ├── useThemeColor/     # 主题色 Hook
+│   │   ├── useTheme/          # 主题算法 Hook
 │   │   └── useThemeMode/      # 主题模式 Hook
 │   ├── layouts/               # 布局组件
 │   │   ├── index.tsx          # 主布局（Header + Sider + Content）

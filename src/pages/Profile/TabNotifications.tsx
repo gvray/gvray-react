@@ -23,11 +23,19 @@ import { useProfileNotificationsModel } from './model';
 const { Text } = Typography;
 
 const TYPE_CONFIG = {
-  system: { icon: <InfoCircleOutlined />, color: '#1677ff', label: '系统' },
-  approval: { icon: <CheckCircleOutlined />, color: '#52c41a', label: '审批' },
+  system: {
+    icon: <InfoCircleOutlined />,
+    color: 'var(--gvray-primary-color)',
+    label: '系统',
+  },
+  approval: {
+    icon: <CheckCircleOutlined />,
+    color: 'var(--gvray-success-color)',
+    label: '审批',
+  },
   security: {
     icon: <ExclamationCircleOutlined />,
-    color: '#faad14',
+    color: 'var(--gvray-warning-color)',
     label: '安全',
   },
 };

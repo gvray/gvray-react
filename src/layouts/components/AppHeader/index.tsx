@@ -1,24 +1,23 @@
 import { Space } from 'antd';
 import { SelectLang } from 'umi';
 
+import ThemeModeSwitch from '../ThemeModeSwitch';
 import ThemeSetting from '../ThemeSetting';
 import UserDropdown from './UserDropdown';
 import { HeaderActions, HeaderWrapper } from './styles';
 
 interface AppHeaderProps {
-  themeColor: {
-    bgColor: string;
-  };
   headerFixed: boolean;
 }
 
-const AppHeader: React.FC<AppHeaderProps> = ({ themeColor, headerFixed }) => {
+const AppHeader: React.FC<AppHeaderProps> = ({ headerFixed }) => {
   return (
-    <HeaderWrapper $bgColor={themeColor.bgColor} $fixed={headerFixed}>
+    <HeaderWrapper $fixed={headerFixed}>
       <HeaderActions>
         <Space size={2}>
+          <ThemeModeSwitch />
           <ThemeSetting />
-          <SelectLang />
+          <SelectLang {...({ trigger: ['click'] } as any)} />
           <UserDropdown />
         </Space>
       </HeaderActions>

@@ -32,7 +32,7 @@
     align-items: center;
     overflow: hidden;
     padding: 18px 20px;
-    border: 1px solid var(--ant-color-border-secondary, rgba(5, 5, 5, 0.06));
+    border: 1px solid var(--gvray-border-color-secondary);
     border-radius: 18px;
     background: radial-gradient(
         circle at 86% 18%,
@@ -45,7 +45,7 @@
         transparent 28%
       ),
       linear-gradient(135deg, rgba(22, 119, 255, 0.1), rgba(114, 46, 209, 0.05)),
-      var(--ant-color-bg-container, #fff);
+      var(--gvray-bg-container);
     box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
 
     &::before,
@@ -60,9 +60,9 @@
       right: -52px;
       width: 190px;
       height: 190px;
-      border: 1px solid rgba(22, 119, 255, 0.16);
+      border: 1px solid rgb(from var(--gvray-primary-color) r g b / 0.16);
       border-radius: 50%;
-      background: rgba(255, 255, 255, 0.16);
+      background: rgb(from var(--gvray-bg-container) r g b / 0.16);
     }
 
     &::after {
@@ -71,7 +71,7 @@
       width: 160px;
       height: 80px;
       background-image: radial-gradient(
-        rgba(22, 119, 255, 0.2) 1px,
+        var(--gvray-primary-3) 1px,
         transparent 1px
       );
       background-size: 14px 14px;
@@ -113,7 +113,7 @@
     display: flex;
     flex-wrap: wrap;
     gap: 4px 14px;
-    color: var(--ant-color-text-secondary, rgba(0, 0, 0, 0.45));
+    color: var(--gvray-text-color-secondary);
     font-size: 13px;
     line-height: 1.7;
 
@@ -145,7 +145,7 @@
 
   .summaryCard {
     height: 100%;
-    border: 1px solid var(--ant-color-border-secondary, rgba(5, 5, 5, 0.06));
+    border: 1px solid var(--gvray-border-color-secondary);
     border-radius: 16px;
     box-shadow: none;
 
@@ -175,8 +175,8 @@
     height: 34px;
     flex-shrink: 0;
     border-radius: 11px;
-    color: var(--ant-color-primary, #1677ff);
-    background: var(--ant-color-primary-bg, #e6f4ff);
+    color: var(--gvray-primary-color);
+    background: var(--gvray-primary-1);
     font-size: 17px;
   }
 
@@ -188,7 +188,7 @@
   .summaryTitle {
     min-width: 0;
     .text-ellipsis();
-    color: var(--ant-color-text, rgba(0, 0, 0, 0.88));
+    color: var(--gvray-text-color);
     font-size: 17px;
     font-weight: 700;
     line-height: 1.45;
@@ -211,7 +211,7 @@
 
     > span:first-child {
       flex-shrink: 0;
-      color: var(--ant-color-text-secondary, rgba(0, 0, 0, 0.45));
+      color: var(--gvray-text-color-secondary);
     }
 
     :global(.ant-typography) {
@@ -241,7 +241,7 @@
   .tabsCard,
   .moduleCard,
   .prefCard {
-    border: 1px solid var(--ant-color-border-secondary, rgba(5, 5, 5, 0.06));
+    border: 1px solid var(--gvray-border-color-secondary);
     border-radius: 16px;
     box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
   }
@@ -261,11 +261,10 @@
       z-index: 20;
       margin: 0;
       padding: 0 24px;
-      border-bottom: 1px solid
-        var(--ant-color-border-secondary, rgba(5, 5, 5, 0.06));
+      border-bottom: 1px solid var(--gvray-border-color-secondary);
       border-radius: 16px 16px 0 0;
-      background: var(--ant-color-bg-container, #fff);
-      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.04);
+      background: var(--gvray-bg-container);
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
     }
 
     :global(.ant-tabs-nav-wrap) {
@@ -294,6 +293,16 @@
     margin-bottom: 16px;
   }
 
+  /* Alert info 跟随 colorPrimary */
+  .profileNotice.ant-alert-info {
+    background: var(--gvray-primary-1);
+    border-color: var(--gvray-primary-3);
+
+    :global(.ant-alert-icon) {
+      color: var(--gvray-primary-color);
+    }
+  }
+
   .moduleCard {
     margin-bottom: 16px;
     overflow: visible;
@@ -319,11 +328,11 @@
   }
 
   .readonlyField {
-    color: var(--ant-color-text-secondary, rgba(0, 0, 0, 0.45));
+    color: var(--gvray-text-color-secondary);
 
     :global(.anticon) {
       margin-left: 6px;
-      color: var(--ant-color-text-quaternary, rgba(0, 0, 0, 0.25));
+      color: var(--gvray-text-color-placeholder);
       font-size: 11px;
     }
   }
@@ -341,7 +350,7 @@
   }
 
   .contactTitle {
-    color: var(--ant-color-text, rgba(0, 0, 0, 0.88));
+    color: var(--gvray-text-color);
     font-size: 14px;
     font-weight: 600;
   }
@@ -370,11 +379,11 @@
 
   .verifiedIcon,
   .safeIcon {
-    color: var(--ant-color-success, #52c41a);
+    color: var(--gvray-success-color);
   }
 
   .unverifiedIcon {
-    color: var(--ant-color-warning, #faad14);
+    color: var(--gvray-warning-color);
   }
 
   .securityGrid {
@@ -394,7 +403,7 @@
   }
 
   .mutedIcon {
-    color: var(--ant-color-text-quaternary, rgba(0, 0, 0, 0.25));
+    color: var(--gvray-text-color-placeholder);
   }
 
   .listTitle,
@@ -477,12 +486,12 @@
   }
 
   .permissionDescIcon {
-    color: var(--ant-color-text-quaternary, rgba(0, 0, 0, 0.25));
+    color: var(--gvray-text-color-placeholder);
     font-size: 12px;
     cursor: help;
 
     &:hover {
-      color: var(--ant-color-primary, #1677ff);
+      color: var(--gvray-primary-color);
     }
   }
 

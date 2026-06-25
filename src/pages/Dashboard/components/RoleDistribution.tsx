@@ -1,4 +1,5 @@
 import { Charts } from '@/components';
+import { theme } from 'antd';
 import type { EChartsOption } from 'echarts';
 import React, { useMemo } from 'react';
 
@@ -28,6 +29,7 @@ const RoleDistribution: React.FC<RoleDistributionProps> = ({
   height = 340,
   data,
 }) => {
+  const { token } = theme.useToken();
   const normalizedData: RoleDataItem[] = useMemo(() => {
     if (!data) return [];
     if (Array.isArray(data)) return data as RoleDataItem[];
@@ -42,7 +44,7 @@ const RoleDistribution: React.FC<RoleDistributionProps> = ({
           color:
             item.itemStyle?.color ||
             colorPalette[index % colorPalette.length] ||
-            '#ccc',
+            token.colorBorder,
         },
       })),
     [normalizedData],
@@ -51,10 +53,10 @@ const RoleDistribution: React.FC<RoleDistributionProps> = ({
   const options: EChartsOption = {
     tooltip: {
       trigger: 'item',
-      backgroundColor: 'rgba(255,255,255,0.96)',
-      borderColor: '#e5e7eb',
+      backgroundColor: token.colorBgContainer,
+      borderColor: token.colorBorder,
       borderWidth: 1,
-      textStyle: { color: '#334155', fontSize: 13 },
+      textStyle: { color: token.colorText, fontSize: 13 },
       formatter: (params: unknown) => {
         const p = params as {
           name: string;
@@ -79,12 +81,12 @@ const RoleDistribution: React.FC<RoleDistributionProps> = ({
       icon: 'circle',
       textStyle: {
         fontSize: 12,
-        color: '#64748b',
+        color: token.colorTextSecondary,
         rich: {
-          name: { fontSize: 12, color: '#334155', padding: [0, 0, 0, 4] },
+          name: { fontSize: 12, color: token.colorText, padding: [0, 0, 0, 4] },
           value: {
             fontSize: 12,
-            color: '#94a3b8',
+            color: token.colorTextSecondary,
             padding: [0, 0, 0, 8],
           },
         },
@@ -103,7 +105,7 @@ const RoleDistribution: React.FC<RoleDistributionProps> = ({
         avoidLabelOverlap: false,
         itemStyle: {
           borderRadius: 6,
-          borderColor: '#fff',
+          borderColor: token.colorBgContainer,
           borderWidth: 3,
         },
         label: { show: false },
@@ -114,7 +116,6 @@ const RoleDistribution: React.FC<RoleDistributionProps> = ({
           itemStyle: {
             shadowBlur: 16,
             shadowOffsetX: 0,
-            shadowColor: 'rgba(0, 0, 0, 0.15)',
           },
         },
         data: dataWithColor,

@@ -1,46 +1,47 @@
 import { CheckOutlined } from '@ant-design/icons';
 import { Tooltip } from 'antd';
+import React from 'react';
 import { styled } from 'umi';
 
-interface TagProps {
-  color: string;
-  check: boolean;
-  onClick: () => void;
-}
-
-const TagWrapper = styled.div`
-  width: 20px;
-  height: 20px;
-  color: #fff;
-  line-height: 20px;
-  border-radius: 2px;
-  float: left;
-  text-align: center;
-  cursor: pointer;
+const ThemeColors = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  max-width: 196px;
 `;
 
-const Tag = (props: TagProps) => {
-  const { color, check, ...rest } = props;
-  return (
-    <TagWrapper style={{ backgroundColor: color }} {...rest}>
-      {check ? <CheckOutlined /> : ''}
-    </TagWrapper>
-  );
-};
+const ColorDot = styled.button<{ $color: string; $active: boolean }>`
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 12px;
+  background-color: ${({ $color }) => $color};
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: scale(1.15);
+  }
+
+  ${({ $active }) =>
+    $active &&
+    `
+      box-shadow: 0 0 0 2px var(--gvray-bg-container), 0 0 0 4px var(--gvray-primary-color);
+    `}
+`;
 
 interface ThemeColorProps {
-  colorList: {
-    color: string;
-    label: string;
-  }[];
+  colorList: { color: string; label: string }[];
   value: string;
   onChange?: (theme: { label: string; color: string }) => void;
 }
 
-const ThemeColors = styled.div`
-  display: flex;
-  gap: 8px;
-`;
 const ThemeColor: React.FC<ThemeColorProps> = ({
   colorList,
   value,
@@ -48,17 +49,19 @@ const ThemeColor: React.FC<ThemeColorProps> = ({
 }) => {
   return (
     <ThemeColors>
-      {colorList.map(({ color, label }) => {
-        return (
-          <Tooltip key={color} title={label}>
-            <Tag
-              check={value === color}
-              color={color}
-              onClick={() => onChange?.({ color, label })}
-            />
-          </Tooltip>
-        );
-      })}
+      {colorList.map(({ color, label }) => (
+        <Tooltip key={color} title={label}>
+          <ColorDot
+            type="button"
+            $color={color}
+            $active={value === color}
+            onClick={() => onChange?.({ color, label })}
+            aria-label={`选择主题色 ${label}`}
+          >
+            {value === color && <CheckOutlined />}
+          </ColorDot>
+        </Tooltip>
+      ))}
     </ThemeColors>
   );
 };

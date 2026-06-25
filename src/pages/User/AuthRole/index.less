@@ -55,8 +55,8 @@
     border-radius: 8px;
     background: linear-gradient(
       135deg,
-      var(--ant-primary-color) 0%,
-      #1890ff 100%
+      var(--gvray-primary-color) 0%,
+      var(--gvray-primary-color-hover) 100%
     );
     display: flex;
     align-items: center;
@@ -83,7 +83,7 @@
   .userName {
     font-size: 16px;
     font-weight: 600;
-    color: var(--ant-heading-color);
+    color: var(--gvray-heading-color);
     margin-bottom: 2px;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -92,11 +92,11 @@
 
   .userAccount {
     font-size: 13px;
-    color: var(--ant-text-color-secondary);
+    color: var(--gvray-text-color-secondary);
   }
 
   .divider {
-    border-top: 1px solid #f0f0f0;
+    border-top: 1px solid var(--gvray-border-color);
     margin: 16px 0;
   }
 
@@ -108,7 +108,7 @@
     font-size: 13px;
 
     :global(.label) {
-      color: var(--ant-text-color-secondary);
+      color: var(--gvray-text-color-secondary);
     }
   }
 
@@ -118,7 +118,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    color: var(--ant-heading-color);
+    color: var(--gvray-heading-color);
     font-weight: 500;
   }
 
@@ -129,40 +129,40 @@
   }
 
   .statItem {
-    background: var(--ant-fill-color-quaternary);
-    border: 1px solid var(--ant-border-color);
+    background: var(--gvray-fill-color-quaternary);
+    border: 1px solid var(--gvray-border-color);
     border-radius: 8px;
     padding: 10px 8px;
     text-align: center;
 
     &.highlight {
-      background: var(--ant-primary-1);
-      border-color: var(--ant-primary-3);
+      background: var(--gvray-primary-1);
+      border-color: var(--gvray-primary-3);
 
       :global(.number) {
-        color: var(--ant-primary-color);
+        color: var(--gvray-primary-color);
       }
     }
 
     :global(.number) {
       font-size: 20px;
       font-weight: 600;
-      color: var(--ant-heading-color);
+      color: var(--gvray-heading-color);
       line-height: 1;
       margin-bottom: 4px;
     }
 
     :global(.label) {
       font-size: 11px;
-      color: var(--ant-text-color-secondary);
+      color: var(--gvray-text-color-secondary);
     }
   }
 
   .mainContent {
     flex: 1;
     min-width: 0;
-    background: var(--ant-bg-container);
-    border: 1px solid var(--ant-border-color);
+    background: var(--gvray-bg-container);
+    border: 1px solid var(--gvray-border-color);
     border-radius: 8px;
     overflow: hidden;
 
@@ -178,7 +178,7 @@
     align-items: center;
     gap: 12px;
     padding: 12px 16px;
-    border-bottom: 1px solid var(--ant-border-color);
+    border-bottom: 1px solid var(--gvray-border-color);
     flex-wrap: wrap;
   }
 
@@ -197,10 +197,10 @@
     padding: 14px;
     min-height: 110px;
     border-radius: 8px;
-    background: var(--ant-bg-container);
+    background: var(--gvray-bg-container);
     cursor: pointer;
     transition: all 0.2s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+    box-shadow: var(--gvray-box-shadow);
 
     &:hover {
       box-shadow: 0 3px 6px rgba(24, 144, 255, 0.12);
@@ -208,7 +208,7 @@
     }
 
     &.selected {
-      background: var(--ant-primary-1);
+      background: var(--gvray-primary-1);
       box-shadow: none;
 
       .checkIcon {
@@ -224,7 +224,7 @@
     width: 18px;
     height: 18px;
     border-radius: 50%;
-    background: var(--ant-primary-color);
+    background: var(--gvray-primary-color);
     color: white;
     display: flex;
     align-items: center;
@@ -237,15 +237,15 @@
   .roleName {
     font-size: 15px;
     font-weight: 600;
-    color: var(--ant-heading-color);
+    color: var(--gvray-heading-color);
     margin-bottom: 6px;
     padding-right: 24px;
   }
 
   .roleKey {
     font-size: 12px;
-    color: var(--ant-primary-color);
-    background: var(--ant-primary-1);
+    color: var(--gvray-primary-color);
+    background: var(--gvray-primary-1);
     padding: 2px 8px;
     border-radius: 4px;
     display: inline-block;
@@ -255,7 +255,7 @@
 
   .roleDesc {
     font-size: 12px;
-    color: var(--ant-text-color-secondary);
+    color: var(--gvray-text-color-secondary);
     line-height: 1.5;
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -266,12 +266,12 @@
 
   .emptyState {
     text-align: center;
-    color: var(--ant-text-color-secondary);
+    color: var(--gvray-text-color-secondary);
     padding: 60px 20px;
 
     .icon {
       font-size: 48px;
-      color: var(--ant-text-color-disabled);
+      color: var(--gvray-text-color-disabled);
       margin-bottom: 16px;
     }
   }

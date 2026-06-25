@@ -285,7 +285,11 @@ const TabPreferences: React.FC = () => {
             renderItem={(item) => (
               <List.Item>
                 <List.Item.Meta
-                  avatar={<LayoutOutlined style={{ color: '#8c8c8c' }} />}
+                  avatar={
+                    <LayoutOutlined
+                      style={{ color: 'var(--gvray-text-color-placeholder)' }}
+                    />
+                  }
                   title={<Text style={{ fontSize: 13 }}>{item.title}</Text>}
                   description={
                     <Text type="secondary" style={{ fontSize: 12 }}>
@@ -363,7 +367,11 @@ const TabPreferences: React.FC = () => {
             renderItem={(item) => (
               <List.Item>
                 <List.Item.Meta
-                  avatar={<SettingOutlined style={{ color: '#8c8c8c' }} />}
+                  avatar={
+                    <SettingOutlined
+                      style={{ color: 'var(--gvray-text-color-placeholder)' }}
+                    />
+                  }
                   title={<Text style={{ fontSize: 13 }}>{item.title}</Text>}
                   description={
                     <Text type="secondary" style={{ fontSize: 12 }}>

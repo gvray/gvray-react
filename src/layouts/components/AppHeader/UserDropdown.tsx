@@ -58,6 +58,7 @@ const UserDropdown = () => {
         onClick: handleMenuClick,
       }}
       placement="bottomRight"
+      trigger={['click']}
     >
       <UserAvatar
         src={profile?.avatar || undefined}

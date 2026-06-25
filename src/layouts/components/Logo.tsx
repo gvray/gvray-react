@@ -2,30 +2,34 @@ import React from 'react';
 import { styled, useNavigate } from 'umi';
 
 interface LogoProps {
-  theme?: 'light' | 'dark'; // 定义主题属性
+  theme?: 'light' | 'dark';
   collapsed?: boolean;
   title?: string;
 }
 
-const LogoWrapper = styled.div.withConfig({
-  shouldForwardProp: (prop) => !['theme', 'collapsed'].includes(prop),
-})<LogoProps>`
-  margin: ${(props) => (props.collapsed ? '12px 8px' : '12px 10px 2px 10px')};
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: ${(props) => (props.collapsed ? '24px' : '8px')};
-  color: ${(props) => (props.theme === 'light' ? '#000' : '#fff')};
+const LogoWrapper = styled.div<{
+  $themeMode?: 'light' | 'dark';
+  $collapsed?: boolean;
+}>`
+  margin: ${(props) => (props.$collapsed ? '12px 8px' : '12px 10px 2px 10px')};
+  border-radius: ${(props) => (props.$collapsed ? '24px' : '8px')};
+  /* 文字颜色必须跟随 sidebar theme，而非全局 CSS 变量 */
+  color: ${(props) =>
+    props.$themeMode === 'dark'
+      ? 'rgba(255,255,255,0.85)'
+      : 'var(--gvray-text-color)'};
   line-height: 32px;
   text-align: center;
   overflow: hidden;
   cursor: pointer;
-  font-size: ${(props) => (props.collapsed ? '16px' : '20px')};
+  font-size: ${(props) => (props.$collapsed ? '16px' : '20px')};
   display: flex;
   align-items: center;
-  justify-content: ${(props) => (props.collapsed ? 'center' : 'flex-start')};
+  justify-content: ${(props) => (props.$collapsed ? 'center' : 'flex-start')};
   gap: 8px;
   height: 48px;
   min-width: 48px;
-  padding-left: ${(props) => (props.collapsed ? '0' : '8px')};
+  padding-left: ${(props) => (props.$collapsed ? '0' : '8px')};
   .logo-img {
     width: 1.8em;
     height: 1.8em;
@@ -43,8 +47,8 @@ const Logo: React.FC<LogoProps> = ({ theme = 'light', collapsed, title }) => {
   const navigate = useNavigate();
   return (
     <LogoWrapper
-      theme={theme}
-      collapsed={collapsed}
+      $themeMode={theme}
+      $collapsed={collapsed}
       onClick={() => {
         navigate('/');
       }}

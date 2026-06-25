@@ -19,13 +19,13 @@ const IconItem = styled.div`
   justify-content: center;
   aspect-ratio: 1 / 1;
   font-size: 16px;
-  color: #555;
-  background-color: #ebebeb;
+  color: var(--gvray-text-color-secondary);
+  background-color: var(--gvray-fill-color);
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.2s ease;
   &:hover {
-    background-color: #d6d6d6; // 或你喜欢的颜色
+    background-color: var(--gvray-fill-color-secondary);
   }
 `;
 

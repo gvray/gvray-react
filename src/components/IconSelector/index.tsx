@@ -10,11 +10,11 @@ interface IconSelectorProps {
 }
 
 const DropdownPanel = styled.div`
-  background-color: #fff;
+  background-color: var(--gvray-bg-container);
   max-height: 500px;
   padding-left: 10px;
   padding-right: 10px;
-  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: var(--gvray-box-shadow);
 `;
 
 interface CustomPanelProps {

@@ -1,68 +1,112 @@
-// 全局主题 CSS 变量参考
-// 这些 CSS 变量由 ThemeTokenInjector 在 Layout 中动态注入
-// 支持主题切换和昼夜模式
+// 全局主题 CSS 变量速查表
+// 由 ThemeTokenInjector 在 Layout 中动态注入，支持主题切换和昼夜模式
 //
-// ⚠️ 重要：直接在样式中使用 var(--ant-xxx)，不要通过 LESS 变量包装
+// ⚠️ 重要：直接在样式中使用 var(--gvray-xxx)，不要通过 LESS 变量包装
 // 因为 LESS 编译 + PostCSS 优化可能会将 CSS 变量求值为静态值
 //
 // ============ 使用示例 ============
 // .myClass {
-//   color: var(--ant-primary-color);           // ✅ 正确
-//   background: var(--ant-bg-container);       // ✅ 正确
-//   border: 1px solid var(--ant-border-color); // ✅ 正确
+//   color: var(--gvray-primary-color);           // ✅ 正确
+//   background: var(--gvray-bg-container);       // ✅ 正确
+//   border: 1px solid var(--gvray-border-color); // ✅ 正确
 // }
 //
-// ============ 可用的 CSS 变量列表 ============
-//
-// 主色系：
-// --ant-primary-color
-// --ant-primary-color-hover
-// --ant-primary-color-active
-// --ant-primary-color-outline
-//
-// 功能色：
-// --ant-success-color
-// --ant-warning-color
-// --ant-error-color
-// --ant-info-color
-//
-// 文本色：
-// --ant-text-color
-// --ant-text-color-secondary
-// --ant-text-color-disabled
-// --ant-heading-color
-//
-// 背景色：
-// --ant-bg-color
-// --ant-bg-container
-// --ant-bg-elevated
-// --ant-bg-layout
-// --ant-bg-spotlight
-//
-// 边框色：
-// --ant-border-color
-// --ant-border-color-split
-//
-// 填充色：
-// --ant-fill-color
-// --ant-fill-color-secondary
-// --ant-fill-color-tertiary
-// --ant-fill-color-quaternary
-//
-// 尺寸：
-// --ant-border-radius
-// --ant-border-radius-lg
-// --ant-border-radius-sm
-//
-// 阴影：
-// --ant-box-shadow
-// --ant-box-shadow-secondary
-//
-// 主色衍生（用于背景/边框）：
-// --ant-primary-1  (最浅)
-// --ant-primary-2
-// --ant-primary-3
-// --ant-primary-4
-//
-// 其他：
-// --ant-purple-6  (用于渐变)
+// 完整规范见：docs/theme-guidelines.md
+// ============================================================
+
+// ============ 主色系 ============
+// --gvray-primary-color           // 主色
+// --gvray-primary-color-hover     // 主色 hover
+// --gvray-primary-color-active    // 主色 active
+// --gvray-primary-color-outline   // 主色 outline 背景
+// --gvray-color-primary           // antd 原生命名（同上）
+// --gvray-color-primary-hover     // antd 原生命名
+// --gvray-color-primary-active    // antd 原生命名
+// --gvray-color-primary-bg        // antd 原生命名
+
+// ============ 功能色 ============
+// --gvray-success-color           // 成功色
+// --gvray-warning-color           // 警告色
+// --gvray-error-color             // 错误色
+// --gvray-info-color              // 信息色
+// --gvray-color-success           // antd 原生命名
+// --gvray-color-warning           // antd 原生命名
+// --gvray-color-error             // antd 原生命名
+// --gvray-color-info              // antd 原生命名
+
+// ============ 文本色 ============
+// --gvray-text-color              // 主文本
+// --gvray-text-color-secondary    // 次要文本
+// --gvray-text-color-disabled     // 禁用文本
+// --gvray-text-color-placeholder  // 占位文本
+// --gvray-heading-color           // 标题色
+// --gvray-text-label              // 标签色
+// --gvray-text-description        // 描述色
+// --gvray-color-text              // antd 原生命名
+// --gvray-color-text-secondary    // antd 原生命名
+// --gvray-color-text-tertiary     // antd 原生命名
+// --gvray-color-text-quaternary   // antd 原生命名
+// --gvray-color-text-disabled     // antd 原生命名
+// --gvray-color-text-heading      // antd 原生命名
+// --gvray-color-text-label        // antd 原生命名
+// --gvray-color-text-description  // antd 原生命名
+// --gvray-color-text-placeholder  // antd 原生命名
+
+// ============ 背景色 ============
+// --gvray-bg-color                // 页面背景
+// --gvray-bg-container            // 容器背景
+// --gvray-bg-elevated             // 浮层背景
+// --gvray-bg-layout               // 布局背景
+// --gvray-bg-spotlight            // 高亮背景
+// --gvray-bg-mask                 // 遮罩背景
+// --gvray-color-bg-container      // antd 原生命名
+// --gvray-color-bg-elevated       // antd 原生命名
+// --gvray-color-bg-layout         // antd 原生命名
+// --gvray-color-bg-mask           // antd 原生命名
+// --gvray-color-bg-spotlight      // antd 原生命名
+
+// ============ 边框 / 分割线 ============
+// --gvray-border-color            // 主边框
+// --gvray-border-color-secondary  // 次边框
+// --gvray-border-color-split      // 分割线
+// --gvray-color-border            // antd 原生命名
+// --gvray-color-border-secondary  // antd 原生命名
+
+// ============ 填充色 ============
+// --gvray-fill-color              // 主填充
+// --gvray-fill-color-secondary    // 次填充
+// --gvray-fill-color-tertiary     // 三级填充
+// --gvray-fill-color-quaternary   // 四级填充
+// --gvray-color-fill              // antd 原生命名
+// --gvray-color-fill-secondary    // antd 原生命名
+// --gvray-color-fill-tertiary     // antd 原生命名
+// --gvray-color-fill-quaternary   // antd 原生命名
+
+// ============ 尺寸 ============
+// --gvray-border-radius           // 圆角
+// --gvray-border-radius-lg        // 大圆角
+// --gvray-border-radius-sm        // 小圆角
+// --gvray-border-radius-xs        // 极小圆角
+
+// ============ 阴影 ============
+// --gvray-box-shadow              // 主阴影
+// --gvray-box-shadow-secondary    // 次阴影
+// --gvray-box-shadow-tertiary     // 三级阴影
+
+// ============ 主色衍生（背景/边框/悬浮） ============
+// --gvray-primary-1               // 最浅主色背景
+// --gvray-primary-2               // 浅主色 hover 背景
+// --gvray-primary-3               // 主色边框
+// --gvray-primary-4               // 主色 hover 边框
+// --gvray-primary-5               // 主色 hover（同 --gvray-primary-color-hover）
+// --gvray-primary-6               // 主色（同 --gvray-primary-color）
+// --gvray-primary-7               // 主色 active
+
+// ============ 链接色 ============
+// --gvray-link-color              // 链接色
+// --gvray-link-hover-color        // 链接 hover
+// --gvray-link-active-color       // 链接 active
+
+// ============ 图标色 ============
+// --gvray-icon-color              // 图标默认色
+// --gvray-icon-color-hover        // 图标 hover 色

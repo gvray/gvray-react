@@ -4,6 +4,17 @@ class ProgressManager {
   timer: any = null;
   requests = 0;
 
+  private getPrimaryColor(): string {
+    // 优先从 CSS 变量读取，兼容动态主题切换
+    if (typeof window !== 'undefined') {
+      const val = getComputedStyle(document.documentElement).getPropertyValue(
+        '--ant-primary-color',
+      );
+      if (val?.trim()) return val.trim();
+    }
+    return '#1677ff';
+  }
+
   mount() {
     if (this.el) return;
 
@@ -15,7 +26,7 @@ class ProgressManager {
       left: '0',
       height: '2px',
       width: '0%',
-      background: '#1677ff',
+      background: this.getPrimaryColor(),
       zIndex: '99999',
       opacity: '0',
       transition: 'width 0.2s ease, opacity 0.2s ease',

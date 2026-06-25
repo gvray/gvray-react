@@ -102,35 +102,35 @@ const PERMISSION_TYPES = [
     label: '全部数据权限',
     description: '可以访问所有数据，不受任何限制',
     icon: <DatabaseOutlined />,
-    color: '#52c41a',
+    color: 'var(--gvray-success-color)',
   },
   {
     value: DataScope.DEPARTMENT,
     label: '本部门数据权限',
     description: '只能访问当前用户所在部门的数据',
     icon: <TeamOutlined />,
-    color: '#fa8c16',
+    color: 'var(--gvray-warning-color)',
   },
   {
     value: DataScope.DEPARTMENT_AND_CHILD,
     label: '本部门及以下数据权限',
     description: '可以访问当前用户所在部门及其下级部门的数据',
     icon: <TeamOutlined />,
-    color: '#722ed1',
+    color: 'var(--gvray-info-color)',
   },
   {
     value: DataScope.CUSTOM,
     label: '自定义数据权限',
     description: '可以自定义访问特定部门的数据',
     icon: <EyeOutlined />,
-    color: '#1890ff',
+    color: 'var(--gvray-primary-color)',
   },
   {
     value: DataScope.SELF,
     label: '仅本人数据权限',
     description: '只能访问自己创建或负责的数据',
     icon: <EyeOutlined />,
-    color: '#eb2f96',
+    color: 'var(--gvray-error-color)',
   },
 ];
 
@@ -273,7 +273,9 @@ export default function AuthDataScopeModal({
     <Modal
       title={
         <div style={{ display: 'flex', alignItems: 'center' }}>
-          <DatabaseOutlined style={{ marginRight: '8px', color: '#1890ff' }} />
+          <DatabaseOutlined
+            style={{ marginRight: '8px', color: 'var(--gvray-primary-color)' }}
+          />
           数据权限分配 - {currentRole?.name || roleName}
           {currentRole?.roleKey && (
             <Tag color="blue" style={{ marginLeft: '8px' }}>

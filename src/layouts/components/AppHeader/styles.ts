@@ -4,11 +4,12 @@ import { styled } from 'umi';
 const { Header } = Layout;
 
 export const HeaderWrapper = styled(Header)<{
-  $bgColor: string;
   $fixed: boolean;
 }>`
   padding: 0;
-  background: ${({ $bgColor }) => $bgColor};
+  background: var(--gvray-bg-container);
+  /* 用分割线色做底部边框：亮色极淡灰线，暗色微亮线，始终柔和不突兀 */
+  border-bottom: 1px solid var(--gvray-border-color-split);
   position: ${({ $fixed }) => ($fixed ? 'sticky' : 'relative')};
   top: 0;
   z-index: 100;

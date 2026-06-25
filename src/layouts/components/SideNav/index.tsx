@@ -2,9 +2,8 @@ import AntIcon from '@/components/AntIcon';
 import type { SiderTheme } from '@/constants/runtime-settings';
 import { useAuthStore, useSettingStore } from '@/stores';
 import { runtimeConfig } from '@/utils/runtime-config';
-import { AppstoreOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
-import { ConfigProvider, Layout, Menu, Skeleton } from 'antd';
+import { Layout, Menu, Skeleton } from 'antd';
 import React, { useEffect, useMemo, useState } from 'react';
 import { history, styled, useLocation } from 'umi';
 import Logo from '../Logo';
@@ -29,15 +28,12 @@ const siderStyle: React.CSSProperties = {
 
 interface SideNavProps {
   collapsed: boolean;
-  theme?: SiderTheme;
+  sidebarTheme: SiderTheme;
   width?: number;
   collapsedWidth?: number;
   showLogo?: boolean;
 }
 
-/**
- * 菜单转换
- */
 const transformMenuItems = (
   menuData: any[],
 ): NonNullable<MenuProps['items']> => {
@@ -55,7 +51,7 @@ const transformMenuItems = (
 
 const SideNav: React.FC<SideNavProps> = ({
   collapsed,
-  theme = 'dark',
+  sidebarTheme,
   width = 220,
   collapsedWidth = 64,
   showLogo = true,
@@ -68,29 +64,17 @@ const SideNav: React.FC<SideNavProps> = ({
 
   const location = useLocation();
 
-  const isDark = theme === 'dark';
+  const isDark = sidebarTheme === 'dark';
   const loading = menus === undefined;
 
   const [openKeys, setOpenKeys] = useState<string[]>([]);
   const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
 
-  /**
-   * menus -> menu items
-   */
-  const items = useMemo(() => {
-    return transformMenuItems(menus || []);
-  }, [menus]);
-
-  /**
-   * 路由变化同步菜单状态（展开 + 高亮）
-   */
   useEffect(() => {
     const pathname = location.pathname;
-
     setSelectedKeys([pathname]);
 
     const segments = pathname.split('/').filter(Boolean);
-
     const keys: string[] = [];
     let path = '';
 
@@ -98,100 +82,43 @@ const SideNav: React.FC<SideNavProps> = ({
       path += `/${segments[i]}`;
       keys.push(path);
     }
-
     setOpenKeys(keys);
   }, [location.pathname]);
 
-  /**
-   * 点击菜单跳转
-   */
   const handleMenuClick: MenuProps['onClick'] = (e) => {
     setSelectedKeys([e.key]);
     history.push(e.key);
   };
 
-  /**
-   * 暗色主题 token
-   */
-  const darkSiderTokens = useMemo(() => {
-    if (!isDark) return undefined;
+  const items = useMemo(() => {
+    return transformMenuItems(menus || []);
+  }, [menus]);
 
-    return {
-      components: {
-        Menu: {
-          darkItemBg: '#001529',
-          darkSubMenuItemBg: '#000c17',
-          darkItemSelectedBg: '#1677ff',
-        },
-      },
-    };
-  }, [isDark]);
+  if (!loading && items.length === 0) {
+    return null;
+  }
 
-  const siderContent = (
-    <Sider
-      trigger={null}
-      collapsible
-      collapsed={collapsed}
-      width={width}
-      collapsedWidth={collapsedWidth}
-      theme={theme}
-      style={siderStyle}
-    >
-      {showLogo && (
-        <Logo theme={theme} title={siteName} collapsed={collapsed} />
-      )}
+  return (
+    <SiderWrapper>
+      <Sider
+        trigger={null}
+        collapsible
+        collapsed={collapsed}
+        width={width}
+        collapsedWidth={collapsedWidth}
+        theme={sidebarTheme}
+        style={{
+          ...siderStyle,
+        }}
+      >
+        {showLogo && (
+          <Logo theme={sidebarTheme} title={siteName} collapsed={collapsed} />
+        )}
 
-      <Skeleton loading={loading} active round style={{ padding: 15 }}>
-        {!loading && items.length === 0 ? (
-          collapsed ? (
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'center',
-                paddingTop: 24,
-              }}
-            >
-              <AppstoreOutlined
-                style={{
-                  fontSize: 20,
-                  color: isDark ? 'rgba(255,255,255,0.25)' : '#d9d9d9',
-                }}
-              />
-            </div>
-          ) : (
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                padding: '48px 16px',
-                color: isDark ? 'rgba(255,255,255,0.45)' : '#999',
-                textAlign: 'center',
-              }}
-            >
-              <AppstoreOutlined
-                style={{
-                  fontSize: 40,
-                  color: isDark ? 'rgba(255,255,255,0.2)' : '#d9d9d9',
-                  marginBottom: 12,
-                }}
-              />
-              <div style={{ fontSize: 14, marginBottom: 4 }}>暂无可用菜单</div>
-              <div
-                style={{
-                  fontSize: 12,
-                  color: isDark ? 'rgba(255,255,255,0.3)' : '#bfbfbf',
-                }}
-              >
-                当前账号暂无菜单权限
-              </div>
-            </div>
-          )
-        ) : (
+        <Skeleton loading={loading} active round style={{ padding: 15 }}>
           <Menu
             mode="inline"
-            theme={theme}
+            theme={sidebarTheme}
             inlineIndent={10}
             items={items}
             openKeys={openKeys}
@@ -199,18 +126,8 @@ const SideNav: React.FC<SideNavProps> = ({
             onOpenChange={(keys) => setOpenKeys(keys as string[])}
             onClick={handleMenuClick}
           />
-        )}
-      </Skeleton>
-    </Sider>
-  );
-
-  return (
-    <SiderWrapper>
-      {isDark ? (
-        <ConfigProvider theme={darkSiderTokens}>{siderContent}</ConfigProvider>
-      ) : (
-        siderContent
-      )}
+        </Skeleton>
+      </Sider>
 
       <CollapseTrigger
         collapsed={collapsed}

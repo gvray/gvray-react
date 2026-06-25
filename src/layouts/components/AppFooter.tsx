@@ -14,7 +14,7 @@ interface AppFooterProps {
 const AppFooterRoot = styled(Footer)`
   margin-bottom: 20px;
   padding: 0;
-  color: rgba(0, 0, 0, 0.45);
+  color: var(--gvray-text-color-secondary);
   font-size: 14px;
   display: flex;
   justify-content: center;
