@@ -43,7 +43,7 @@ const ThemeSetting: React.FC<ThemeSettingProps> = ({ onChange }) => {
       placement="bottomRight"
       trigger="click"
       arrow={false}
-      overlayInnerStyle={{ padding: '8px 12px' }}
+      styles={{ body: { padding: '8px 12px' } }}
       content={
         <ThemeColor
           value={colorPrimary}
