@@ -1,6 +1,6 @@
 /**
  * 此文件由 scripts/gen-api-types.ts 自动生成
- * 生成时间: 2026-06-24T14:41:28.199Z
+ * 生成时间: 2026-07-01T14:38:13.494Z
  * 数据来源: http://localhost:8001/api-json
  * 请勿手动修改此文件
  */
@@ -155,7 +155,7 @@ declare namespace API {
     roles?: CurrentUserRoleResponseDto[];
     /** 所属部门 */
     department?: CurrentUserDepartmentResponseDto;
-    /** 所属���位 */
+    /** 所属岗位 */
     positions?: CurrentUserPositionResponseDto[];
     /** 用户偏好设置 */
     preferences?: Record<string, unknown>;
@@ -413,6 +413,11 @@ declare namespace API {
   interface AssignRolesDto {
     /** 角色ID列表（UUID） */
     roleIds: string[];
+  }
+
+  interface ResetPasswordDto {
+    /** 新密码 */
+    newPassword: string;
   }
 
   interface BatchDeleteUsersDto {
@@ -1346,7 +1351,7 @@ declare namespace API {
      * 主题模式
      * @example light
      */
-    theme?: 'light' | 'dark' | 'auto';
+    theme?: 'light' | 'dark' | 'system';
     /**
      * 主题主色（Hex 颜色值或颜色名称，如 #1890ff、blue）
      * @example #1890ff

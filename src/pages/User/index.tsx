@@ -8,6 +8,7 @@ import {
 import StatusTag from '@/components/StatusTag';
 import { TableProRef } from '@/components/TablePro';
 import { PERM } from '@/constants';
+import { useAuth } from '@/hooks';
 import useDict from '@/hooks/useDict';
 import type { DictOption } from '@/types/dict';
 import { callRef, logger } from '@/utils';
@@ -15,10 +16,13 @@ import {
   DeleteOutlined,
   EditOutlined,
   ExclamationCircleOutlined,
+  KeyOutlined,
+  MoreOutlined,
   UserOutlined,
 } from '@ant-design/icons';
-import { Modal, Space, message } from 'antd';
-import { useRef } from 'react';
+import type { MenuProps } from 'antd';
+import { Button, Dropdown, Form, Input, Modal, Space, message } from 'antd';
+import { useRef, useState } from 'react';
 import { useNavigate } from 'umi';
 import UpdateForm, { UpdateFormRef } from './UpdateForm';
 import { getUserColumns } from './columns';
@@ -34,7 +38,11 @@ const UserPage = () => {
   const updateFormRef = useRef<UpdateFormRef>(null);
   const tableProRef = useRef<TableProRef>(null);
   const dict = useDict<UserDict>(['user_status', 'user_gender']);
-  const { fetchUserList, removeUser } = useUserModel();
+  const { fetchUserList, removeUser, resetPassword } = useUserModel();
+  const { permissions } = useAuth();
+  const [resetModalOpen, setResetModalOpen] = useState(false);
+  const [resetUserId, setResetUserId] = useState<string | null>(null);
+  const [resetForm] = Form.useForm();
 
   const tableReload = () => {
     callRef(tableProRef, (t) => t.reload());
@@ -76,6 +84,65 @@ const UserPage = () => {
     navigate(`/system/user-auth/role/${userId}`);
   };
 
+  const handleResetPassword = (record: API.UserResponseDto) => {
+    setResetUserId(record.userId);
+    setResetModalOpen(true);
+  };
+
+  const handleResetOk = async () => {
+    try {
+      const values = await resetForm.validateFields();
+      if (resetUserId) {
+        await resetPassword(resetUserId, values.newPassword);
+        message.success('重置密码成功');
+        setResetModalOpen(false);
+        resetForm.resetFields();
+      }
+    } catch (error) {
+      logger.error(error);
+    }
+  };
+
+  const handleResetCancel = () => {
+    setResetModalOpen(false);
+    resetForm.resetFields();
+  };
+
+  // 权限检查辅助函数
+  const hasPermission = (requiredPerms: string[]) => {
+    if (!requiredPerms || requiredPerms.length === 0) return true;
+    if (!permissions || permissions.length === 0) return false;
+    if (permissions.includes('*:*:*')) return true;
+    return requiredPerms.every((p) => permissions.includes(p));
+  };
+
+  // 更多操作菜单
+  const getMoreMenu = (record: API.UserResponseDto): MenuProps['items'] => {
+    const menuItems = [
+      {
+        key: 'authRole',
+        icon: <UserOutlined />,
+        label: '分配角色',
+        onClick: () => handleAuthRole(record.userId),
+        permission: PERM.USER_UPDATE_ROLES,
+      },
+      {
+        key: 'resetPassword',
+        icon: <KeyOutlined />,
+        label: '重置密码',
+        onClick: () => handleResetPassword(record),
+        permission: PERM.USER_RESET_PASSWORD,
+      },
+    ];
+
+    return (
+      menuItems
+        .filter((item) => hasPermission([item.permission]))
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        .map(({ permission, ...item }) => item)
+    );
+  };
+
   let columns = getUserColumns().map((column: any) => {
     if (column.dataIndex === 'userId') {
       return {
@@ -109,6 +176,8 @@ const UserPage = () => {
       title: '操作',
       key: 'action',
       render: (record: API.UserResponseDto) => {
+        const moreMenu = getMoreMenu(record);
+
         return (
           <Space size={0}>
             <AuthButton
@@ -128,14 +197,17 @@ const UserPage = () => {
             >
               删除
             </AuthButton>
-            <AuthButton
-              type="link"
-              icon={<UserOutlined />}
-              onClick={() => handleAuthRole(record.userId)}
-              perms={[PERM.USER_UPDATE_ROLES]}
-            >
-              分配角色
-            </AuthButton>
+            {moreMenu && moreMenu.length > 0 && (
+              <Dropdown
+                menu={{ items: moreMenu }}
+                placement="bottomRight"
+                trigger={['click']}
+              >
+                <Button type="link" icon={<MoreOutlined />}>
+                  更多
+                </Button>
+              </Dropdown>
+            )}
           </Space>
         );
       },
@@ -163,6 +235,45 @@ const UserPage = () => {
       />
       {/* 用户新增修改弹出层 */}
       <UpdateForm ref={updateFormRef} dict={dict} onOk={handleOk} />
+      {/* 重置密码弹窗 */}
+      <Modal
+        title="重置密码"
+        open={resetModalOpen}
+        onOk={handleResetOk}
+        onCancel={handleResetCancel}
+        destroyOnClose
+      >
+        <Form form={resetForm} layout="vertical" preserve={false}>
+          <Form.Item
+            label="新密码"
+            name="newPassword"
+            rules={[
+              { required: true, message: '请输入新密码' },
+              { min: 6, message: '密码长度不能少于6位' },
+            ]}
+          >
+            <Input.Password placeholder="请输入新密码" />
+          </Form.Item>
+          <Form.Item
+            label="确认密码"
+            name="confirmPassword"
+            dependencies={['newPassword']}
+            rules={[
+              { required: true, message: '请确认密码' },
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  if (!value || getFieldValue('newPassword') === value) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(new Error('两次输入的密码不一致'));
+                },
+              }),
+            ]}
+          >
+            <Input.Password placeholder="请确认新密码" />
+          </Form.Item>
+        </Form>
+      </Modal>
     </PageContainer>
   );
 };

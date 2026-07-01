@@ -1,4 +1,9 @@
-import { deleteUser, getUserById, queryUserList } from '@/services/user';
+import {
+  deleteUser,
+  getUserById,
+  queryUserList,
+  resetUserPassword,
+} from '@/services/user';
 import { useCallback } from 'react';
 
 export const useUserModel = () => {
@@ -12,9 +17,16 @@ export const useUserModel = () => {
   const removeUser = useCallback(async (userId: string) => {
     await deleteUser(userId);
   }, []);
+  const resetPassword = useCallback(
+    async (userId: string, newPassword: string) => {
+      await resetUserPassword(userId, { newPassword });
+    },
+    [],
+  );
   return {
     fetchUserList,
     fetchUserDetail,
     removeUser,
+    resetPassword,
   };
 };

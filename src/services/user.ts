@@ -50,6 +50,14 @@ export function batchDeleteUsers(data: API.BatchDeleteUsersDto) {
   });
 }
 
+/** 重置用户密码 */
+export function resetUserPassword(userId: string, data: API.ResetPasswordDto) {
+  return request<API.Response<void>>(`/system/users/${userId}/reset-password`, {
+    method: 'POST',
+    data,
+  });
+}
+
 /** 为用户分配角色 */
 export function assignUserRoles(userId: string, data: API.AssignRolesDto) {
   return request<API.Response<API.UserResponseDto>>(
