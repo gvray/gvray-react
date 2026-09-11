@@ -61,6 +61,9 @@ export function getUnreadNoticeCount() {
     '/system/notices/unread/count',
     {
       method: 'GET',
+      // 后台轮询：token 过期时不触发全局 401 弹窗，静默失败由轮询自行重试。
+      // 等其他交互接口刷新 token 后，下一轮轮询自然恢复。
+      skipErrorHandler: true,
     },
   );
 }

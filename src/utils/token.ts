@@ -1,7 +1,7 @@
 import storetify from 'storetify';
 
 // 从环境变量获取 token key
-const ACCESS_TOKEN_KEY = `${__APP_API_TOKEN_KEY__}_access`;
+export const ACCESS_TOKEN_KEY = `${__APP_API_TOKEN_KEY__}_access`;
 const REFRESH_TOKEN_KEY = `${__APP_API_TOKEN_KEY__}_refresh`;
 const APP_API_TIMEOUT =
   (__APP_API_TIMEOUT__ ? __APP_API_TIMEOUT__ : 60000) / 1000; // 秒
