@@ -5,6 +5,7 @@ import { createConfig, getConfigById, updateConfig } from '@/services/config';
 import type { DictOption } from '@/types/dict';
 import { logger } from '@/utils';
 import { createFormLayout } from '@gvray/adminkit';
+import { safeJsonParse } from '@gvray/eskit';
 import {
   Form,
   FormInstance,
@@ -109,10 +110,9 @@ const UpdateForm = forwardRef<UpdateFormRef, UpdateFormProps>(
               : String(values.value);
         }
         if (values.type === 'json' && typeof values.value === 'string') {
-          try {
-            values.value = JSON.stringify(JSON.parse(values.value));
-          } catch (error) {
-            logger.debug('JSON validation error:', error);
+          const parsed = safeJsonParse(values.value);
+          if (parsed !== undefined) {
+            values.value = JSON.stringify(parsed);
           }
         }
 
@@ -346,12 +346,11 @@ const UpdateForm = forwardRef<UpdateFormRef, UpdateFormProps>(
                     {
                       validator: (_, v) => {
                         if (currentType === 'json') {
-                          try {
-                            JSON.parse(typeof v === 'string' ? v : '');
-                            return Promise.resolve();
-                          } catch {
-                            return Promise.reject(new Error('JSON 格式不合法'));
-                          }
+                          return safeJsonParse(
+                            typeof v === 'string' ? v : '',
+                          ) !== undefined
+                            ? Promise.resolve()
+                            : Promise.reject(new Error('JSON 格式不合法'));
                         }
                         return Promise.resolve();
                       },

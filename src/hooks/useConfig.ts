@@ -1,4 +1,5 @@
 import { queryConfigList } from '@/services/config';
+import { safeJsonParse } from '@gvray/eskit';
 import { useCallback, useEffect, useState } from 'react';
 
 // 配置管理hooks
@@ -119,12 +120,7 @@ export const useConfigValidation = () => {
       case 'boolean':
         return value === 'true' || value === 'false';
       case 'json':
-        try {
-          JSON.parse(value);
-          return true;
-        } catch {
-          return false;
-        }
+        return safeJsonParse(value) !== undefined;
       default:
         return true;
     }

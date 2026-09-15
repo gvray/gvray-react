@@ -1,6 +1,6 @@
 import CryptoJS from 'crypto-js';
-const aseKey = '0123456789abcdef';
-const iv = 'abcdef0123456789';
+const aseKey = __APP_AES_KEY__;
+const iv = __APP_AES_IV__;
 let key = CryptoJS.enc.Utf8.parse(aseKey);
 let ivs = CryptoJS.enc.Utf8.parse(iv);
 

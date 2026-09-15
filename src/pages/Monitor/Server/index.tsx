@@ -1,5 +1,6 @@
 import { Charts, Icon, PageContainer } from '@/components';
-import { formatBytes, formatUptime, getUsageColor } from '@/utils';
+import { getUsageColor } from '@/utils';
+import { formatFileSize as formatBytes, formatUptime } from '@gvray/formatkit';
 import {
   Card,
   Col,

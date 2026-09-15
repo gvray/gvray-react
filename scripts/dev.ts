@@ -8,7 +8,7 @@ const mode = args.mode || 'dev';
 const port = args.port || 8000;
 const mock = args.mock;
 
-loadEnvFromEnv(mode);
+loadEnvFromEnv(mode, { port, mock });
 
 process.env.UMI_ENV = mode;
 process.env.PORT = String(port);

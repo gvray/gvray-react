@@ -2,7 +2,8 @@ import { AuthButton, Icon, PageContainer, TablePro } from '@/components';
 import { TableProRef } from '@/components/TablePro';
 import { PERM } from '@/constants';
 import { useFeedback } from '@/hooks';
-import { callRef, formatBytes, logger } from '@/utils';
+import { callRef, logger } from '@/utils';
+import { formatFileSize as formatBytes } from '@gvray/formatkit';
 import {
   Card,
   Col,

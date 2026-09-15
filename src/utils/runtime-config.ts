@@ -3,6 +3,7 @@ import {
   type AppRuntimeConfig,
   type AppRuntimeUiConfig,
 } from '@/constants/runtime-settings';
+import { shallowMerge } from '@gvray/eskit';
 
 /**
  * 运行时配置单例。
@@ -25,6 +26,18 @@ function normalizeUi(raw: unknown): Partial<AppRuntimeUiConfig> {
   return result as Partial<AppRuntimeUiConfig>;
 }
 
+/**
+ * 对强类型配置对象做一层浅合并。
+ * 由于 @gvray/eskit/shallowMerge 要求 target 满足 Record<string, unknown>，
+ * 而配置接口没有索引签名，这里做一次类型桥接。
+ */
+function mergeConfigSection<T extends object>(target: T, source: unknown): T {
+  return shallowMerge(
+    target as unknown as Record<string, unknown>,
+    source,
+  ) as unknown as T;
+}
+
 class RuntimeConfig {
   private _config: AppRuntimeConfig = { ...DEFAULT_RUNTIME_CONFIG };
 
@@ -33,20 +46,19 @@ class RuntimeConfig {
       this._config = { ...DEFAULT_RUNTIME_CONFIG };
       return;
     }
-    const merge = <T extends object>(a: T, b: unknown): T => ({
-      ...a,
-      ...((b as Partial<T>) || {}),
-    });
     this._config = {
       ...DEFAULT_RUNTIME_CONFIG,
       ...(raw as Partial<AppRuntimeConfig>),
-      feature: merge(DEFAULT_RUNTIME_CONFIG.feature, raw.feature),
-      oauth: merge(DEFAULT_RUNTIME_CONFIG.oauth, raw.oauth),
-      security: merge(DEFAULT_RUNTIME_CONFIG.security, raw.security),
-      storage: merge(DEFAULT_RUNTIME_CONFIG.storage, raw.storage),
-      system: merge(DEFAULT_RUNTIME_CONFIG.system, raw.system),
-      ui: merge(DEFAULT_RUNTIME_CONFIG.ui, normalizeUi(raw.ui)),
-      user: merge(DEFAULT_RUNTIME_CONFIG.user, raw.user),
+      feature: mergeConfigSection(DEFAULT_RUNTIME_CONFIG.feature, raw.feature),
+      oauth: mergeConfigSection(DEFAULT_RUNTIME_CONFIG.oauth, raw.oauth),
+      security: mergeConfigSection(
+        DEFAULT_RUNTIME_CONFIG.security,
+        raw.security,
+      ),
+      storage: mergeConfigSection(DEFAULT_RUNTIME_CONFIG.storage, raw.storage),
+      system: mergeConfigSection(DEFAULT_RUNTIME_CONFIG.system, raw.system),
+      ui: mergeConfigSection(DEFAULT_RUNTIME_CONFIG.ui, normalizeUi(raw.ui)),
+      user: mergeConfigSection(DEFAULT_RUNTIME_CONFIG.user, raw.user),
     };
   }
 

@@ -39,7 +39,7 @@
     "start:dev": "tsx scripts/dev.ts --mode dev --port 9527",
     "start:prod": "tsx scripts/dev.ts --mode prod --port 9529",
     "start:staging": "tsx scripts/dev.ts --mode staging --port 9528",
-    "update-gvray": "pnpm update --latest @gvray/adminkit @gvray/colorkit @gvray/datekit @gvray/domkit @gvray/eskit @gvray/formatkit @gvray/mathkit @gvray/pathkit @gvray/requestkit @gvray/validationkit"
+    "update-gvray": "pnpm update --latest @gvray/adminkit @gvray/colorkit @gvray/datekit @gvray/domkit @gvray/eskit @gvray/formatkit @gvray/logger @gvray/mathkit @gvray/pathkit @gvray/request @gvray/requestkit @gvray/validationkit"
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx}": "pnpm lint-staged:js",
@@ -49,16 +49,16 @@
   },
   "dependencies": {
     "@ant-design/icons": "^5.3.0",
-    "@gvray/adminkit": "^1.2.0",
+    "@gvray/adminkit": "^1.3.1",
     "@gvray/colorkit": "1.2.0",
-    "@gvray/datekit": "^1.2.0",
-    "@gvray/domkit": "^1.2.0",
-    "@gvray/eskit": "^1.4.0",
-    "@gvray/formatkit": "^1.2.0",
+    "@gvray/datekit": "^1.4.0",
+    "@gvray/domkit": "^1.4.0",
+    "@gvray/eskit": "^1.6.0",
+    "@gvray/formatkit": "^1.3.0",
     "@gvray/logger": "^1.1.0",
-    "@gvray/mathkit": "1.2.0",
-    "@gvray/pathkit": "^1.2.0",
-    "@gvray/request": "^1.2.0",
+    "@gvray/mathkit": "1.3.0",
+    "@gvray/pathkit": "^1.2.2",
+    "@gvray/request": "^1.2.1",
     "@gvray/requestkit": "^1.2.0",
     "@gvray/validationkit": "1.1.0",
     "antd": "^5.14.1",
