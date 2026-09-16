@@ -161,7 +161,7 @@ const UpdateFormFunction: React.ForwardRefRenderFunction<
                 <Input
                   placeholder="请输入角色标识"
                   maxLength={50}
-                  disabled={formLoading}
+                  disabled={formLoading || !!editingId}
                 />
               </Form.Item>
             </FormGrid.Item>

@@ -204,7 +204,7 @@ const TabPreferences: React.FC = () => {
   return (
     <Row gutter={[16, 16]}>
       {/* 外观与布局 */}
-      <Col xs={24} xxl={12}>
+      <Col xs={24} lg={12} xxl={8}>
         <Card
           title={
             <>
@@ -312,7 +312,7 @@ const TabPreferences: React.FC = () => {
       </Col>
 
       {/* 数据与功能 */}
-      <Col xs={24} xxl={12}>
+      <Col xs={24} lg={12} xxl={8}>
         <Card
           title={
             <>
@@ -395,7 +395,7 @@ const TabPreferences: React.FC = () => {
       </Col>
 
       {/* 重置 */}
-      <Col xs={24} xxl={12}>
+      <Col xs={24} lg={12} xxl={8}>
         <Card
           title={
             <>

@@ -6,7 +6,6 @@
   .profileHero,
   .profileSummary,
   .profileMain,
-  .tabsCard,
   .moduleCard,
   .responsiveTabs {
     box-sizing: border-box;
@@ -238,7 +237,6 @@
     width: 100%;
   }
 
-  .tabsCard,
   .moduleCard,
   .prefCard {
     border: 1px solid var(--gvray-color-border-secondary);
@@ -246,25 +244,16 @@
     box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
   }
 
-  .tabsCard {
-    overflow: visible;
-
-    :global(.ant-card-body) {
-      padding: 0;
-    }
-  }
-
   .responsiveTabs {
     :global(.ant-tabs-nav) {
       position: sticky;
       top: var(--profile-sticky-top, 64px);
       z-index: 20;
-      margin: 0;
+      margin: 0 0 16px;
       padding: 0 24px;
-      border-bottom: 1px solid var(--gvray-color-border-secondary);
-      border-radius: 16px 16px 0 0;
+      border: 1px solid var(--gvray-color-border-secondary);
+      border-radius: 16px;
       background: var(--gvray-color-bg-container);
-      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
     }
 
     :global(.ant-tabs-nav-wrap) {
@@ -278,7 +267,6 @@
 
     :global(.ant-tabs-content-holder) {
       min-width: 0;
-      padding: 24px;
     }
   }
 
@@ -547,10 +535,6 @@
       :global(.ant-tabs-nav) {
         padding: 0 20px;
       }
-
-      :global(.ant-tabs-content-holder) {
-        padding: 20px;
-      }
     }
   }
 
@@ -567,10 +551,6 @@
     .responsiveTabs {
       :global(.ant-tabs-nav) {
         padding: 0 16px;
-      }
-
-      :global(.ant-tabs-content-holder) {
-        padding: 16px;
       }
     }
 
@@ -618,10 +598,6 @@
     .responsiveTabs {
       :global(.ant-tabs-nav) {
         top: var(--profile-sticky-top, 56px);
-      }
-
-      :global(.ant-tabs-content-holder) {
-        padding: 12px;
       }
     }
 

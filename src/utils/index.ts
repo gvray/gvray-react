@@ -1,4 +1,5 @@
 export * from './authModal';
+export * from './bootstrap';
 export { getUsageColor } from './format';
 export { default as logger } from './logger';
 export * from './ref';

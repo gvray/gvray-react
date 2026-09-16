@@ -1,20 +1,18 @@
 import { LOGIN_PATH } from '@/constants';
 import { buildPreferences } from '@/constants/runtime-settings';
 import { AppProviders } from '@/providers';
-import { queryMe, queryMenus } from '@/services/auth';
-import { getDictionaryItemsByTypeCodes } from '@/services/dictionary';
 import { getRuntimeConfig } from '@/services/system';
-import { useAuthStore, useDictStore, useSettingStore } from '@/stores';
+import { useSettingStore } from '@/stores';
 import { runtimeConfig } from '@/utils/runtime-config';
 import React from 'react';
 import { history, matchRoutes } from 'umi';
 import {
   handleAuthExpired,
+  loadAuthData,
   logger,
   redirectToLogin,
   tokenManager,
 } from './utils';
-import { wrapToBizError } from './utils/errors';
 
 // const isDev = process.env.NODE_ENV === 'development';
 
@@ -38,76 +36,33 @@ export async function getInitialState() {
     await useSettingStore.persist?.rehydrate?.();
   }
 
-  let runtimeConfigData: Record<string, unknown> | undefined;
-  let me: API.CurrentUserResponseDto | undefined;
-  let menus: API.MenuResponseDto[] | undefined;
-
-  // 获取运行时配置（无需登录）
+  // 获取运行时配置（无需登录）。失败不 set，保留默认值
   try {
     const res = await getRuntimeConfig();
-    runtimeConfigData = res.data;
-    runtimeConfig.set(runtimeConfigData);
+    runtimeConfig.set(res.data);
   } catch (error) {
     logger.error(error);
   }
 
-  // 已登录时并行获取身份信息和菜单
+  // 已登录时装载身份信息、偏好与字典（loadAuthData 内 401 清凭证保留韧性）
   if (tokenManager.isAuthenticated()) {
-    try {
-      const [meRes, menusRes] = await Promise.all([
-        queryMe({ skipErrorHandler: true }),
-        queryMenus({ skipErrorHandler: true }),
-      ]);
-      me = meRes.data;
-      menus = menusRes.data;
-      // 在login页面刷新 这里应该跳转到首页
+    await loadAuthData();
+
+    if (tokenManager.isAuthenticated()) {
+      // 凭证仍有效：若停在 login 页则跳首页
       if (history.location.pathname === LOGIN_PATH) {
         history.push('/');
       }
-    } catch (error) {
-      const bizError = wrapToBizError(error);
-      // 只有真正的未授权/凭证过期才清凭证并跳转登录；
-      // 网络抖动或服务端异常保留原凭证，避免误踢用户
-      if (bizError.details?.status === 401) {
-        tokenManager.clearTokens();
-        handleAuthExpired();
-      } else {
-        logger.error('获取初始化用户信息失败', error);
-      }
+    } else {
+      // loadAuthData 遇 401 已清凭证 → 跳登录（handleAuthExpired 内部处理 login 页/弹窗逻辑）
+      handleAuthExpired();
     }
-  }
-
-  // 初始化 preferences：运行时默认值 → persist 恢复值 → 服务端用户偏好（优先级最高）
-  useSettingStore.setState((state) => ({
-    ...buildPreferences(runtimeConfig.get().ui),
-    ...state,
-    ...(me?.preferences || {}),
-  }));
-
-  // 认证数据 → AuthStore
-  if (me) {
-    useAuthStore.getState().setAuth(me, menus);
-  }
-
-  // 已登录时预加载常用字典到全局缓存
-  if (tokenManager.isAuthenticated()) {
-    try {
-      if (!useDictStore.getState().getDict('common_status')) {
-        const dictRes = await getDictionaryItemsByTypeCodes(
-          {
-            typeCodes: 'common_status',
-          },
-          { skipErrorHandler: true },
-        );
-        if (dictRes.data?.common_status) {
-          useDictStore
-            .getState()
-            .setDict('common_status', dictRes.data.common_status);
-        }
-      }
-    } catch (error) {
-      logger.error('预加载 common_status 字典失败', error);
-    }
+  } else {
+    // 未登录：仅应用运行时配置默认偏好 + persist 恢复值
+    useSettingStore.setState((state) => ({
+      ...buildPreferences(runtimeConfig.get().ui),
+      ...state,
+    }));
   }
 
   logger.info('App 初始化完成');

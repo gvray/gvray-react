@@ -229,14 +229,12 @@ export default function ProfilePage() {
         </section>
 
         <main className={styles.profileMain}>
-          <Card className={styles.tabsCard}>
-            <Tabs
-              className={styles.responsiveTabs}
-              activeKey={activeKey}
-              onChange={handleTabChange}
-              items={tabItems}
-            />
-          </Card>
+          <Tabs
+            className={styles.responsiveTabs}
+            activeKey={activeKey}
+            onChange={handleTabChange}
+            items={tabItems}
+          />
         </main>
       </div>
     </PageContainer>

@@ -1,10 +1,5 @@
-import { buildPreferences } from '@/constants/runtime-settings';
-import { login, queryMe, queryMenus } from '@/services/auth';
-import { getDictionaryItemsByTypeCodes } from '@/services/dictionary';
-import { getRuntimeConfig } from '@/services/system';
-import { useAuthStore, useDictStore, useSettingStore } from '@/stores';
-import { decrypt, encrypt, logger, tokenManager } from '@/utils';
-import { runtimeConfig } from '@/utils/runtime-config';
+import { login } from '@/services/auth';
+import { decrypt, encrypt, loadAuthData, tokenManager } from '@/utils';
 import { useCallback, useEffect, useState } from 'react';
 import storetify from 'storetify';
 
@@ -78,53 +73,6 @@ export function useLoginModel() {
     storetify('rememberMe', undefined);
   }, []);
 
-  /* ---------- 登录后初始化 ---------- */
-  const loadInitData = useCallback(async () => {
-    let runtimeConfigData: Record<string, unknown> | undefined;
-    try {
-      const res = await getRuntimeConfig();
-      runtimeConfigData = res.data;
-    } catch (error) {
-      logger.error(error);
-    }
-
-    const [meRes, menusRes] = await Promise.all([
-      queryMe({ skipErrorHandler: true }).catch(() => undefined),
-      queryMenus().catch(() => undefined),
-    ]);
-    const me = meRes?.data;
-    const menus = menusRes?.data;
-
-    runtimeConfig.set(runtimeConfigData);
-
-    useSettingStore.setState({
-      ...buildPreferences(runtimeConfig.get().ui),
-      ...(me?.preferences || {}),
-    });
-
-    if (me) {
-      useAuthStore.getState().setAuth(me, menus);
-    }
-  }, []);
-
-  /* ---------- 预加载字典 ---------- */
-  const preloadDict = useCallback(async () => {
-    try {
-      if (!useDictStore.getState().getDict('common_status')) {
-        const dictRes = await getDictionaryItemsByTypeCodes({
-          typeCodes: 'common_status',
-        });
-        if (dictRes.data?.common_status) {
-          useDictStore
-            .getState()
-            .setDict('common_status', dictRes.data.common_status);
-        }
-      }
-    } catch (error) {
-      logger.error('预加载 common_status 字典失败', error);
-    }
-  }, []);
-
   /* ---------- 账号登录 ---------- */
   const loginByAccount = useCallback(
     async (values: any): Promise<LoginResult> => {
@@ -149,8 +97,10 @@ export function useLoginModel() {
           res.data.refresh_token_expires_in,
         );
 
-        await loadInitData();
-        await preloadDict();
+        const ok = await loadAuthData();
+        if (!ok) {
+          return { success: false, message: '获取用户信息失败，请重试' };
+        }
 
         return { success: true, message: res.message };
       } catch (error: any) {
@@ -163,7 +113,7 @@ export function useLoginModel() {
         setIsLogging(false);
       }
     },
-    [saveRemember, clearRemember, loadInitData, preloadDict],
+    [saveRemember, clearRemember],
   );
 
   /* ---------- 手机号登录 ---------- */

@@ -1,6 +1,6 @@
 # umi
 /node_modules
-/.env.local
+/.env
 /.umirc.local.ts
 /config/config.local.ts
 /src/.umi
