@@ -4,6 +4,8 @@ import plugins from './plugins';
 import routes from './routes';
 
 const outputDir = `dist/${process.env.APP_ENV || 'dev'}`;
+// 站点 origin base 路径（子路径部署如 GitHub Pages 设为 /repo/；默认 /）。public/ 下的本地静态资源按此前缀引用
+const basePath = process.env.APP_BASE_PATH || '/';
 
 export default defineConfig({
   define,
@@ -54,9 +56,9 @@ export default defineConfig({
    */
   headScripts: [
     // 解决首次加载时白屏的问题
-    { src: '/scripts/loading.js', async: true },
+    { src: `${basePath}scripts/loading.js`, async: true },
     // iconfont Symbol 方案 —— 本地化的 JS 文件
-    { src: '/iconfont/iconfont.js' },
+    { src: `${basePath}iconfont/iconfont.js` },
   ],
   plugins,
   /**
@@ -93,7 +95,9 @@ export default defineConfig({
   //   dataField: 'data',
   // },
   styledComponents: {},
-  publicPath: process.env.APP_CDN_URL || '/',
+  // 子路径部署（如 GitHub Pages）通过 APP_BASE_PATH 注入 publicPath 与路由 base；默认 / 兼容根路径部署（Docker）
+  publicPath: process.env.APP_CDN_URL || process.env.APP_BASE_PATH || '/',
+  base: basePath,
   outputPath: outputDir,
   // end plugins
   mfsu: false,

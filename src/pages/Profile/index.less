@@ -256,6 +256,11 @@
       background: var(--gvray-color-bg-container);
     }
 
+    // nav 已有圆角边框,藏掉 antd 默认底部 ::before 直线,否则不跟随圆角会从两侧溢出并与边框重叠。
+    :global(.ant-tabs-nav)::before {
+      display: none !important;
+    }
+
     :global(.ant-tabs-nav-wrap) {
       overflow: auto;
     }
