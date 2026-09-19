@@ -6,6 +6,8 @@ import routes from './routes';
 const outputDir = `dist/${process.env.APP_ENV || 'dev'}`;
 // 站点 origin base 路径（子路径部署如 GitHub Pages 设为 /repo/；默认 /）。public/ 下的本地静态资源按此前缀引用
 const basePath = process.env.APP_BASE_PATH || '/';
+// 静态资源 URL 前缀：优先 CDN，其次子路径 base，默认 /。public/ 下文件不经 webpack，需手动拼接
+const publicPath = process.env.APP_CDN_URL || process.env.APP_BASE_PATH || '/';
 
 export default defineConfig({
   define,
@@ -96,8 +98,10 @@ export default defineConfig({
   // },
   styledComponents: {},
   // 子路径部署（如 GitHub Pages）通过 APP_BASE_PATH 注入 publicPath 与路由 base；默认 / 兼容根路径部署（Docker）
-  publicPath: process.env.APP_CDN_URL || process.env.APP_BASE_PATH || '/',
+  publicPath,
   base: basePath,
+  // favicon 写入静态 HTML，避免子路径部署下浏览器默认请求 /favicon.ico 404
+  links: [{ rel: 'icon', href: `${publicPath}favicon.ico` }],
   outputPath: outputDir,
   // end plugins
   mfsu: false,

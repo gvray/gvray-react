@@ -9,6 +9,9 @@ export default {
   __APP_VERSION__: process.env.APP_VERSION,
   __APP_BUILD_TIME__: process.env.APP_BUILD_TIME,
   __APP_CDN_URL__: process.env.APP_CDN_URL,
+  // public/ 下静态资源的 URL 前缀：优先 CDN，其次子路径 base，默认 /
+  __APP_PUBLIC_PATH__:
+    process.env.APP_CDN_URL || process.env.APP_BASE_PATH || '/',
   __APP_SENTRY_DSN__: process.env.APP_SENTRY_DSN,
   __APP_TRACKING_ID__: process.env.APP_TRACKING_ID,
   __APP_MOCK_ENABLED__: Boolean(process.env.APP_MOCK_ENABLED),

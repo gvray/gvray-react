@@ -1,4 +1,5 @@
 import bgStarry from '@/assets/bg-starry.jpg';
+import { publicAsset } from '@/utils';
 import { styled } from 'umi';
 
 interface LoginBgProps {
@@ -87,7 +88,7 @@ const LoginBg: React.FC<LoginBgProps> = ({
     <Root>
       <Bg style={{ backgroundImage: `url('${bgImage}')` }} />
       <Title>
-        <LogoImg src="/logo-dark.svg" />
+        <LogoImg src={publicAsset('logo-dark.svg')} />
         <strong>{title}</strong>
       </Title>
       <Slogan>

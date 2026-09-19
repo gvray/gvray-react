@@ -8,6 +8,7 @@ declare const __APP_API_TIMEOUT__: number;
 declare const __APP_VERSION__: string;
 declare const __APP_BUILD_TIME__: string;
 declare const __APP_CDN_URL__: string;
+declare const __APP_PUBLIC_PATH__: string;
 declare const __APP_SENTRY_DSN__: string;
 declare const __APP_TRACKING_ID__: string;
 declare const __APP_MOCK_ENABLED__: boolean;
