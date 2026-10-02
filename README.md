@@ -38,6 +38,11 @@ theme
   <img src="./docs/screenshots/2026-08-08/dark/demo.webp" width="49%" alt="Dark Theme" />
 </p>
 
+**在线预览：**
+
+- [react.gvray.com](https://react.gvray.com) · **主站**
+- [GitHub Pages](https://gvray.github.io/gvray-react) · **备用**
+
 ## ✨ 核心能力
 
 | 能力 | 描述 |

@@ -38,6 +38,11 @@ theme
   <img src="./docs/screenshots/2026-08-08/dark/demo.webp" width="49%" alt="Dark Theme" />
 </p>
 
+**Live Demo:**
+
+- [react.gvray.com](https://react.gvray.com) · **Primary**
+- [GitHub Pages](https://gvray.github.io/gvray-react) · **Fallback**
+
 ## ✨ Core Capabilities
 
 | Capability | Description |
